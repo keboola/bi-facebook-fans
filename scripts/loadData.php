@@ -41,10 +41,11 @@ try {
 $config = Zend_Registry::get('config');
 $facebook = new App_Facebook($config->facebook->pageId, $config->facebook->appToken);
 
+$_v = new Model_Visits();
 $results = $facebook->call('insights/page_views', 'day', '2011-01-01', '2011-02-02');
 if (isset($results['values'])) {
 	foreach($results['values'] as $v) {
-		echo date('j. n. Y', strtotime($v['end_time']))." - ".$v['value']."\n";
+		$v->add(date('Y-m-d', strtotime($v['end_time'])), $v['value']);
 	}
 }
 

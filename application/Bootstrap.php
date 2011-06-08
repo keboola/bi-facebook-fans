@@ -59,6 +59,26 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		$configMerged->setReadOnly();
 		$registry->config = $configMerged;
 	}
+
+		protected function _initDb()
+	{
+		$registry = Zend_Registry::getInstance();
+
+		// connect do db
+		$db = Zend_Db::factory('pdo_mysql', array(
+			'host'		=> $registry->config->db->host,
+			'username'	=> $registry->config->db->login,
+			'password'	=> $registry->config->db->password,
+			'dbname'	=> $registry->config->db->db
+		));
+
+		// test připojení k db
+		$db->getConnection();
+		$db->query('SET NAMES utf8');
+
+		// nastavení db adapteru pro všechny potomky Zend_Db_Table
+		Zend_Db_Table::setDefaultAdapter($db);
+	}
 	
 }
 
