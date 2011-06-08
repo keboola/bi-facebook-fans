@@ -1,0 +1,6 @@
+.idea
+application/configs/config.ini
+
+# osx noise
+.DS_Store
+profile
