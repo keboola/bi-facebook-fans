@@ -41,12 +41,25 @@ try {
 $config = Zend_Registry::get('config');
 $facebook = new App_Facebook($config->facebook->pageId, $config->facebook->appToken);
 
-$_v = new Model_Visits();
-$results = $facebook->call('insights/page_views', 'day', '2011-01-01', '2011-02-02');
+$_d = new Model_Days();
+$days = array();
+
+$results = $facebook->call('insights/page_views', 'day', '2010-09-01', '2010-10-01');
 if (isset($results['values'])) {
 	foreach($results['values'] as $v) {
-		$v->add(date('Y-m-d', strtotime($v['end_time'])), $v['value']);
+		$days[strtotime($v['end_time'])]['visits'] = $v['value'];
 	}
+}
+
+$results = $facebook->call('insights/page_like_adds', 'day', '2010-09-01', '2010-10-01');
+if (isset($results['values'])) {
+	foreach($results['values'] as $v) {
+		$days[strtotime($v['end_time'])]['likes'] = $v['value'];
+	}
+}
+
+foreach($days as $date => $values) {
+	$_d->add($date, $values['visits'], $values['likes']);
 }
 
 die();
