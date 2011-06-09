@@ -1,6 +1,6 @@
 <?php
 /**
- * Script to get OAuth token for Facebook APIand load data to GoodData
+ * Class to call Facebook Graph API
  * @author Jakub Matejka <jakub@keboola.com>
  * @date 2011-06-07
  */

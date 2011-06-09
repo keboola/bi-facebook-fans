@@ -8,14 +8,21 @@
 class Model_Days extends Zend_Db_Table
 {
 	protected $_name = 'fbi_days';
+	protected $_rowClass = 'Model_Row_Day';
 
 	/**
-	 * @param  $date
-	 * @param  $value
-	 * @return void
+	 * @param  $data
+	 * @return int
 	 */
-	public function add($date, $visits, $likes)
+	public function add($data)
 	{
-		$this->getAdapter()->query('REPLACE INTO fbi_days SET date=?, visits=?, likes=?', array($date, $visits, $likes));
+		$r = $this->fetchRow(array('date=?' => $data['date']));
+		if ($r) {
+			$r->setFromArray($data);
+			$r->save();
+			return $r->id;
+		} else {
+			return $this->insert($data);
+		}
 	}
 }
