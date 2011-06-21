@@ -26,10 +26,12 @@ $application->bootstrap();
 
 // Setup console input
 $opts = new Zend_Console_Getopt(array(
-	'export|e=w' => 'what to export option: visits'
+	'since|s=w' => 'Start date of export',
+	'until|u=w' => 'End date of export'
 ));
 $opts->setHelp(array(
-	'e' => 'What to export: visits'
+	's' => 'Start date of export in yyyymmdd format',
+	'u' => 'End date of export in yyyymmdd format'
 ));
 try {
 	$opts->parse();
@@ -38,19 +40,25 @@ try {
 	exit;
 }
 
+$since = $opts->getOption('since');
+if ($since) {
+	$since = date('Y-m-d', strtotime($since));
+} else {
+	echo $opts->getUsageMessage();
+	exit;
+}
+
+$until = $opts->getOption('until');
+if ($until) {
+	$until = date('Y-m-d', strtotime($until));
+} else {
+	echo $opts->getUsageMessage();
+	exit;
+}
+
 $config = Zend_Registry::get('config');
 $insights = new App_FacebookInsights($config->facebook->pageId, $config->facebook->appToken);
-
-
-$data = array_merge(
-	$insights->getData('2010-12-01', '2011-01-01'),
-	$insights->getData('2011-01-01', '2011-02-01'),
-	$insights->getData('2011-02-01', '2011-03-01'),
-	$insights->getData('2011-03-01', '2011-04-01'),
-	$insights->getData('2011-04-01', '2011-05-01'),
-	$insights->getData('2011-05-01', '2011-06-01'),
-	$insights->getData('2011-06-01', '2011-06-09')
-);
+$data = $insights->getData($since, $until);
 
 $_d = new Model_Days();
 foreach($data as $date => $values) {

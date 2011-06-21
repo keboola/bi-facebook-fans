@@ -50,4 +50,9 @@ class Model_Row_Day extends Zend_Db_Table_Row_Abstract
 			$_dr->insert(array('idDay' => $this->id, 'idReferral' => $id, 'views' => $v));
 		}
 	}
+
+	public function totalViews()
+	{
+		return $this->getTable()->getAdapter()->fetchOne('SELECT COUNT(views) FROM fbi_days WHERE date <= ?', $this->date);
+	}
 }

@@ -28,7 +28,14 @@ class App_FacebookInsights
 		$results = $this->_api->call('insights/page_active_users', 'day', $since, $until);
 		if (isset($results['values'])) {
 			foreach($results['values'] as $v) {
-				$data[date('Y-m-d', strtotime($v['end_time']))]['activeUsers'] = $v['value'];
+				$data[date('Y-m-d', strtotime($v['end_time']))]['dau'] = $v['value'];
+			}
+		}
+
+		$results = $this->_api->call('insights/page_active_users', 'month', $since, $until);
+		if (isset($results['values'])) {
+			foreach($results['values'] as $v) {
+				$data[date('Y-m-d', strtotime($v['end_time']))]['mau'] = $v['value'];
 			}
 		}
 
