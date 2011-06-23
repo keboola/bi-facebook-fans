@@ -14,10 +14,11 @@ class Model_Row_Day extends Zend_Db_Table_Row_Abstract
 	public function addUserCountries($data)
 	{
 		$_uc = new Model_DaysUserCountries();
-		$_uc->delete(array('idDay=?' => $this->id));
 
 		foreach ($data as $k => $v) {
-			$_uc->insert(array('idDay' => $this->id, 'country' => $k, 'views' => $v));
+			if (!$_uc->fetchRow(array('idDay=?' => $this->id, 'country=?' => $k))) {
+				$_uc->insert(array('idDay' => $this->id, 'country' => $k, 'views' => $v));
+			}
 		}
 	}
 
@@ -29,7 +30,6 @@ class Model_Row_Day extends Zend_Db_Table_Row_Abstract
 	{
 		$_r = new Model_Referrals();
 		$_dr = new Model_DaysReferrals();
-		$_dr->delete(array('idDay=?' => $this->id));
 
 		foreach ($internal as $k => $v) {
 			$r = $_r->fetchRow(array('name=?' => $k));
@@ -38,7 +38,9 @@ class Model_Row_Day extends Zend_Db_Table_Row_Abstract
 			} else {
 				$id = $r->id;
 			}
-			$_dr->insert(array('idDay' => $this->id, 'idReferral' => $id, 'views' => $v));
+			if (!$_dr->fetchRow(array('idDay=?' => $this->id, 'idReferral=?' => $id))) {
+				$_dr->insert(array('idDay' => $this->id, 'idReferral' => $id, 'views' => $v));
+			}
 		}
 		foreach ($external as $k => $v) {
 			$r = $_r->fetchRow(array('name=?' => $k));
@@ -47,7 +49,9 @@ class Model_Row_Day extends Zend_Db_Table_Row_Abstract
 			} else {
 				$id = $r->id;
 			}
-			$_dr->insert(array('idDay' => $this->id, 'idReferral' => $id, 'views' => $v));
+			if (!$_dr->fetchRow(array('idDay=?' => $this->id, 'idReferral=?' => $id))) {
+				$_dr->insert(array('idDay' => $this->id, 'idReferral' => $id, 'views' => $v));
+			}
 		}
 	}
 

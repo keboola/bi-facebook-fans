@@ -35,26 +35,43 @@ try {
 switch($opts->getOption('table')) {
 	case 'days':
 		$_t = new Model_Days();
-		$output = '"id","date","activeUsers","views","viewsUnique","viewsLogin","viewsLogout","viewsTotal","likesTotal","likes","comments"'."\n";
+		$output = '"id","date","dau","mau","views","viewsunique","viewslogin","viewslogout","viewstotal","likestotal",'
+				  .'"likesadded","likesremoved","contentlikesadded","","comments","feedviews","feedviewsunique",'
+				  .'"wallposts","wallpostsunique","photos","photoviews","photoviewsunique","videos","videoplays",'
+				  .'"videoplaysunique"'."\n";
 		foreach($_t->fetchAll() as $r) {
 			$output .= '"'.$r->id.'",'
 			           . '"'.$r->date.'",'
-			           . '"'.$r->activeUsers.'",'
+			           . '"'.$r->dau.'",'
+					   . '"'.$r->mau.'",'
 			           . '"'.$r->views.'",'
                        . '"'.$r->viewsUnique.'",'
                        . '"'.$r->viewsLogin.'",'
                        . '"'.$r->viewsLogout.'",'
                        . '"'.$r->totalViews().'",'
                        . '"'.$r->likesTotal.'",'
-					   . '"'.$r->likes.'",'
-                       . '"'.$r->comments.'"'
+					   . '"'.$r->likesAdded.'",'
+					   . '"'.$r->likesRemoved.'",'
+					   . '"'.$r->contentLikesAdded.'",'
+					   . '"'.$r->contentLikesRemoved.'",'
+                       . '"'.$r->comments.'",'
+                       . '"'.$r->feedViews.'",'
+                       . '"'.$r->feedViewsUnique.'",'
+                       . '"'.$r->wallPosts.'",'
+                       . '"'.$r->wallPostsUnique.'",'
+                       . '"'.$r->photos.'",'
+                       . '"'.$r->photoViews.'",'
+                       . '"'.$r->photoViewsUnique.'",'
+                       . '"'.$r->videos.'",'
+                       . '"'.$r->videoPlays.'",'
+                       . '"'.$r->videoPlaysUnique.'"'
 			           . "\n";
 		}
 		echo $output;
 		break;
 	case 'rDaysReferrals':
 		$_t = new Model_DaysReferrals();
-		$output = '"id","idDay","idReferral","views"'."\n";
+		$output = '"id","idday","idreferral","views"'."\n";
 		foreach($_t->fetchAll() as $r) {
             $output .= '"'.$r->id.'",'
 			           . '"'.$r->idDay.'",'
@@ -77,7 +94,7 @@ switch($opts->getOption('table')) {
 		break;
 	case 'userCountries':
 		$_t = new Model_DaysUserCountries();
-		$output = '"id","idDay","country","views"'."\n";
+		$output = '"id","idday","country","views"'."\n";
 		foreach($_t->fetchAll() as $r) {
 			$output .= '"'.$r->id.'",'
 			           . '"'.$r->idDay.'",'

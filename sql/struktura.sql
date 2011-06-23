@@ -15,14 +15,28 @@ DROP TABLE IF EXISTS `fbi_days`;
 CREATE TABLE `fbi_days` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `date` date NOT NULL,
-  `activeUsers` int(10) unsigned NOT NULL,
+  `dau` int(10) unsigned NOT NULL,
+  `mau` int(10) unsigned NOT NULL,
   `views` int(10) unsigned NOT NULL,
   `viewsUnique` int(10) unsigned NOT NULL,
   `viewsLogin` int(10) unsigned NOT NULL,
   `viewsLogout` int(10) unsigned NOT NULL,
   `likesTotal` int(10) unsigned NOT NULL,
-  `likes` int(10) unsigned NOT NULL,
+  `likesAdded` int(10) unsigned NOT NULL,
+  `likesRemoved` int(10) unsigned NOT NULL,
+  `contentLikesAdded` int(10) unsigned NOT NULL,
+  `contentLikesRemoved` int(10) unsigned NOT NULL,
   `comments` int(10) unsigned NOT NULL,
+  `feedViews` int(10) unsigned NOT NULL,
+  `feedViewsUnique` int(10) unsigned NOT NULL,
+  `wallPosts` int(10) unsigned NOT NULL,
+  `wallPostsUnique` int(10) unsigned NOT NULL,
+  `photos` int(10) unsigned NOT NULL,
+  `photoViews` int(10) unsigned NOT NULL,
+  `photoViewsUnique` int(10) unsigned NOT NULL,
+  `videos` int(10) unsigned NOT NULL,
+  `videoPlays` int(10) unsigned NOT NULL,
+  `videoPlaysUnique` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `date` (`date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -38,8 +52,8 @@ CREATE TABLE `fbi_rDaysReferrals` (
   PRIMARY KEY (`id`),
   KEY `idDay` (`idDay`),
   KEY `idReferral` (`idReferral`),
-  CONSTRAINT `fbi_rDaysReferrals_ibfk_4` FOREIGN KEY (`idDay`) REFERENCES `fbi_days` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fbi_rDaysReferrals_ibfk_3` FOREIGN KEY (`idReferral`) REFERENCES `fbi_referrals` (`id`) ON DELETE CASCADE
+  CONSTRAINT `fbi_rDaysReferrals_ibfk_3` FOREIGN KEY (`idReferral`) REFERENCES `fbi_referrals` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fbi_rDaysReferrals_ibfk_4` FOREIGN KEY (`idDay`) REFERENCES `fbi_days` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `fbi_referrals`;

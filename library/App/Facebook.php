@@ -53,7 +53,7 @@ class App_Facebook
 		if ($until) {
 			$url .= '&until='.$until;
 		}
-		$result = file_get_contents($url);
+		$result = @file_get_contents($url);
 		if ($result) {
 			$result = Zend_Json::decode($result);
 			if (isset($result['data'][0]))
@@ -61,7 +61,7 @@ class App_Facebook
 			else
 				return $result;
 		} else
-			return false;
+			throw new App_FacebookException('There was an error during talking to Facebook API. Try again please.');
 	}
 
 	

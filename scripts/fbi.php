@@ -58,7 +58,13 @@ if ($until) {
 
 $config = Zend_Registry::get('config');
 $insights = new App_FacebookInsights($config->facebook->pageId, $config->facebook->appToken);
-$data = $insights->getData($since, $until);
+try {
+	$data = $insights->getData($since, $until);
+} catch(App_FacebookException $e) {
+	echo $e->getMessage()."\n";
+	die();
+}
+
 
 $_d = new Model_Days();
 foreach($data as $date => $values) {
