@@ -8,10 +8,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		setlocale(LC_ALL, 'en_US.UTF8');
 		ini_set("url_rewriter.tags","");
 		date_default_timezone_set('Europe/Prague');
-		
+
 		$front = Zend_Controller_Front::getInstance();
-		$front->setParam('noErrorHandler', true);
-		
+		//$front->setParam('noErrorHandler', true);
+
 		// Setup of Nette Debug
 		require_once "Nette/Utils/exceptions.php";
 		require_once "Nette/Utils/shortcuts.php";
@@ -22,14 +22,14 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		define('NETTE_DIR', APPLICATION_PATH.'/../library/Nette');
 		define('NETTE_VERSION_ID', 907); // v0.9.7
 		define('NETTE_PACKAGE', 'PHP 5.2 prefixed');
-		
+
 		//if (APPLICATION_ENV == 'development') {
 			NDebug::enable();
 		/*} else {
 			NDebug::enable('production', APPLICATION_PATH.'/../logs/php-error.log', $registry->config->adminEmail);
 		}*/
 	}
-	
+
 	protected function _initAutoload()
 	{
 		$autoloader = Zend_Loader_Autoloader::getInstance();
@@ -42,6 +42,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		        'model' => array(
 		            'path'      => 'models/',
 					'namespace' => 'Model_',
+				),
+				'form' => array(
+		            'path'      => 'forms/',
+					'namespace' => 'Form_',
 				)
 			),
 		));
@@ -60,7 +64,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		$registry->config = $configMerged;
 	}
 
-		protected function _initDb()
+	protected function _initDb()
 	{
 		$registry = Zend_Registry::getInstance();
 
