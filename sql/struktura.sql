@@ -14,6 +14,7 @@ DROP TABLE IF EXISTS `fbi_days`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `fbi_days` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `idPage` int(10) unsigned NOT NULL,
   `date` date NOT NULL,
   `dau` int(10) unsigned NOT NULL,
   `mau` int(10) unsigned NOT NULL,
@@ -38,7 +39,20 @@ CREATE TABLE `fbi_days` (
   `videoPlays` int(10) unsigned NOT NULL,
   `videoPlaysUnique` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `date` (`date`)
+  UNIQUE KEY `idPage` (`idPage`,`date`),
+  KEY `date` (`date`),
+  CONSTRAINT `fbi_days_ibfk_1` FOREIGN KEY (`idPage`) REFERENCES `fbi_pages` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `fbi_pages`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fbi_pages` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `idFacebook` varchar(20) NOT NULL,
+  `token` varchar(90) NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `fbi_rDaysReferrals`;
