@@ -16,7 +16,7 @@ class Model_Days extends Zend_Db_Table
 	 */
 	public function add($data)
 	{
-		$r = $this->fetchRow(array('date=?' => $data['date']));
+		$r = $this->fetchRow(array('date=?' => $data['date'], 'idPage=?' => $data['idPage']));
 		if ($r) {
 			return $r->id;
 		} else {

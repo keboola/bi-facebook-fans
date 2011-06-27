@@ -26,10 +26,12 @@ $application->bootstrap();
 
 // Setup console input
 $opts = new Zend_Console_Getopt(array(
+	'page|p=i' => 'Id of page in db',
 	'since|s=w' => 'Start date of export',
 	'until|u=w' => 'End date of export'
 ));
 $opts->setHelp(array(
+	'p' => 'Id of page in db',
 	's' => 'Start date of export in yyyymmdd format',
 	'u' => 'End date of export in yyyymmdd format'
 ));
@@ -37,6 +39,19 @@ try {
 	$opts->parse();
 } catch (Zend_Console_Getopt_Exception $e) {
 	echo $e->getUsageMessage();
+	exit;
+}
+
+$p = $opts->getOption('page');
+if ($p) {
+	$_p = new Model_Pages();
+	$page = $_p->fetchRow(array('id=?' => $p));
+	if (!$page) {
+		echo "You have wrong page id.\n";
+		exit;
+	}
+} else {
+	echo $opts->getUsageMessage();
 	exit;
 }
 
@@ -57,7 +72,7 @@ if ($until) {
 }
 
 $config = Zend_Registry::get('config');
-$insights = new App_FacebookInsights($config->facebook->pageId, $config->facebook->appToken);
+$insights = new App_FacebookInsights($page);
 try {
 	$data = $insights->getData($since, $until);
 } catch(App_FacebookException $e) {
@@ -73,7 +88,7 @@ foreach($data as $date => $values) {
 	$externalReferrals = $values['externalReferrals'];
 
 	$id = $_d->add(array_merge(
-		array('date' => $date),
+		array('date' => $date, 'idPage' => $page->id),
 		array_diff_key($values, array('activeUsersCountry' => null, 'internalReferrals' => null, 'externalReferrals' => null))
 	));
 	$day = $_d->fetchRow(array('id=?' => $id));

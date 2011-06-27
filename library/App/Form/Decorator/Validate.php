@@ -25,7 +25,7 @@ class App_Form_Decorator_Validate extends Zend_Form_Decorator_Abstract
 					switch($k2) {
 						case 'Zend_Validate_NotEmpty':
 							$rules	.= "\t\t\t\trequired: true,\n";
-							$messages .= "\t\t\t\trequired: '"._t('v.isEmpty')."',\n";
+							$messages .= "\t\t\t\trequired: 'Field can't be empty.',\n";
 							break;
 						case 'Zend_Validate_Date':
 							$rules	.= "\t\t\t\tdateDE: true,\n";

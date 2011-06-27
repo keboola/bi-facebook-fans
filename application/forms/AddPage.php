@@ -25,6 +25,8 @@ class Form_AddPage extends App_Form
 			'ignore'	=> true,
 			'label'		=> 'Send'
 		));
+
+		$this->addDisplayGroup(array('name', 'idPage', 'fbToken', 'submit'), 'basic');
 	}
 }
 ?>

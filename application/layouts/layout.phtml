@@ -1,25 +1,31 @@
-<?= $this->doctype() ?>
+<!DOCTYPE HTML>
 <html>
-<?
+	<head>
+		<meta charset=utf-8>
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-//css
-$this->headLink()
-	->prependStylesheet('/css/main.css', 'screen')
+		<title>Facebook GoodData Connector</title>
 
-?>
-<head>
-	<title>Facebook GoodData Connector</title>
+		<script src="/js/modernizr-1.7.min.js"></script>
+		<script src="/js/jquery-1.6.1.min.js"></script>
+		<script src="/js/imagePreview.js"></script>
 
-	<meta charset="utf-8"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1"/>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-</head>
+		<link rel="stylesheet" type="text/css" href="/css/52framework/reset.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="/css/52framework/css3.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="/css/52framework/general.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="/css/52framework/forms.css" media="screen" />
+    	<link rel="stylesheet" type="text/css" href="/css/main.css" media="screen" />
+	</head>
 
-<body>
-	<div>
-		<?=$this->layout()->content;?>
-	</div>
-</body>
+	<body>
+		<div class="pageHeader">
+			<img src="/img/keboola.png" />
+			<h1>Facebook GoodData Connector Setup</h1>
+		</div>
+		<div class="pageContent">
+<?=$this->layout()->content;?>
+		</div>
+	</body>
 </html>
 
 

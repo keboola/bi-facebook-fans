@@ -1,4 +1,19 @@
-<h1>Facebook GoodData Connector Setup</h1>
-<div>
-	<?=$this->form?>
-</div>
+					
+<? if($this->message) {
+	switch ($this->message) {
+		case 'alreadyExists':
+			echo "\t\t\t<p class=\"error\">This page is already in the database!</p>\n";
+			break;
+		case 'success':
+			echo "\t\t\t<p class=\"info\">Page has been added to the database. Now you have to invite our GoodData user to your project. See the screenshot:<br /> <a href=\"/img/gd-addUser.png\" class=\"preview\"><img src=\"/img/gd-addUser-thumb.png\" /></a></p>\n";
+			break;
+	}
+	echo "</p>\n";
+}?>
+
+<? if($this->form) {?>
+			<p class="info">Enter page name and id. You can get page's id from url when you try to edit your page, see the screenshot:<br /> <a href="/img/fb-pageId.png" class="preview"><img src="/img/fb-pageId-thumb.png" /></a></p>
+			<div class="form" style="width:400px">
+<?=$this->form?>
+			</div>
+<? }?>

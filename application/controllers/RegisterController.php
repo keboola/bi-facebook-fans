@@ -38,6 +38,33 @@ class RegisterController extends Zend_Controller_Action
 	 */
 	public function indexAction()
 	{
+		$form = new Form_AddPage();
+
+		if ($this->_request->isPost()) {
+			if ($form->isValid($this->_request->getParams())) {
+				$_p = new Model_Pages();
+				$p = $_p->fetchRow(array('idFacebook=?' => $this->_request->idPage));
+				if ($p) {
+					$this->view->message = 'alreadyExists';
+				} else {
+					$_p->insert(array(
+						'name' => $this->_request->name,
+						'idFacebook' => $this->_request->idPage,
+						'token' => $this->_request->fbToken
+					));
+					$this->view->message = 'success';
+					$this->view->form = null;
+					return;
+				}
+			} else {
+				
+			}
+			
+			$form->populate($this->_request->getParams());
+			$this->view->form = $form;
+			return;
+		}
+
 		if (empty($this->_request->code)) {
 			$_SESSION['state'] = md5(uniqid(rand(), TRUE)); //CSRF protection
 			$dialogUrl = "http://www.facebook.com/dialog/oauth?client_id=" . $this->_config->facebook->appId
@@ -55,12 +82,10 @@ class RegisterController extends Zend_Controller_Action
 			$params = null;
 			parse_str($response, $params);
 
-			$form = new Form_AddPage();
 			$form->getElement('fbToken')->setValue($params['access_token']);
 
 			$this->view->form = $form;
-		}
-		else {
+		} else {
 			echo("The state does not match. You may be a victim of CSRF.");
 		}
 	}

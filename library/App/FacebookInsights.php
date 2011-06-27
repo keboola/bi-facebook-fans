@@ -13,12 +13,11 @@ class App_FacebookInsights
 	private $_api;
 
 	/**
-	 * @param int $pageId
-	 * @param string $appToken
+	 * @param Zend_Table_Row $page
 	 */
-	public function __construct($pageId, $appToken)
+	public function __construct($page)
 	{
-		$this->_api = new App_Facebook($pageId, $appToken);
+		$this->_api = new App_Facebook($page->idFacebook, $page->token);
 	}
 
 	public function getData($since, $until)
