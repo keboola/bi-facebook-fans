@@ -84,7 +84,8 @@ if (isset($data['lifetime'])) {
 	$lifetime = $data['lifetime'];
 	$data = array_diff_key($data, array('lifetime'));
 
-	if ($page->likesDate < $lifetime['date']) {
+	if ($page->likesDate < $lifetime['date'] && isset($lifetime['likesMale']) && isset($lifetime['likesFemale'])
+		&& isset($lifetime['likesUnknownSex'])) {
 		$page->likesDate = $lifetime['date'];
 		$page->likesMale = $lifetime['likesMale'];
 		$page->likesFemale = $lifetime['likesFemale'];
