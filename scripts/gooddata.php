@@ -20,15 +20,30 @@ $application->bootstrap();
 
 // Setup console input
 $opts = new Zend_Console_Getopt(array(
+	'page|p=i' => 'Id of page in db',
 	'table|t=s' => 'table option, with required string parameter'
 ));
 $opts->setHelp(array(
+	'p' => 'Id of page in db',
 	't' => 'Name of the table to export.'
 ));
 try {
 	$opts->parse();
 } catch (Zend_Console_Getopt_Exception $e) {
 	echo $e->getUsageMessage();
+	exit;
+}
+
+$p = $opts->getOption('page');
+if ($p) {
+	$_p = new Model_Pages();
+	$page = $_p->fetchRow(array('id=?' => $p));
+	if (!$page) {
+		echo "You have wrong page id.\n";
+		exit;
+	}
+} else {
+	echo $opts->getUsageMessage();
 	exit;
 }
 
@@ -39,7 +54,7 @@ switch($opts->getOption('table')) {
 				  .'"likesadded","likesremoved","contentlikesadded","","comments","feedviews","feedviewsunique",'
 				  .'"wallposts","wallpostsunique","photos","photoviews","photoviewsunique","videos","videoplays",'
 				  .'"videoplaysunique"'."\n";
-		foreach($_t->fetchAll() as $r) {
+		foreach($_t->fetchAll(array('idPage=?' => $page->id)) as $r) {
 			$output .= '"'.$r->id.'",'
 			           . '"'.$r->date.'",'
 			           . '"'.$r->dau.'",'
@@ -72,7 +87,7 @@ switch($opts->getOption('table')) {
 	case 'rDaysReferrals':
 		$_t = new Model_DaysReferrals();
 		$output = '"id","idday","idreferral","views"'."\n";
-		foreach($_t->fetchAll() as $r) {
+		foreach($_t->fetchForPage($page->id) as $r) {
             $output .= '"'.$r->id.'",'
 			           . '"'.$r->idDay.'",'
 			           . '"'.$r->idReferral.'",'
@@ -84,7 +99,7 @@ switch($opts->getOption('table')) {
 	case 'referrals':
 		$_t = new Model_Referrals();
 		$output = '"id","name","type"'."\n";
-		foreach($_t->fetchAll() as $r) {
+		foreach($_t->fetchForPage($page->id) as $r) {
 			$output .= '"'.$r->id.'",'
 			           . '"'.$r->name.'",'
 			           . '"'.$r->type.'"'
@@ -95,7 +110,7 @@ switch($opts->getOption('table')) {
 	case 'userCountries':
 		$_t = new Model_DaysUserCountries();
 		$output = '"id","idday","country","views"'."\n";
-		foreach($_t->fetchAll() as $r) {
+		foreach($_t->fetchForPage($page->id) as $r) {
 			$output .= '"'.$r->id.'",'
 			           . '"'.$r->idDay.'",'
 					   . '"'.$r->country.'",'

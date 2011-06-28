@@ -1,13 +1,13 @@
 <?php
 /**
- * Dayily active users referrals
+ * Days to Countries
  * @author Jakub Matejka <jakub@keboola.com>
  * @date 2011-06-08
  */
 
-class Model_DaysReferrals extends Zend_Db_Table
+class Model_DaysCountries extends Zend_Db_Table
 {
-	protected $_name = 'fbi_rDaysReferrals';
+	protected $_name = 'fbi_daysCountries';
 
 	public function fetchForPage($idPage)
 	{
@@ -15,6 +15,5 @@ class Model_DaysReferrals extends Zend_Db_Table
 				->where('idPage=?', $idPage)
 				->joinLeft('fbi_days', 'fbi_days.id = '.$this->_name.'.idDay');
 		return $this->fetchAll($select);
-
 	}
 }

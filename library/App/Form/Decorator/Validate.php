@@ -20,12 +20,12 @@ class App_Form_Decorator_Validate extends Zend_Form_Decorator_Abstract
 				$rules	.= "\t\t\t'".$k."': {\n";
 				$messages .= "\t\t\t'".$k."': {\n";
 				$count2	= 0;
-				$validate  = false;
+				$validate  = true;
 				foreach($validators as $k2=>$v2){
 					switch($k2) {
 						case 'Zend_Validate_NotEmpty':
 							$rules	.= "\t\t\t\trequired: true,\n";
-							$messages .= "\t\t\t\trequired: 'Field can't be empty.',\n";
+							$messages .= "\t\t\t\trequired: 'Field can\'t be empty.',\n";
 							break;
 						case 'Zend_Validate_Date':
 							$rules	.= "\t\t\t\tdateDE: true,\n";
@@ -63,7 +63,7 @@ class App_Form_Decorator_Validate extends Zend_Form_Decorator_Abstract
 			$formName = '#'.$formName;
 		}
 		$r = '
-<script type="text/javascript" src="/js/jquery.validate/jquery.validate.js"></script>
+<script type="text/javascript" src="/js/jquery.validate/jquery.validate.min.js"></script>
 <script type="text/javascript"><!--
 $().ready(function() {
 	$("'.$formName.'").validate({

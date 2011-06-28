@@ -17,7 +17,7 @@ class App_FacebookInsights
 	 */
 	public function __construct($page)
 	{
-		$this->_api = new App_Facebook($page->idFacebook, $page->token);
+		$this->_api = new App_Facebook($page->idPage, $page->token);
 	}
 
 	public function getData($since, $until)
@@ -38,10 +38,57 @@ class App_FacebookInsights
 			}
 		}
 
+		$results = $this->_api->call('insights/page_active_users_city', 'day', $since, $until);
+		if (isset($results['values'])) {
+			foreach($results['values'] as $v) {
+				$data[date('Y-m-d', strtotime($v['end_time']))]['activeUsersCity'] = $v['value'];
+			}
+		}
+
 		$results = $this->_api->call('insights/page_active_users_country', 'day', $since, $until);
 		if (isset($results['values'])) {
 			foreach($results['values'] as $v) {
 				$data[date('Y-m-d', strtotime($v['end_time']))]['activeUsersCountry'] = $v['value'];
+			}
+		}
+
+		$results = $this->_api->call('insights/page_active_users_country', 'day', $since, $until);
+		if (isset($results['values'])) {
+			foreach($results['values'] as $v) {
+				$data[date('Y-m-d', strtotime($v['end_time']))]['activeUsersCountry'] = $v['value'];
+			}
+		}
+
+		$results = $this->_api->call('insights/page_active_users_gender_age', 'day', $since, $until);
+		if (isset($results['values'])) {
+			foreach($results['values'] as $value) {
+				$males = 0;
+				$females = 0;
+				$unknown = 0;
+				$age = array();
+				foreach($value['value'] as $k => $n) {
+					$r = explode('.', $k); // is for example: "M.35-44" : 1
+					if (isset($r[0])) {
+						if ($r[0] == 'M') {
+							$males += $n;
+						} elseif ($r[0] == 'F') {
+							$females += $n;
+						} else {
+							$unknown += $n;
+						}
+					}
+					if (isset($r[1])) {
+						if (!isset($age[$r[1]])) {
+							$age[$r[1]] = $n;
+						} else {
+							$age[$r[1]] += $n;
+						}
+					}
+				}
+				$data[date('Y-m-d', strtotime($v['end_time']))]['age'] = $age;
+				$data[date('Y-m-d', strtotime($v['end_time']))]['viewsMale'] = $males;
+				$data[date('Y-m-d', strtotime($v['end_time']))]['viewsFemale'] = $females;
+				$data[date('Y-m-d', strtotime($v['end_time']))]['viewsUnknownSex'] = $unknown;
 			}
 		}
 
@@ -196,6 +243,113 @@ class App_FacebookInsights
 		if (isset($results['values'])) {
 			foreach($results['values'] as $v) {
 				$data[date('Y-m-d', strtotime($v['end_time']))]['videoPlaysUnique'] = $v['value'];
+			}
+		}
+
+		$results = $this->_api->call('insights/page_audio_plays', 'day', $since, $until);
+		if (isset($results['values'])) {
+			foreach($results['values'] as $v) {
+				$data[date('Y-m-d', strtotime($v['end_time']))]['audioPlays'] = $v['value'];
+			}
+		}
+
+		$results = $this->_api->call('insights/page_audio_plays_unique', 'day', $since, $until);
+		if (isset($results['values'])) {
+			foreach($results['values'] as $v) {
+				$data[date('Y-m-d', strtotime($v['end_time']))]['audioPlaysUnique'] = $v['value'];
+			}
+		}
+
+		$results = $this->_api->call('insights/page_discussions', 'day', $since, $until);
+		if (isset($results['values'])) {
+			foreach($results['values'] as $v) {
+				$data[date('Y-m-d', strtotime($v['end_time']))]['discussions'] = $v['value'];
+			}
+		}
+
+		$results = $this->_api->call('insights/page_discussions_unique', 'day', $since, $until);
+		if (isset($results['values'])) {
+			foreach($results['values'] as $v) {
+				$data[date('Y-m-d', strtotime($v['end_time']))]['discussionsUnique'] = $v['value'];
+			}
+		}
+
+		$results = $this->_api->call('insights/page_review_adds', 'day', $since, $until);
+		if (isset($results['values'])) {
+			foreach($results['values'] as $v) {
+				$data[date('Y-m-d', strtotime($v['end_time']))]['reviewsAdded'] = $v['value'];
+			}
+		}
+
+		$results = $this->_api->call('insights/page_review_adds_unique', 'day', $since, $until);
+		if (isset($results['values'])) {
+			foreach($results['values'] as $v) {
+				$data[date('Y-m-d', strtotime($v['end_time']))]['reviewsAddedUnique'] = $v['value'];
+			}
+		}
+
+		$results = $this->_api->call('insights/page_review_modifications', 'day', $since, $until);
+		if (isset($results['values'])) {
+			foreach($results['values'] as $v) {
+				$data[date('Y-m-d', strtotime($v['end_time']))]['reviewsModified'] = $v['value'];
+			}
+		}
+
+		$results = $this->_api->call('insights/page_review_modifications_unique', 'day', $since, $until);
+		if (isset($results['values'])) {
+			foreach($results['values'] as $v) {
+				$data[date('Y-m-d', strtotime($v['end_time']))]['reviewsModifiedUnique'] = $v['value'];
+			}
+		}
+
+
+		// Lifetime aggregated data, fetch just for last day of interval
+		$lastDay = date('Y-m-d', strtotime($until)-86400);
+		$data['lifetime']['date'] = $lastDay;
+		$results = $this->_api->call('insights/page_fans_city', 'lifetime', $lastDay, $until);
+		if (isset($results['values'])) {
+			foreach($results['values'] as $v) {
+				$data['lifetime']['cities'] = $v['value'];
+			}
+		}
+
+		$results = $this->_api->call('insights/page_fans_country', 'lifetime', $lastDay, $until);
+		if (isset($results['values'])) {
+			foreach($results['values'] as $v) {
+				$data['lifetime']['countries'] = $v['value'];
+			}
+		}
+
+		$results = $this->_api->call('insights/page_fans_gender_age', 'lifetime', $lastDay, $until);
+		if (isset($results['values'])) {
+			foreach($results['values'] as $value) {
+				$males = 0;
+				$females = 0;
+				$unknown = 0;
+				$age = array();
+				foreach($value['value'] as $k => $n) {
+					$r = explode('.', $k); // is for example: "M.35-44" : 1
+					if (isset($r[0])) {
+						if ($r[0] == 'M') {
+							$males += $n;
+						} elseif ($r[0] == 'F') {
+							$females += $n;
+						} else {
+							$unknown += $n;
+						}
+					}
+					if (isset($r[1])) {
+						if (!isset($age[$r[1]])) {
+							$age[$r[1]] = $n;
+						} else {
+							$age[$r[1]] += $n;
+						}
+					}
+				}
+				$data['lifetime']['age'] = $age;
+				$data['lifetime']['likesMale'] = $males;
+				$data['lifetime']['likesFemale'] = $females;
+				$data['lifetime']['likesUnknownSex'] = $unknown;
 			}
 		}
 

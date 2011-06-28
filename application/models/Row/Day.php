@@ -11,9 +11,51 @@ class Model_Row_Day extends Zend_Db_Table_Row_Abstract
 	/**
 	 * @param array $data
 	 */
-	public function addUserCountries($data)
+	public function addAge($data)
 	{
-		$_uc = new Model_DaysUserCountries();
+		$_a = new Model_Age();
+		$_da = new Model_DaysAge();
+
+		foreach ($data as $k => $v) {
+			$r = $_a->fetchRow(array('name=?' => $k));
+			if (!$r) {
+				$id = $_a->insert(array('name' => $k));
+			} else {
+				$id = $r->id;
+			}
+			if (!$_da->fetchRow(array('idDay=?' => $this->id, 'idAge=?' => $id))) {
+				$_da->insert(array('idDay' => $this->id, 'idAge' => $id, 'views' => $v));
+			}
+		}
+	}
+
+	/**
+	 * @param array $data
+	 */
+	public function addCities($data)
+	{
+		$_c = new Model_Cities();
+		$_dc = new Model_DaysCities();
+
+		foreach ($data as $k => $v) {
+			$r = $_c->fetchRow(array('name=?' => $k));
+			if (!$r) {
+				$id = $_c->insert(array('name' => $k));
+			} else {
+				$id = $r->id;
+			}
+			if (!$_dc->fetchRow(array('idDay=?' => $this->id, 'idCity=?' => $id))) {
+				$_dc->insert(array('idDay' => $this->id, 'idCity' => $id, 'views' => $v));
+			}
+		}
+	}
+
+	/**
+	 * @param array $data
+	 */
+	public function addCountries($data)
+	{
+		$_uc = new Model_DaysCountries();
 
 		foreach ($data as $k => $v) {
 			if (!$_uc->fetchRow(array('idDay=?' => $this->id, 'country=?' => $k))) {

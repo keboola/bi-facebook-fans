@@ -25,10 +25,11 @@
 	border:  solid 2px #627aac;
 }
 
-p.info {
+.infoBox {
 	border: solid 3px #999;
 	background: #ccc;
-	padding: .5em 20px;
+	margin: 0 0 1em;
+	padding: 1em 20px;
 }
 p.error {
 	border: solid 3px #ea2803;
@@ -41,4 +42,26 @@ p.error {
 	position: absolute;
 	border: solid 3px #627aac;
 	display: none;
+}
+
+
+div.formElement {
+	overflow: visible;
+}
+form strong.error,
+form ul.errors {
+	font-weight: bold;
+	float: left;
+	text-align: right;
+	display: block;
+	width: 100%;
+}
+form strong.error,
+form ul.errors li {
+	color: #ea2803;
+	list-style: none;
+}
+
+ul li, ol li {
+	margin-bottom: .5em;
 }

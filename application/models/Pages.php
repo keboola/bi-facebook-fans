@@ -8,6 +8,6 @@
 class Model_Pages extends Zend_Db_Table
 {
 	protected $_name = 'fbi_pages';
-
+	protected $_rowClass = 'Model_Row_Page';
 
 }

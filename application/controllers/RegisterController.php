@@ -43,13 +43,16 @@ class RegisterController extends Zend_Controller_Action
 		if ($this->_request->isPost()) {
 			if ($form->isValid($this->_request->getParams())) {
 				$_p = new Model_Pages();
-				$p = $_p->fetchRow(array('idFacebook=?' => $this->_request->idPage));
+				$p = $_p->fetchRow(array('idPage=?' => $this->_request->idPage));
 				if ($p) {
 					$this->view->message = 'alreadyExists';
 				} else {
 					$_p->insert(array(
+						'email' => $this->_request->email,
+						'idUser' => $this->_request->idUser,
 						'name' => $this->_request->name,
-						'idFacebook' => $this->_request->idPage,
+						'idPage' => $this->_request->idPage,
+						'idProject' => $this->_request->idProject,
 						'token' => $this->_request->fbToken
 					));
 					$this->view->message = 'success';
@@ -68,7 +71,7 @@ class RegisterController extends Zend_Controller_Action
 		if (empty($this->_request->code)) {
 			$_SESSION['state'] = md5(uniqid(rand(), TRUE)); //CSRF protection
 			$dialogUrl = "http://www.facebook.com/dialog/oauth?client_id=" . $this->_config->facebook->appId
-						 . "&scope=offline_access,read_insights&redirect_uri=" . urlencode($this->_pageUrl)
+						 . "&scope=offline_access,read_insights,email&redirect_uri=" . urlencode($this->_pageUrl)
 						 . "&state=" . $_SESSION['state'];
 			$this->_redirect($dialogUrl);
 			return;
@@ -82,11 +85,24 @@ class RegisterController extends Zend_Controller_Action
 			$params = null;
 			parse_str($response, $params);
 
-			$form->getElement('fbToken')->setValue($params['access_token']);
+			if ($params['access_token']) {
+				$tokenUrl = "https://graph.facebook.com/me?access_token=".$params['access_token'];
+				$response = file_get_contents($tokenUrl);
+				if ($response) {
+					$response = Zend_Json::decode($response);
+					$form->getElement('idUser')->setValue($response['id']);
+					$form->getElement('email')->setValue($response['email']);
+					$form->getElement('fbToken')->setValue($params['access_token']);
+				} else {
+					$this->view->message = 'apiError';
+				}
+			} else {
+				$this->view->message = 'apiError';
+			}
 
 			$this->view->form = $form;
 		} else {
-			echo("The state does not match. You may be a victim of CSRF.");
+			$this->view->message = 'csrfError';
 		}
 	}
 }

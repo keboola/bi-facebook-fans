@@ -18,6 +18,8 @@ class Model_Days extends Zend_Db_Table
 	{
 		$r = $this->fetchRow(array('date=?' => $data['date'], 'idPage=?' => $data['idPage']));
 		if ($r) {
+			$r->setFromArray($data);
+			$r->save();
 			return $r->id;
 		} else {
 			return $this->insert($data);
