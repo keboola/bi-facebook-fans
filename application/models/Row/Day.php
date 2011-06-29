@@ -30,12 +30,14 @@ class Model_Row_Day extends Zend_Db_Table_Row_Abstract
 	}
 
 	/**
+	 * @param int $idPage
 	 * @param array $data
 	 */
-	public function addCities($data)
+	public function addCities($idPage, $data)
 	{
 		$_c = new Model_Cities();
 		$_dc = new Model_DaysCities();
+		$_pc = new Model_PagesCities();
 
 		foreach ($data as $k => $v) {
 			$r = $_c->fetchRow(array('name=?' => $k));
@@ -46,6 +48,11 @@ class Model_Row_Day extends Zend_Db_Table_Row_Abstract
 			}
 			if (!$_dc->fetchRow(array('idDay=?' => $this->id, 'idCity=?' => $id))) {
 				$_dc->insert(array('idDay' => $this->id, 'idCity' => $id, 'views' => $v));
+				try {
+					$_pc->insert(array('idPage' => $idPage, 'idCity' => $id));
+				} catch(Exception $e) {
+					// already in db
+				}
 			}
 		}
 	}
@@ -65,13 +72,15 @@ class Model_Row_Day extends Zend_Db_Table_Row_Abstract
 	}
 
 	/**
+	 * @param int $idPage
 	 * @param array $internal
 	 * @param array $external
 	 */
-	public function addReferrals($internal, $external)
+	public function addReferrals($idPage, $internal, $external)
 	{
 		$_r = new Model_Referrals();
 		$_dr = new Model_DaysReferrals();
+		$_pr = new Model_PagesReferrals();
 
 		foreach ($internal as $k => $v) {
 			$r = $_r->fetchRow(array('name=?' => $k));
@@ -82,6 +91,11 @@ class Model_Row_Day extends Zend_Db_Table_Row_Abstract
 			}
 			if (!$_dr->fetchRow(array('idDay=?' => $this->id, 'idReferral=?' => $id))) {
 				$_dr->insert(array('idDay' => $this->id, 'idReferral' => $id, 'views' => $v));
+				try {
+					$_pr->insert(array('idPage' => $idPage, 'idReferral' => $id));
+				} catch(Exception $e) {
+					// already in db
+				}
 			}
 		}
 		foreach ($external as $k => $v) {
@@ -93,6 +107,11 @@ class Model_Row_Day extends Zend_Db_Table_Row_Abstract
 			}
 			if (!$_dr->fetchRow(array('idDay=?' => $this->id, 'idReferral=?' => $id))) {
 				$_dr->insert(array('idDay' => $this->id, 'idReferral' => $id, 'views' => $v));
+				try {
+					$_pr->insert(array('idPage' => $idPage, 'idReferral' => $id));
+				} catch(Exception $e) {
+					// already in db
+				}
 			}
 		}
 	}

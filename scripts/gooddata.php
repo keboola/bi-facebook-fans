@@ -50,10 +50,12 @@ if ($p) {
 switch($opts->getOption('table')) {
 	case 'days':
 		$_t = new Model_Days();
-		$output = '"id","date","dau","mau","views","viewsunique","viewslogin","viewslogout","viewstotal","likestotal",'
-				  .'"likesadded","likesremoved","contentlikesadded","","comments","feedviews","feedviewsunique",'
-				  .'"wallposts","wallpostsunique","photos","photoviews","photoviewsunique","videos","videoplays",'
-				  .'"videoplaysunique"'."\n";
+		$output = '"id","date","dau","mau","views","viewsunique","viewslogin","viewslogout","viewstotal","viewsmale",'
+					.'"viewsfemale","viewsunknownsex","likestotal","likesadded","likesremoved","contentlikesadded",'
+				  	.',"contentlikesremoved","comments","feedviews","feedviewsunique","wallposts","wallpostsunique",'
+				  	.'"photos","photoviews","photoviewsunique","videos","videoplays","videoplaysunique","audioplays",'
+				  	.'"audioplaysunique","discussions","discussionsunique","reviewsadded","reviewsaddedunique",'
+				  	.'"reviewsaddedunique","reviewsmodified","reviewsmodifiedunique"'."\n";
 		foreach($_t->fetchAll(array('idPage=?' => $page->id)) as $r) {
 			$output .= '"'.$r->id.'",'
 			           . '"'.$r->date.'",'
@@ -64,6 +66,9 @@ switch($opts->getOption('table')) {
                        . '"'.$r->viewsLogin.'",'
                        . '"'.$r->viewsLogout.'",'
                        . '"'.$r->totalViews().'",'
+					   . '"'.$r->viewsMale.'",'
+					   . '"'.$r->viewsFemale.'",'
+					   . '"'.$r->viewsUnknownSex.'",'
                        . '"'.$r->likesTotal.'",'
 					   . '"'.$r->likesAdded.'",'
 					   . '"'.$r->likesRemoved.'",'
@@ -79,7 +84,15 @@ switch($opts->getOption('table')) {
                        . '"'.$r->photoViewsUnique.'",'
                        . '"'.$r->videos.'",'
                        . '"'.$r->videoPlays.'",'
-                       . '"'.$r->videoPlaysUnique.'"'
+                       . '"'.$r->videoPlaysUnique.'",'
+					   . '"'.$r->audioPlays.'",'
+					   . '"'.$r->audioPlaysUnique.'",'
+					   . '"'.$r->discussions.'",'
+					   . '"'.$r->discussionsUnique.'",'
+					   . '"'.$r->reviewsAdded.'",'
+					   . '"'.$r->reviewsAddedUnique.'",'
+					   . '"'.$r->reviewsModified.'",'
+					   . '"'.$r->reviewsModifiedUnique.'"'
 			           . "\n";
 		}
 		echo $output;

@@ -303,24 +303,26 @@ class App_FacebookInsights
 		}
 
 
-		// Lifetime aggregated data, fetch just for last day of interval
-		$lastDay = date('Y-m-d', strtotime($until)-86400);
-		$data['lifetime']['date'] = $lastDay;
-		$results = $this->_api->call('insights/page_fans_city', 'lifetime', $lastDay, $until);
+		// Lifetime aggregated likes data
+		//fetch for last day of interval
+		$untilPrev = date('Y-m-d', strtotime($until)-86400);
+		$data['lifetime']['date'] = $untilPrev;
+
+		$results = $this->_api->call('insights/page_fans_city', 'lifetime', $untilPrev, $until);
 		if (isset($results['values'])) {
 			foreach($results['values'] as $v) {
 				$data['lifetime']['cities'] = $v['value'];
 			}
 		}
 
-		$results = $this->_api->call('insights/page_fans_country', 'lifetime', $lastDay, $until);
+		$results = $this->_api->call('insights/page_fans_country', 'lifetime', $untilPrev, $until);
 		if (isset($results['values'])) {
 			foreach($results['values'] as $v) {
 				$data['lifetime']['countries'] = $v['value'];
 			}
 		}
 
-		$results = $this->_api->call('insights/page_fans_gender_age', 'lifetime', $lastDay, $until);
+		$results = $this->_api->call('insights/page_fans_gender_age', 'lifetime', $untilPrev, $until);
 		if (isset($results['values'])) {
 			foreach($results['values'] as $value) {
 				$males = 0;
@@ -352,6 +354,7 @@ class App_FacebookInsights
 				$data['lifetime']['likesUnknownSex'] = $unknown;
 			}
 		}
+		
 
 		return $data;
 	}

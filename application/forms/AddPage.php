@@ -22,9 +22,7 @@ class Form_AddPage extends App_Form
 		));
 
 		$this->addElement('text', 'idProject', array(
-			'required'	=> true,
-			'label'		=> 'GoodData Project Id',
-			'validators' => array('NotEmpty')
+			'label'		=> 'GoodData Project Id'
 		));
 
 		$this->addElement('hidden', 'fbToken');

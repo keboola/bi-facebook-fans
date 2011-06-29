@@ -5,7 +5,7 @@
  * @date 2011-06-28
  */
 
-class Model_PagesAge extends Zend_Db_Table
+class Model_LikesAge extends Zend_Db_Table
 {
-	protected $_name = 'fbi_rPagesAge';
+	protected $_name = 'fbi_rLikesAge';
 }

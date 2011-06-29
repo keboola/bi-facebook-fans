@@ -42,7 +42,11 @@ try {
 	exit;
 }
 
+
 $_p = new Model_Pages();
+$_l = new Model_Likes();
+
+
 $p = $opts->getOption('page');
 if ($p) {
 	$page = $_p->fetchRow(array('id=?' => $p));
@@ -93,25 +97,38 @@ foreach($pages as $page) {
 		$lifetime = $data['lifetime'];
 		$data = array_diff_key($data, array('lifetime'));
 
-		if ($page->likesDate < $lifetime['date'] && isset($lifetime['likesMale']) && isset($lifetime['likesFemale'])
-			&& isset($lifetime['likesUnknownSex'])) {
-			$page->likesDate = $lifetime['date'];
-			$page->likesMale = $lifetime['likesMale'];
-			$page->likesFemale = $lifetime['likesFemale'];
-			$page->likesUnknownSex = $lifetime['likesUnknownSex'];
-			$page->save();
+		$monthDay = date('Y-m-01', strtotime($lifetime['date']));
+		$l = $_l->fetchRow(array('idPage=?' => $page->id, 'month=?' => $monthDay));
+		if (!$l) {
+			$lId = $_l->insert(array(
+				'idPage'		=> $page->id,
+				'month'			=> $monthDay,
+				'date'			=> $lifetime['date'],
+				'male'			=> isset($lifetime['likesMale']) ? $lifetime['likesMale'] : 0,
+				'female'		=> isset($lifetime['likesFemale']) ? $lifetime['likesFemale'] : 0,
+				'unknownSex'	=> isset($lifetime['likesUnknownSex']) ? $lifetime['likesUnknownSex'] : 0
+			));
+			$l = $_l->fetchRow(array('id=?' => $lId));
+		} else {
+			if ($l->date <= $lifetime['date']) {
+				$l->date = $lifetime['date'];
+				$l->male = isset($lifetime['likesMale']) ? $lifetime['likesMale'] : 0;
+				$l->female = isset($lifetime['likesFemale']) ? $lifetime['likesFemale'] : 0;
+				$l->unknownSex = isset($lifetime['likesUnknownSex']) ? $lifetime['likesUnknownSex'] : 0;
+			}
 		}
 
 		if (isset($lifetime['countries'])) {
-			$page->addCountries($lifetime['countries'], $lifetime['date']);
+			$l->addCountries($lifetime['countries'], $lifetime['date']);
 		}
 		if (isset($lifetime['cities'])) {
-			$page->addCities($lifetime['cities'], $lifetime['date']);
+			$l->addCities($page->id, $lifetime['cities'], $lifetime['date']);
 		}
 		if (isset($lifetime['age'])) {
-			$page->addAge($lifetime['age'], $lifetime['date']);
+			$l->addAge($lifetime['age'], $lifetime['date']);
 		}
 	}
+	
 
 	$_d = new Model_Days();
 	foreach($data as $date => $values) {
@@ -133,8 +150,8 @@ foreach($pages as $page) {
 		));
 		$day = $_d->fetchRow(array('id=?' => $id));
 		$day->addAge($age);
-		$day->addCities($activeUsersCity);
+		$day->addCities($page->id, $activeUsersCity);
 		$day->addCountries($activeUsersCountry);
-		$day->addReferrals($internalReferrals, $externalReferrals);
+		$day->addReferrals($page->id, $internalReferrals, $externalReferrals);
 	}
 }
