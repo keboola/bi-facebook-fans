@@ -86,6 +86,35 @@ CREATE TABLE `fbi_daysCountries` (
   CONSTRAINT `fbi_daysCountries_ibfk_1` FOREIGN KEY (`idDay`) REFERENCES `fbi_days` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `fbi_likes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fbi_likes` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `idPage` int(10) unsigned NOT NULL,
+  `month` date NOT NULL,
+  `date` date NOT NULL,
+  `male` int(10) unsigned NOT NULL,
+  `female` int(10) unsigned NOT NULL,
+  `unknownSex` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idPage` (`idPage`),
+  CONSTRAINT `fbi_likes_ibfk_1` FOREIGN KEY (`idPage`) REFERENCES `fbi_pages` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `fbi_likesCountries`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fbi_likesCountries` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `idLike` int(10) unsigned NOT NULL,
+  `country` char(2) COLLATE utf8_czech_ci NOT NULL,
+  `likes` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idPage` (`idLike`),
+  CONSTRAINT `fbi_likesCountries_ibfk_1` FOREIGN KEY (`idLike`) REFERENCES `fbi_likes` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `fbi_pages`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -96,25 +125,9 @@ CREATE TABLE `fbi_pages` (
   `name` varchar(255) NOT NULL,
   `idPage` varchar(20) NOT NULL,
   `idProject` varchar(40) NOT NULL,
-  `token` varchar(90) NOT NULL,
-  `likesDate` date DEFAULT NULL,
-  `likesMale` int(10) unsigned DEFAULT NULL,
-  `likesFemale` int(10) unsigned DEFAULT NULL,
-  `likesUnknownSex` int(10) unsigned DEFAULT NULL,
+  `token` varchar(90) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `fbi_pagesCountries`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `fbi_pagesCountries` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `idPage` int(10) unsigned NOT NULL,
-  `country` char(2) COLLATE utf8_czech_ci NOT NULL,
-  `likes` int(10) unsigned NOT NULL,
-  `date` date NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `fbi_rDaysAge`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -158,18 +171,30 @@ CREATE TABLE `fbi_rDaysReferrals` (
   CONSTRAINT `fbi_rDaysReferrals_ibfk_4` FOREIGN KEY (`idDay`) REFERENCES `fbi_days` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `fbi_rPagesAge`;
+DROP TABLE IF EXISTS `fbi_rLikesAge`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `fbi_rPagesAge` (
-  `idPage` int(10) unsigned NOT NULL,
+CREATE TABLE `fbi_rLikesAge` (
+  `idLike` int(10) unsigned NOT NULL,
   `idAge` int(10) unsigned NOT NULL,
   `likes` int(10) unsigned NOT NULL,
-  `date` date NOT NULL,
-  PRIMARY KEY (`idPage`,`idAge`),
+  PRIMARY KEY (`idLike`,`idAge`),
   KEY `idAge` (`idAge`),
-  CONSTRAINT `fbi_rPagesAge_ibfk_2` FOREIGN KEY (`idAge`) REFERENCES `fbi_age` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fbi_rPagesAge_ibfk_1` FOREIGN KEY (`idPage`) REFERENCES `fbi_pages` (`id`) ON DELETE CASCADE
+  CONSTRAINT `fbi_rLikesAge_ibfk_3` FOREIGN KEY (`idLike`) REFERENCES `fbi_likes` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fbi_rLikesAge_ibfk_2` FOREIGN KEY (`idAge`) REFERENCES `fbi_age` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `fbi_rLikesCities`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fbi_rLikesCities` (
+  `idLike` int(10) unsigned NOT NULL,
+  `idCity` int(10) unsigned NOT NULL,
+  `likes` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`idLike`,`idCity`),
+  KEY `idCity` (`idCity`),
+  CONSTRAINT `fbi_rLikesCities_ibfk_3` FOREIGN KEY (`idLike`) REFERENCES `fbi_likes` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fbi_rLikesCities_ibfk_2` FOREIGN KEY (`idCity`) REFERENCES `fbi_cities` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `fbi_rPagesCities`;
@@ -178,12 +203,22 @@ DROP TABLE IF EXISTS `fbi_rPagesCities`;
 CREATE TABLE `fbi_rPagesCities` (
   `idPage` int(10) unsigned NOT NULL,
   `idCity` int(10) unsigned NOT NULL,
-  `likes` int(10) unsigned NOT NULL,
-  `date` date NOT NULL,
   PRIMARY KEY (`idPage`,`idCity`),
   KEY `idCity` (`idCity`),
-  CONSTRAINT `fbi_rPagesCities_ibfk_1` FOREIGN KEY (`idPage`) REFERENCES `fbi_pages` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fbi_rPagesCities_ibfk_2` FOREIGN KEY (`idCity`) REFERENCES `fbi_cities` (`id`) ON DELETE CASCADE
+  CONSTRAINT `fbi_rPagesCities_ibfk_2` FOREIGN KEY (`idCity`) REFERENCES `fbi_cities` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fbi_rPagesCities_ibfk_1` FOREIGN KEY (`idPage`) REFERENCES `fbi_pages` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `fbi_rPagesReferrals`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fbi_rPagesReferrals` (
+  `idPage` int(10) unsigned NOT NULL,
+  `idReferral` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`idPage`,`idReferral`),
+  KEY `idReferral` (`idReferral`),
+  CONSTRAINT `fbi_rPagesReferrals_ibfk_1` FOREIGN KEY (`idPage`) REFERENCES `fbi_pages` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fbi_rPagesReferrals_ibfk_2` FOREIGN KEY (`idReferral`) REFERENCES `fbi_referrals` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `fbi_referrals`;
