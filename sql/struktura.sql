@@ -126,8 +126,8 @@ CREATE TABLE `fbi_pages` (
   `idPage` varchar(20) NOT NULL,
   `idProject` varchar(40) NOT NULL,
   `token` varchar(90) DEFAULT NULL,
-  `getFBData` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `sendToGD` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `isActive` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `isInGD` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
