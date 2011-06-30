@@ -1,0 +1,33 @@
+<schema>
+	<name>LikesToCities</name>
+	<columns>
+		<column>
+			<name>id</name>
+			<title>ID (LikesToCities)</title>
+			<ldmType>CONNECTION_POINT</ldmType>
+			<folder>LikesToCities</folder>
+		</column>
+		<column>
+			<name>idlike</name>
+			<title>ID (Likes)</title>
+			<ldmType>REFERENCE</ldmType>
+			<reference>id</reference>
+			<schemaReference>Days</schemaReference>
+			<folder>LikesToCities</folder>
+		</column>
+		<column>
+			<name>idcity</name>
+			<title>ID (Cities)</title>
+			<ldmType>REFERENCE</ldmType>
+			<reference>id</reference>
+			<schemaReference>Cities</schemaReference>
+			<folder>LikesToCities</folder>
+		</column>
+		<column>
+			<name>likes</name>
+			<title>Likes (LikesToCities)</title>
+			<ldmType>FACT</ldmType>
+			<folder>LikesToCities</folder>
+		</column>
+	</columns>
+</schema>

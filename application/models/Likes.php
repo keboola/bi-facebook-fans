@@ -9,4 +9,5 @@ class Model_Likes extends Zend_Db_Table
 {
 	protected $_name = 'fbi_likes';
 	protected $_rowClass = 'Model_Row_Like';
+
 }

@@ -1,0 +1,23 @@
+<schema>
+	<name>Referrals</name>
+	<columns>
+		<column>
+			<name>id</name>
+			<title>ID (Referrals)</title>
+			<ldmType>CONNECTION_POINT</ldmType>
+			<folder>Referrals</folder>
+		</column>
+		<column>
+			<name>name</name>
+			<title>Name</title>
+			<ldmType>ATTRIBUTE</ldmType>
+			<folder>Referrals</folder>
+		</column>
+		<column>
+			<name>type</name>
+			<title>Type</title>
+			<ldmType>ATTRIBUTE</ldmType>
+			<folder>Referrals</folder>
+		</column>
+	</columns>
+</schema>

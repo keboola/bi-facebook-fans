@@ -1,0 +1,17 @@
+<schema>
+	<name>Cities</name>
+	<columns>
+		<column>
+			<name>id</name>
+			<title>ID (Cities)</title>
+			<ldmType>CONNECTION_POINT</ldmType>
+			<folder>Cities</folder>
+		</column>
+		<column>
+			<name>name</name>
+			<title>Name</title>
+			<ldmType>ATTRIBUTE</ldmType>
+			<folder>Cities</folder>
+		</column>
+	</columns>
+</schema>

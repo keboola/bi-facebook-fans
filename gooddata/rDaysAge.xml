@@ -1,0 +1,33 @@
+<schema>
+	<name>DaysToAge</name>
+	<columns>
+		<column>
+			<name>id</name>
+			<title>ID (DaysToAge)</title>
+			<ldmType>CONNECTION_POINT</ldmType>
+			<folder>DaysToAge</folder>
+		</column>
+		<column>
+			<name>idday</name>
+			<title>ID (Days)</title>
+			<ldmType>REFERENCE</ldmType>
+			<reference>id</reference>
+			<schemaReference>Days</schemaReference>
+			<folder>DaysToAge</folder>
+		</column>
+		<column>
+			<name>idage</name>
+			<title>ID (Age)</title>
+			<ldmType>REFERENCE</ldmType>
+			<reference>id</reference>
+			<schemaReference>Age</schemaReference>
+			<folder>DaysToAge</folder>
+		</column>
+		<column>
+			<name>views</name>
+			<title>Views (DaysToAge)</title>
+			<ldmType>FACT</ldmType>
+			<folder>DaysToAge</folder>
+		</column>
+	</columns>
+</schema>

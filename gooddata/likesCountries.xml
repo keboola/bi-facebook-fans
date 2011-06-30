@@ -1,0 +1,31 @@
+<schema>
+	<name>LikesToCountries</name>
+	<columns>
+		<column>
+			<name>id</name>
+			<title>ID (LikesToCountries)</title>
+			<ldmType>CONNECTION_POINT</ldmType>
+			<folder>LikesToCountries</folder>
+		</column>
+		<column>
+			<name>idlike</name>
+			<title>ID (Likes)</title>
+			<ldmType>REFERENCE</ldmType>
+			<reference>id</reference>
+			<schemaReference>Likes</schemaReference>
+			<folder>LikesToCountries</folder>
+		</column>
+		<column>
+			<name>country</name>
+			<title>Country</title>
+			<ldmType>ATTRIBUTE</ldmType>
+			<folder>LikesToCountries</folder>
+		</column>
+		<column>
+			<name>likes</name>
+			<title>Likes (LikesToCountries)</title>
+			<ldmType>FACT</ldmType>
+			<folder>LikesToCountries</folder>
+		</column>
+	</columns>
+</schema>

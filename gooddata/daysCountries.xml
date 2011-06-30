@@ -1,0 +1,31 @@
+<schema>
+	<name>DaysToCountries</name>
+	<columns>
+		<column>
+			<name>id</name>
+			<title>ID (DaysToCountries)</title>
+			<ldmType>CONNECTION_POINT</ldmType>
+			<folder>DaysToCountries</folder>
+		</column>
+		<column>
+			<name>idday</name>
+			<title>ID (Days)</title>
+			<ldmType>REFERENCE</ldmType>
+			<reference>id</reference>
+			<schemaReference>Days</schemaReference>
+			<folder>DaysToCountries</folder>
+		</column>
+		<column>
+			<name>country</name>
+			<title>Country</title>
+			<ldmType>ATTRIBUTE</ldmType>
+			<folder>DaysToCountries</folder>
+		</column>
+		<column>
+			<name>views</name>
+			<title>Views (DaysToCountries)</title>
+			<ldmType>FACT</ldmType>
+			<folder>DaysToCountries</folder>
+		</column>
+	</columns>
+</schema>

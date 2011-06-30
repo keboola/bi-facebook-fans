@@ -1,0 +1,33 @@
+<schema>
+	<name>DaysToCities</name>
+	<columns>
+		<column>
+			<name>id</name>
+			<title>ID (DaysToCities)</title>
+			<ldmType>CONNECTION_POINT</ldmType>
+			<folder>DaysToCities</folder>
+		</column>
+		<column>
+			<name>idday</name>
+			<title>ID (Days)</title>
+			<ldmType>REFERENCE</ldmType>
+			<reference>id</reference>
+			<schemaReference>Days</schemaReference>
+			<folder>DaysToCities</folder>
+		</column>
+		<column>
+			<name>idcity</name>
+			<title>ID (Cities)</title>
+			<ldmType>REFERENCE</ldmType>
+			<reference>id</reference>
+			<schemaReference>Cities</schemaReference>
+			<folder>DaysToCities</folder>
+		</column>
+		<column>
+			<name>views</name>
+			<title>Views (DaysToCities)</title>
+			<ldmType>FACT</ldmType>
+			<folder>DaysToCities</folder>
+		</column>
+	</columns>
+</schema>

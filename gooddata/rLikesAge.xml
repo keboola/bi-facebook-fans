@@ -1,0 +1,33 @@
+<schema>
+	<name>LikesToAge</name>
+	<columns>
+		<column>
+			<name>id</name>
+			<title>ID (LikesToAge)</title>
+			<ldmType>CONNECTION_POINT</ldmType>
+			<folder>LikesToAge</folder>
+		</column>
+		<column>
+			<name>idlike</name>
+			<title>ID (Likes)</title>
+			<ldmType>REFERENCE</ldmType>
+			<reference>id</reference>
+			<schemaReference>Days</schemaReference>
+			<folder>LikesToAge</folder>
+		</column>
+		<column>
+			<name>idage</name>
+			<title>ID (Age)</title>
+			<ldmType>REFERENCE</ldmType>
+			<reference>id</reference>
+			<schemaReference>Age</schemaReference>
+			<folder>LikesToAge</folder>
+		</column>
+		<column>
+			<name>likes</name>
+			<title>Likes (LikesToAge)</title>
+			<ldmType>FACT</ldmType>
+			<folder>LikesToAge</folder>
+		</column>
+	</columns>
+</schema>

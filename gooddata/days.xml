@@ -1,0 +1,223 @@
+<schema>
+	<name>Days</name>
+	<columns>
+		<column>
+			<name>id</name>
+			<title>ID (Days)</title>
+			<ldmType>CONNECTION_POINT</ldmType>
+			<folder>Days</folder>
+		</column>
+		<column>
+			<name>date</name>
+			<title>Date</title>
+			<ldmType>DATE</ldmType>
+			<format>yyyy-MM-dd</format>
+			<schemaReference>FacebookDate</schemaReference>
+			<folder>Days</folder>
+		</column>
+		<column>
+			<name>dau</name>
+			<title>DAU (Days)</title>
+			<ldmType>FACT</ldmType>
+			<folder>Days</folder>
+		</column>
+		<column>
+			<name>mau</name>
+			<title>MAU (Days)</title>
+			<ldmType>FACT</ldmType>
+			<folder>Days</folder>
+		</column>
+		<column>
+			<name>views</name>
+			<title>Views (Days)</title>
+			<ldmType>FACT</ldmType>
+			<folder>Days</folder>
+		</column>
+		<column>
+			<name>viewsunique</name>
+			<title>Views Unique (Days)</title>
+			<ldmType>FACT</ldmType>
+			<folder>Days</folder>
+		</column>
+		<column>
+			<name>viewslogin</name>
+			<title>Views Login (Days)</title>
+			<ldmType>FACT</ldmType>
+			<folder>Days</folder>
+		</column>
+		<column>
+			<name>viewslogout</name>
+			<title>Views Logout (Days)</title>
+			<ldmType>FACT</ldmType>
+			<folder>Days</folder>
+		</column>
+		<column>
+			<name>viewsMale</name>
+			<title>Views Male (Days)</title>
+			<ldmType>FACT</ldmType>
+			<folder>Days</folder>
+		</column>
+		<column>
+			<name>viewsFemale</name>
+			<title>Views Female (Days)</title>
+			<ldmType>FACT</ldmType>
+			<folder>Days</folder>
+		</column>
+		<column>
+			<name>viewsunknownsex</name>
+			<title>Views Unknown Sex (Days)</title>
+			<ldmType>FACT</ldmType>
+			<folder>Days</folder>
+		</column>
+		<column>
+			<name>viewstotal</name>
+			<title>Views Total (Days)</title>
+			<ldmType>FACT</ldmType>
+			<folder>Days</folder>
+		</column>
+		<column>
+			<name>likestotal</name>
+			<title>Likes Total (Days)</title>
+			<ldmType>FACT</ldmType>
+			<folder>Days</folder>
+		</column>
+		<column>
+			<name>likesadded</name>
+			<title>Likes Added (Days)</title>
+			<ldmType>FACT</ldmType>
+			<folder>Days</folder>
+		</column>
+		<column>
+			<name>likesremoved</name>
+			<title>Likes Removed (Days)</title>
+			<ldmType>FACT</ldmType>
+			<folder>Days</folder>
+		</column>
+		<column>
+			<name>contentlikesadded</name>
+			<title>Content Likes Added (Days)</title>
+			<ldmType>FACT</ldmType>
+			<folder>Days</folder>
+		</column>
+		<column>
+			<name>contentlikesremoved</name>
+			<title>Content Likes Removed (Days)</title>
+			<ldmType>FACT</ldmType>
+			<folder>Days</folder>
+		</column>
+		<column>
+			<name>comments</name>
+			<title>Comments (Days)</title>
+			<ldmType>FACT</ldmType>
+			<folder>Days</folder>
+		</column>
+		<column>
+			<name>feedviews</name>
+			<title>Feed Views (Days)</title>
+			<ldmType>FACT</ldmType>
+			<folder>Days</folder>
+		</column>
+		<column>
+			<name>feedviewsunique</name>
+			<title>Feed Views Unique (Days)</title>
+			<ldmType>FACT</ldmType>
+			<folder>Days</folder>
+		</column>
+		<column>
+			<name>wallposts</name>
+			<title>Wall Posts (Days)</title>
+			<ldmType>FACT</ldmType>
+			<folder>Days</folder>
+		</column>
+		<column>
+			<name>wallpostsunique</name>
+			<title>Wall Posts Unique (Days)</title>
+			<ldmType>FACT</ldmType>
+			<folder>Days</folder>
+		</column>
+		<column>
+			<name>photos</name>
+			<title>Photos (Days)</title>
+			<ldmType>FACT</ldmType>
+			<folder>Days</folder>
+		</column>
+		<column>
+			<name>photoviews</name>
+			<title>Photo Views (Days)</title>
+			<ldmType>FACT</ldmType>
+			<folder>Days</folder>
+		</column>
+		<column>
+			<name>photoviewsunique</name>
+			<title>Photo Views Unique (Days)</title>
+			<ldmType>FACT</ldmType>
+			<folder>Days</folder>
+		</column>
+		<column>
+			<name>videos</name>
+			<title>Videos (Days)</title>
+			<ldmType>FACT</ldmType>
+			<folder>Days</folder>
+		</column>
+		<column>
+			<name>videoplays</name>
+			<title>Video Plays (Days)</title>
+			<ldmType>FACT</ldmType>
+			<folder>Days</folder>
+		</column>
+		<column>
+			<name>videoplaysunique</name>
+			<title>Video Plays Unique (Days)</title>
+			<ldmType>FACT</ldmType>
+			<folder>Days</folder>
+		</column>
+		<column>
+			<name>audioplays</name>
+			<title>Audio Plays (Days)</title>
+			<ldmType>FACT</ldmType>
+			<folder>Days</folder>
+		</column>
+		<column>
+			<name>audioplaysunique</name>
+			<title>Audio Plays Unique (Days)</title>
+			<ldmType>FACT</ldmType>
+			<folder>Days</folder>
+		</column>
+		<column>
+			<name>discussions</name>
+			<title>Discussions (Days)</title>
+			<ldmType>FACT</ldmType>
+			<folder>Days</folder>
+		</column>
+		<column>
+			<name>discussionsunique</name>
+			<title>Discussions Unique (Days)</title>
+			<ldmType>FACT</ldmType>
+			<folder>Days</folder>
+		</column>
+		<column>
+			<name>reviewsadded</name>
+			<title>Reviews Added (Days)</title>
+			<ldmType>FACT</ldmType>
+			<folder>Days</folder>
+		</column>
+		<column>
+			<name>reviewsaddedunique</name>
+			<title>Reviews Added Unique (Days)</title>
+			<ldmType>FACT</ldmType>
+			<folder>Days</folder>
+		</column>
+		<column>
+			<name>reviewsmodified</name>
+			<title>Reviews Modified (Days)</title>
+			<ldmType>FACT</ldmType>
+			<folder>Days</folder>
+		</column>
+		<column>
+			<name>reviewsmodifiedunique</name>
+			<title>Reviews Modified Unique (Days)</title>
+			<ldmType>FACT</ldmType>
+			<folder>Days</folder>
+		</column>
+	</columns>
+</schema>

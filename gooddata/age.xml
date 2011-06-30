@@ -1,0 +1,17 @@
+<schema>
+	<name>Age</name>
+	<columns>
+		<column>
+			<name>id</name>
+			<title>ID (Age)</title>
+			<ldmType>CONNECTION_POINT</ldmType>
+			<folder>Age</folder>
+		</column>
+		<column>
+			<name>name</name>
+			<title>Name</title>
+			<ldmType>ATTRIBUTE</ldmType>
+			<folder>Age</folder>
+		</column>
+	</columns>
+</schema>

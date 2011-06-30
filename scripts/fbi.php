@@ -56,7 +56,8 @@ if ($p) {
 	}
 	$pages = array($page);
 } else {
-	$pages = $_p->fetchAll();
+	// get all pages which should fetch the data
+	$pages = $_p->fetchAll(array('getFBData=?' => 1));
 }
 
 $since = $opts->getOption('since');

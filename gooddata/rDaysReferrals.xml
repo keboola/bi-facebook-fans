@@ -1,0 +1,33 @@
+<schema>
+	<name>DaysToReferrals</name>
+	<columns>
+		<column>
+			<name>id</name>
+			<title>ID (DaysToReferrals)</title>
+			<ldmType>CONNECTION_POINT</ldmType>
+			<folder>DaysToReferrals</folder>
+		</column>
+		<column>
+			<name>idday</name>
+			<title>ID (Days)</title>
+			<ldmType>REFERENCE</ldmType>
+			<reference>id</reference>
+			<schemaReference>Days</schemaReference>
+			<folder>DaysToReferrals</folder>
+		</column>
+		<column>
+			<name>idreferral</name>
+			<title>ID (Referrals)</title>
+			<ldmType>REFERENCE</ldmType>
+			<reference>id</reference>
+			<schemaReference>Referrals</schemaReference>
+			<folder>DaysToReferrals</folder>
+		</column>
+		<column>
+			<name>views</name>
+			<title>Views (DaysToReferrals)</title>
+			<ldmType>FACT</ldmType>
+			<folder>DaysToReferrals</folder>
+		</column>
+	</columns>
+</schema>
