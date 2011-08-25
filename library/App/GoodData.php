@@ -43,6 +43,26 @@ class App_GoodData
 	}
 
 	/**
+	 * Common wrapper for GD CLI commands
+	 * @param $args
+	 * @return void
+	 */
+	public function call($args)
+	{
+		$command = self::CLI_PATH.' -u '.$this->_username.' -p '.$this->_password.' -e \'OpenProject(id="'.$this->_idProject.'");';
+		$command .= $args;
+
+		$output = shell_exec($command.'\'');
+
+		if (strpos($output, 'ERROR')) {
+			App_Debug::send($output, null, 'http.log');
+		}
+		echo $output;
+
+		system('rm ./*.log*');
+	}
+
+	/**
 	 * Set of commands which create a date
 	 * @param $name
 	 * @param $includeTime
@@ -50,14 +70,13 @@ class App_GoodData
 	 */
 	public function createDate($name, $includeTime)
 	{
-		$command = self::CLI_PATH.' -u '.$this->_username.' -p '.$this->_password.' -e \'OpenProject(id="'.$this->_idProject.'");';
-		$command .= 'UseDateDimension(name="'.$name.'", includeTime="'.($includeTime ? 'true' : 'false').'");';
+		echo "\n".'*** Create date: '.$name."\n";
+		$command = 'UseDateDimension(name="'.$name.'", includeTime="'.($includeTime ? 'true' : 'false').'");';
 		$command .= 'GenerateMaql(maqlFile="'.APPLICATION_PATH.'/../tmp/temp.maql");';
 		$command .= 'ExecuteMaql(maqlFile="'.APPLICATION_PATH.'/../tmp/temp.maql");';
 
-		system($command.'\'');
+		$this->call($command);
 		system('rm -rf '.APPLICATION_PATH.'/../tmp/temp.maql');
-		system('rm ./*.log');
 	}
 
 	/**
@@ -68,14 +87,30 @@ class App_GoodData
 	 */
 	public function createDataset($xml, $csv)
 	{
-		$command = self::CLI_PATH.' -u '.$this->_username.' -p '.$this->_password.' -e \'OpenProject(id="'.$this->_idProject.'");';
-		$command .= 'LoadCsv(csvDataFile="' . $csv . '", header="true", configFile="' . $xml . '");';
+		echo "\n".'*** Create dataset: '.basename($xml)."\n";
+		$command = 'LoadCsv(csvDataFile="' . $csv . '", header="true", configFile="' . $xml . '");';
 		$command .= 'GenerateMaql(maqlFile="'.APPLICATION_PATH.'/../tmp/temp.maql");';
 		$command .= 'ExecuteMaql(maqlFile="'.APPLICATION_PATH.'/../tmp/temp.maql");';
-		
-		system($command.'\'');
+
+		$this->call($command);
 		system('rm -rf '.APPLICATION_PATH.'/../tmp/temp.maql');
-		system('rm ./*.log');
+	}
+
+	/**
+	 * Set of commands which create a dataset
+	 * @param $xml
+	 * @param $csv
+	 * @return void
+	 */
+	public function updateDataset($xml, $csv)
+	{
+		echo "\n".'*** Update dataset: '.basename($xml)."\n";
+		$command = 'LoadCsv(csvDataFile="' . $csv . '", header="true", configFile="' . $xml . '");';
+		$command .= 'GenerateUpdateMaql(maqlFile="'.APPLICATION_PATH.'/../tmp/temp.maql");';
+		$command .= 'ExecuteMaql(maqlFile="'.APPLICATION_PATH.'/../tmp/temp.maql");';
+
+		$this->call($command);
+		system('rm -rf '.APPLICATION_PATH.'/../tmp/temp.maql');
 	}
 
 	/**
@@ -84,14 +119,24 @@ class App_GoodData
 	 * @param $csv
 	 * @return void
 	 */
-	public function loadData($xml, $csv)
+	public function loadData($xml, $csv, $incremental=false)
 	{
-		$command = self::CLI_PATH.' -u '.$this->_username.' -p '.$this->_password.' -e \'OpenProject(id="'.$this->_idProject.'");';
-		$command .= 'LoadCsv(csvDataFile="' . $csv . '", header="true", configFile="' . $xml . '");';
-		$command .= 'TransferData(incremental="false", waitForFinish="true");';
+		echo "\n".'*** Load data: '.basename($csv)."\n";
+		$command = 'LoadCsv(csvDataFile="' . $csv . '", header="true", configFile="' . $xml . '");';
+		$command .= 'TransferData(incremental="'.($incremental ? 'true' : 'false').'", waitForFinish="true");';
 
-		system($command.'\'');
-		system('rm ./*.log');
+		$this->call($command);
+	}
+
+	/**
+	 * Double all double quotes because of GoodData escaping
+	 * @static
+	 * @param $string
+	 * @return string
+	 */
+	public static function escapeString($string)
+	{
+		return substr(trim(str_replace('"', '""', (string)$string)), 0, 255);
 	}
 
 }

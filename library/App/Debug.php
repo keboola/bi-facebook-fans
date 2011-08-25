@@ -20,4 +20,30 @@ class App_Debug
 			APPLICATION_PATH . '/../logs/'.$file
 		);
 	}
+
+	/**
+	 * Method sends log to email
+	 * @param mixed $data
+	 * @param string $email
+	 * @param string $attachment
+	 */
+	public static function send($data, $email=null, $attachment=null)
+	{
+		$c = Zend_Registry::get('config');
+
+		$m = new Zend_Mail('utf8');
+		$m->setFrom($c->app->email);
+		$m->addTo($c->app->admin);
+		$m->setSubject('Facebook-GoodData connector error');
+		$m->setBodyText($data);
+
+		if ($attachment && file_exists($attachment)) {
+			$a = new Zend_Mime_Part(file_get_contents($attachment));
+			$a->filename = basename($attachment);
+			$a->disposition = Zend_Mime::DISPOSITION_ATTACHMENT;
+			$m->addAttachment($a);
+		}
+
+		$m->send();
+	}
 }

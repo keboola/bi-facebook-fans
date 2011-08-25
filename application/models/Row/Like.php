@@ -12,7 +12,7 @@ class Model_Row_Like extends Zend_Db_Table_Row_Abstract
 	 * @param array $data
 	 * @param string $date
 	 */
-	public function addAge($data, $date)
+	public function addAge($idPage, $data, $date)
 	{
 		$_a = new Model_Age();
 		$_la = new Model_LikesAge();
@@ -24,9 +24,9 @@ class Model_Row_Like extends Zend_Db_Table_Row_Abstract
 			} else {
 				$id = $r->id;
 			}
-			$la = $_la->fetchRow(array('idLike=?' => $this->id, 'idAge=?' => $id));
+			$la = $_la->fetchRow(array('idLike=?' => $this->id, 'idAge=?' => $id, 'idPage=?' => $idPage));
 			if (!$la) {
-				$_la->insert(array('idLike' => $this->id, 'idAge' => $id, 'likes' => $v));
+				$_la->insert(array('idLike' => $this->id, 'idAge' => $id, 'idPage' => $idPage, 'likes' => $v));
 			} else {
 				if ($this->date < $date) {
 					$la->likes = $v;
@@ -54,9 +54,9 @@ class Model_Row_Like extends Zend_Db_Table_Row_Abstract
 			} else {
 				$id = $r->id;
 			}
-			$lc = $_lc->fetchRow(array('idLike=?' => $this->id, 'idCity=?' => $id));
+			$lc = $_lc->fetchRow(array('idLike=?' => $this->id, 'idCity=?' => $id, 'idPage=?' => $idPage));
 			if (!$lc) {
-				$_lc->insert(array('idLike' => $this->id, 'idCity' => $id, 'likes' => $v));
+				$_lc->insert(array('idLike' => $this->id, 'idCity' => $id, 'idPage' => $idPage, 'likes' => $v));
 				try {
 					$_pc->insert(array('idPage' => $idPage, 'idCity' => $id));
 				} catch(Exception $e) {
@@ -75,14 +75,14 @@ class Model_Row_Like extends Zend_Db_Table_Row_Abstract
 	 * @param array $data
 	 * @param string $date
 	 */
-	public function addCountries($data, $date)
+	public function addCountries($idPage, $data, $date)
 	{
 		$_c = new Model_LikesCountries();
 
 		foreach ($data as $k => $v) {
-			$c = $_c->fetchRow(array('idLike=?' => $this->id, 'country=?' => $k));
+			$c = $_c->fetchRow(array('idLike=?' => $this->id, 'country=?' => $k, 'idPage=?' => $idPage));
 			if (!$c) {
-				$_c->insert(array('idLike' => $this->id, 'country' => $k, 'likes' => $v));
+				$_c->insert(array('idLike' => $this->id, 'country' => $k, 'idPage' => $idPage, 'likes' => $v));
 			} else {
 				if ($this->date < $date) {
 					$c->likes = $v;

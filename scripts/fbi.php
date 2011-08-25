@@ -81,16 +81,9 @@ foreach($pages as $page) {
 	try {
 		$data = $insights->getData($since, $until);
 	} catch(App_FacebookException $e) {
-		$message = 'Error for page '.$page->id. '('.$page->name.'), interval: '.$since.'-'.$until.' - '.$e->getMessage()."\n";
+		App_Debug::send('Error for page '.$page->id. '('.$page->name.'), interval: '.$since.'-'.$until.' - '.$e->getMessage()."\n");
 
-		$mail = new Zend_Mail('utf-8');
-		$mail->setFrom($config->app->email, 'Facebook-GoodData Connector');
-		$mail->addTo($config->app->admin);
-		$mail->setBodyText($message);
-		$mail->setSubject('Connector error');
-		$mail->send();
-
-		echo 'There was an error during talking to Facebook API. Try again please.';
+		echo "There was an error during talking to Facebook API. Try again please.\n";
 		continue;
 	}
 
@@ -116,17 +109,18 @@ foreach($pages as $page) {
 				$l->male = isset($lifetime['likesMale']) ? $lifetime['likesMale'] : 0;
 				$l->female = isset($lifetime['likesFemale']) ? $lifetime['likesFemale'] : 0;
 				$l->unknownSex = isset($lifetime['likesUnknownSex']) ? $lifetime['likesUnknownSex'] : 0;
+				$l->save();
 			}
 		}
 
 		if (isset($lifetime['countries'])) {
-			$l->addCountries($lifetime['countries'], $lifetime['date']);
+			$l->addCountries($page->id, $lifetime['countries'], $lifetime['date']);
 		}
 		if (isset($lifetime['cities'])) {
 			$l->addCities($page->id, $lifetime['cities'], $lifetime['date']);
 		}
 		if (isset($lifetime['age'])) {
-			$l->addAge($lifetime['age'], $lifetime['date']);
+			$l->addAge($page->id, $lifetime['age'], $lifetime['date']);
 		}
 	}
 	
@@ -139,7 +133,7 @@ foreach($pages as $page) {
 		$internalReferrals = isset($values['internalReferrals']) ? $values['internalReferrals'] : array();
 		$externalReferrals = isset($values['externalReferrals']) ? $values['externalReferrals'] : array();
 
-		$id = $_d->add(array_merge(
+		$day = $_d->add(array_merge(
 			array('date' => $date, 'idPage' => $page->id),
 			array_diff_key($values, array(
 				'age' => null,
@@ -149,10 +143,9 @@ foreach($pages as $page) {
 				'externalReferrals' => null
 			))
 		));
-		$day = $_d->fetchRow(array('id=?' => $id));
-		$day->addAge($age);
+		$day->addAge($page->id, $age);
 		$day->addCities($page->id, $activeUsersCity);
-		$day->addCountries($activeUsersCountry);
+		$day->addCountries($page->id, $activeUsersCountry);
 		$day->addReferrals($page->id, $internalReferrals, $externalReferrals);
 	}
 }

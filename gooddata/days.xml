@@ -8,8 +8,12 @@
 			<folder>Days</folder>
 		</column>
 		<column>
+			<name>idPage</name>
+			<ldmType>IGNORE</ldmType>
+		</column>
+		<column>
 			<name>date</name>
-			<title>Date</title>
+			<title>Date (Days)</title>
 			<ldmType>DATE</ldmType>
 			<format>yyyy-MM-dd</format>
 			<schemaReference>FacebookDate</schemaReference>
@@ -30,6 +34,12 @@
 		<column>
 			<name>views</name>
 			<title>Views (Days)</title>
+			<ldmType>FACT</ldmType>
+			<folder>Days</folder>
+		</column>
+		<column>
+			<name>viewstotal</name>
+			<title>Views Total (Days)</title>
 			<ldmType>FACT</ldmType>
 			<folder>Days</folder>
 		</column>
@@ -66,12 +76,6 @@
 		<column>
 			<name>viewsunknownsex</name>
 			<title>Views Unknown Sex (Days)</title>
-			<ldmType>FACT</ldmType>
-			<folder>Days</folder>
-		</column>
-		<column>
-			<name>viewstotal</name>
-			<title>Views Total (Days)</title>
 			<ldmType>FACT</ldmType>
 			<folder>Days</folder>
 		</column>
@@ -216,6 +220,12 @@
 		<column>
 			<name>reviewsmodifiedunique</name>
 			<title>Reviews Modified Unique (Days)</title>
+			<ldmType>FACT</ldmType>
+			<folder>Days</folder>
+		</column>
+		<column>
+			<name>snapshot</name>
+			<title>Snapshot (Days)</title>
 			<ldmType>FACT</ldmType>
 			<folder>Days</folder>
 		</column>

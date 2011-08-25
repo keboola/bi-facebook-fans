@@ -17,7 +17,7 @@
 		</column>
 		<column>
 			<name>country</name>
-			<title>Country</title>
+			<title>Country (LikesToCountries)</title>
 			<ldmType>ATTRIBUTE</ldmType>
 			<folder>LikesToCountries</folder>
 		</column>

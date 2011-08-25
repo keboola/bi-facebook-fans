@@ -9,7 +9,7 @@
 		</column>
 		<column>
 			<name>date</name>
-			<title>Date</title>
+			<title>Date (Likes)</title>
 			<ldmType>DATE</ldmType>
 			<format>yyyy-MM-dd</format>
 			<schemaReference>FacebookDate</schemaReference>

@@ -9,7 +9,7 @@
 		</column>
 		<column>
 			<name>name</name>
-			<title>Name</title>
+			<title>Name (Age)</title>
 			<ldmType>ATTRIBUTE</ldmType>
 			<folder>Age</folder>
 		</column>

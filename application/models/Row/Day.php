@@ -11,7 +11,7 @@ class Model_Row_Day extends Zend_Db_Table_Row_Abstract
 	/**
 	 * @param array $data
 	 */
-	public function addAge($data)
+	public function addAge($idPage, $data)
 	{
 		$_a = new Model_Age();
 		$_da = new Model_DaysAge();
@@ -23,8 +23,8 @@ class Model_Row_Day extends Zend_Db_Table_Row_Abstract
 			} else {
 				$id = $r->id;
 			}
-			if (!$_da->fetchRow(array('idDay=?' => $this->id, 'idAge=?' => $id))) {
-				$_da->insert(array('idDay' => $this->id, 'idAge' => $id, 'views' => $v));
+			if (!$_da->fetchRow(array('idDay=?' => $this->id, 'idAge=?' => $id, 'idPage=?' => $idPage))) {
+				$_da->insert(array('idDay' => $this->id, 'idAge' => $id, 'idPage' => $idPage, 'views' => $v));
 			}
 		}
 	}
@@ -46,8 +46,8 @@ class Model_Row_Day extends Zend_Db_Table_Row_Abstract
 			} else {
 				$id = $r->id;
 			}
-			if (!$_dc->fetchRow(array('idDay=?' => $this->id, 'idCity=?' => $id))) {
-				$_dc->insert(array('idDay' => $this->id, 'idCity' => $id, 'views' => $v));
+			if (!$_dc->fetchRow(array('idDay=?' => $this->id, 'idCity=?' => $id, 'idPage=?' => $idPage))) {
+				$_dc->insert(array('idDay' => $this->id, 'idCity' => $id, 'idPage' => $idPage, 'views' => $v));
 				try {
 					$_pc->insert(array('idPage' => $idPage, 'idCity' => $id));
 				} catch(Exception $e) {
@@ -60,13 +60,13 @@ class Model_Row_Day extends Zend_Db_Table_Row_Abstract
 	/**
 	 * @param array $data
 	 */
-	public function addCountries($data)
+	public function addCountries($idPage, $data)
 	{
 		$_uc = new Model_DaysCountries();
 
 		foreach ($data as $k => $v) {
-			if (!$_uc->fetchRow(array('idDay=?' => $this->id, 'country=?' => $k))) {
-				$_uc->insert(array('idDay' => $this->id, 'country' => $k, 'views' => $v));
+			if (!$_uc->fetchRow(array('idDay=?' => $this->id, 'country=?' => $k, 'idPage=?' => $idPage))) {
+				$_uc->insert(array('idDay' => $this->id, 'country' => $k, 'idPage' => $idPage, 'views' => $v));
 			}
 		}
 	}
@@ -89,8 +89,8 @@ class Model_Row_Day extends Zend_Db_Table_Row_Abstract
 			} else {
 				$id = $r->id;
 			}
-			if (!$_dr->fetchRow(array('idDay=?' => $this->id, 'idReferral=?' => $id))) {
-				$_dr->insert(array('idDay' => $this->id, 'idReferral' => $id, 'views' => $v));
+			if (!$_dr->fetchRow(array('idDay=?' => $this->id, 'idReferral=?' => $id, 'idPage=?' => $idPage))) {
+				$_dr->insert(array('idDay' => $this->id, 'idReferral' => $id, 'idPage' => $idPage, 'views' => $v));
 				try {
 					$_pr->insert(array('idPage' => $idPage, 'idReferral' => $id));
 				} catch(Exception $e) {
@@ -105,8 +105,8 @@ class Model_Row_Day extends Zend_Db_Table_Row_Abstract
 			} else {
 				$id = $r->id;
 			}
-			if (!$_dr->fetchRow(array('idDay=?' => $this->id, 'idReferral=?' => $id))) {
-				$_dr->insert(array('idDay' => $this->id, 'idReferral' => $id, 'views' => $v));
+			if (!$_dr->fetchRow(array('idDay=?' => $this->id, 'idReferral=?' => $id, 'idPage=?' => $idPage))) {
+				$_dr->insert(array('idDay' => $this->id, 'idReferral' => $id, 'idPage' => $idPage, 'views' => $v));
 				try {
 					$_pr->insert(array('idPage' => $idPage, 'idReferral' => $id));
 				} catch(Exception $e) {
@@ -114,10 +114,5 @@ class Model_Row_Day extends Zend_Db_Table_Row_Abstract
 				}
 			}
 		}
-	}
-
-	public function totalViews()
-	{
-		return $this->getTable()->getAdapter()->fetchOne('SELECT COUNT(views) FROM fbi_days WHERE date <= ?', $this->date);
 	}
 }

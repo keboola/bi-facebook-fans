@@ -9,7 +9,7 @@
 		</column>
 		<column>
 			<name>name</name>
-			<title>Name</title>
+			<title>Name (Cities)</title>
 			<ldmType>ATTRIBUTE</ldmType>
 			<folder>Cities</folder>
 		</column>

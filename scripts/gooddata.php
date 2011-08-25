@@ -24,12 +24,14 @@ $opts = new Zend_Console_Getopt(array(
 		'table|t-s' => 'table option, with required string parameter',
 		'setup|s-i' => 'setup datasets in GoodData',
 		'load|l-i' => 'load data to datasets in GoodData',
+		'update|u-s' => 'update dataset structure in GoodData',
 	));
 $opts->setHelp(array(
 		'p' => 'Id of page in db',
 		't' => 'Name of the table to export.',
 		's' => 'Setup datasets in GoodData',
-		'l' => 'Load data to datasets in GoodData'
+		'l' => 'Load data to datasets in GoodData',
+		'u' => 'Update dataset structure in GoodData',
 	));
 try {
 	$opts->parse();
@@ -62,7 +64,7 @@ if ($p) {
 $config = Zend_Registry::get('config');
 
 foreach ($pages as $page) {
-	$fgd = new App_FacebookGoodData($config->gooddata->username, $config->gooddata->password, $page->idProject, $page->id);
+	$fgd = new App_FacebookGoodData($config, $page->idProject, $page->id);
 
 	if ($opts->getOption('setup')) {
 		$fgd->setup();
@@ -73,43 +75,46 @@ foreach ($pages as $page) {
 	} elseif ($opts->getOption('load')) {
 		$fgd->loadData();
 
+	} elseif ($opts->getOption('update')) {
+		$fgd = new App_FacebookGoodData($config, $page->idProject, $page->id);
+		$fgd->updateStructure($opts->getOption('update'));
 	} else {
 		switch ($opts->getOption('table')) {
 			case 'age':
-				echo $fgd->dumpAge(true);
+				echo $fgd->dumpTable('age', true);
 				break;
 			case 'cities':
-				echo $fgd->dumpCities(true);
+				echo $fgd->dumpTable('cities', true);
 				break;
 			case 'days':
-				echo $fgd->dumpDays(true);
+				echo $fgd->dumpTable('days', true);
 				break;
 			case 'daysCountries':
-				echo $fgd->dumpDaysCountries(true);
+				echo $fgd->dumpTable('daysCountries', true);
 				break;
 			case 'likes':
-				echo $fgd->dumpLikes(true);
+				echo $fgd->dumpTable('likes', true);
 				break;
 			case 'likesCountries':
-				echo $fgd->dumpLikesCountries(true);
+				echo $fgd->dumpTable('likesCountries', true);
 				break;
 			case 'rDaysAge':
-				echo $fgd->dumpDaysAge(true);
+				echo $fgd->dumpTable('rDaysAge', true);
 				break;
 			case 'rDaysCities':
-				echo $fgd->dumpDaysCities(true);
+				echo $fgd->dumpTable('rDaysCities', true);
 				break;
 			case 'rDaysReferrals':
-				echo $fgd->dumpDaysReferrals(true);
+				echo $fgd->dumpTable('rDaysReferrals', true);
 				break;
 			case 'rLikesAge':
-				echo $fgd->dumpLikesAge(true);
+				echo $fgd->dumpTable('rLikesAge', true);
 				break;
 			case 'rLikesCities':
-				echo $fgd->dumpLikesCities(true);
+				echo $fgd->dumpTable('rLikesCities', true);
 				break;
 			case 'referrals':
-				echo $fgd->dumpReferrals(true);
+				echo $fgd->dumpTable('referrals', true);
 				break;
 			default:
 				echo $opts->getUsageMessage();

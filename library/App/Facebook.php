@@ -64,8 +64,10 @@ class App_Facebook
 				return $result['data'][0];
 			else
 				return $result;
-		} else
+		} else {
+			App_Debug::send($output);
 			throw new App_FacebookException($output);
+		}
 	}
 
 	

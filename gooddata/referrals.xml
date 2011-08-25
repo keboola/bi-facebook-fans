@@ -9,13 +9,13 @@
 		</column>
 		<column>
 			<name>name</name>
-			<title>Name</title>
+			<title>Name (Referrals)</title>
 			<ldmType>ATTRIBUTE</ldmType>
 			<folder>Referrals</folder>
 		</column>
 		<column>
 			<name>type</name>
-			<title>Type</title>
+			<title>Type (Referrals)</title>
 			<ldmType>ATTRIBUTE</ldmType>
 			<folder>Referrals</folder>
 		</column>

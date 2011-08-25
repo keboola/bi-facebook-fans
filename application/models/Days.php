@@ -16,13 +16,25 @@ class Model_Days extends Zend_Db_Table
 	 */
 	public function add($data)
 	{
-		$r = $this->fetchRow(array('date=?' => $data['date'], 'idPage=?' => $data['idPage']));
+		$data['viewsTotal'] = $this->getViewsTotal($data['idPage']);
+		if (isset($data['views'])) {
+			$data['viewsTotal'] += $data['views'];
+		}
+
+		$r = $this->fetchRow(array('idPage=?' => $data['idPage'], 'date=?' => $data['date']));
 		if ($r) {
 			$r->setFromArray($data);
 			$r->save();
-			return $r->id;
+			$id = $r->id;
 		} else {
-			return $this->insert($data);
+			$id = $this->insert($data);
 		}
+
+		return $this->fetchRow(array('id=?' => $id));
+	}
+
+	public function getViewsTotal($idPage)
+	{
+		return $this->getAdapter()->fetchOne('SELECT viewsTotal FROM '.$this->_name.' WHERE idPage = ? ORDER BY date DESC', $idPage);
 	}
 }
