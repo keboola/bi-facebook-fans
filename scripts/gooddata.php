@@ -20,6 +20,7 @@ $application->bootstrap();
 
 // Setup console input
 $opts = new Zend_Console_Getopt(array(
+		'all|a-i' => 'load all',
 		'page|p=i' => 'Id of page in db',
 		'table|t-s' => 'table option, with required string parameter',
 		'setup|s-i' => 'setup datasets in GoodData',
@@ -27,6 +28,7 @@ $opts = new Zend_Console_Getopt(array(
 		'update|u-s' => 'update dataset structure in GoodData',
 	));
 $opts->setHelp(array(
+		'a' => 'load all',
 		'p' => 'Id of page in db',
 		't' => 'Name of the table to export.',
 		's' => 'Setup datasets in GoodData',
@@ -73,7 +75,7 @@ foreach ($pages as $page) {
 		$page->save();
 
 	} elseif ($opts->getOption('load')) {
-		$fgd->loadData();
+		$fgd->loadData($opts->getOption('all'));
 
 	} elseif ($opts->getOption('update')) {
 		$fgd = new App_FacebookGoodData($config, $page->idProject, $page->id);

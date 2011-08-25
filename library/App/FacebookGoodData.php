@@ -54,7 +54,7 @@ class App_FacebookGoodData
 	 * @param bool $structure If true, dump only one row for dataset creation
 	 * @return string|void
 	 */
-	public function dumpTable($table, $return=false, $structure=false)
+	public function dumpTable($table, $return=false, $structure=false, $all=false)
 	{
 		switch($table) {
 			case 'age':
@@ -99,6 +99,8 @@ class App_FacebookGoodData
 
 		if ($structure) {
 			$sql .= ' LIMIT 1';
+		} elseif (!$all) {
+			$sql .= ' AND timestamp > \''.date('Y-m-d H:i:s', strtotime('-4 days')).'\'';
 		}
 
 
@@ -122,9 +124,9 @@ class App_FacebookGoodData
 	 * @param $dataset
 	 * @return void
 	 */
-	public function loadDataset($dataset)
+	public function loadDataset($dataset, $all=true)
 	{
-		$this->dumpTable($dataset, false, false);
+		$this->dumpTable($dataset, false, false, $all);
 		$this->_gd->loadData($this->_xmlPath . '/'.$dataset.'.xml', $this->_tmpPath.'/'.$dataset.'.csv');
 	}
 
@@ -164,20 +166,20 @@ class App_FacebookGoodData
 	 * Loads data to all data sets in GoodData
 	 * @return void
 	 */
-	public function loadData()
+	public function loadData($all=false)
 	{
-		$this->loadDataset('days');
-		$this->loadDataset('daysCountries');
-		$this->loadDataset('referrals');
-		$this->loadDataset('age');
-		$this->loadDataset('cities');
-		$this->loadDataset('likes');
-		$this->loadDataset('likesCountries');
-		$this->loadDataset('rDaysAge');
-		$this->loadDataset('rDaysCities');
-		$this->loadDataset('rDaysReferrals');
-		$this->loadDataset('rLikesAge');
-		$this->loadDataset('rLikesCities');
+		$this->loadDataset('days', $all);
+		$this->loadDataset('daysCountries', $all);
+		$this->loadDataset('referrals', $all);
+		$this->loadDataset('age', $all);
+		$this->loadDataset('cities', $all);
+		$this->loadDataset('likes', $all);
+		$this->loadDataset('likesCountries', $all);
+		$this->loadDataset('rDaysAge', $all);
+		$this->loadDataset('rDaysCities', $all);
+		$this->loadDataset('rDaysReferrals', $all);
+		$this->loadDataset('rLikesAge', $all);
+		$this->loadDataset('rLikesCities', $all);
 	}
 
 	/**
