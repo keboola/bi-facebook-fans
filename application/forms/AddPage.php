@@ -18,7 +18,10 @@ class Form_AddPage extends App_Form
 		$this->addElement('text', 'idPage', array(
 			'required'	=> true,
 			'label'		=> 'Facebook Page Id',
-			'validators' => array('NotEmpty')
+			'validators' => array(
+				'NotEmpty',
+				new App_Validate_FacebookPage()
+			)
 		));
 
 		$this->addElement('text', 'idProject', array(
