@@ -148,4 +148,9 @@ foreach($pages as $page) {
 		$day->addCountries($page->id, $activeUsersCountry);
 		$day->addReferrals($page->id, $internalReferrals, $externalReferrals);
 	}
+
+	if (!$page->isImported) {
+		$page->isImported = 1;
+		$page->save();
+	}
 }

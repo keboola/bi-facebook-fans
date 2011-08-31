@@ -145,6 +145,7 @@ CREATE TABLE `fbi_pages` (
   `idProject` varchar(40) NOT NULL,
   `token` varchar(90) DEFAULT NULL,
   `isActive` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `isImported` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `isInGD` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)

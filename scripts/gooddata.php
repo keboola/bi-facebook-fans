@@ -54,9 +54,9 @@ if ($p) {
 } else {
 	// get all pages which should fetch the data
 	if ($opts->getOption('setup')) {
-		$pages = $_p->fetchAll(array('isActive=?' => 1, 'isInGD=?' => 0));
+		$pages = $_p->fetchAll(array('isActive=?' => 1, 'isImported' => 1, 'isInGD=?' => 0));
 	} else if ($opts->getOption('load')) {
-		$pages = $_p->fetchAll(array('isActive=?' => 1, 'isInGD=?' => 1));
+		$pages = $_p->fetchAll(array('isActive=?' => 1, 'isImported' => 1, 'isInGD=?' => 1));
 	} else {
 		echo $e->getUsageMessage();
 		exit;
@@ -74,12 +74,14 @@ foreach ($pages as $page) {
 		$page->isInGD = 1;
 		$page->save();
 
+		$fgd->loadData(true);
+
 	} elseif ($opts->getOption('load')) {
 		$fgd->loadData($opts->getOption('all'));
 
 	} elseif ($opts->getOption('update')) {
-		$fgd = new App_FacebookGoodData($config, $page->idProject, $page->id);
 		$fgd->updateStructure($opts->getOption('update'));
+		
 	} else {
 		switch ($opts->getOption('table')) {
 			case 'age':

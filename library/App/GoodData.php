@@ -44,17 +44,18 @@ class App_GoodData
 
 	/**
 	 * Common wrapper for GD CLI commands
-	 * @param $args
+	 * @param array $args
+	 * @param bool $reportErrors
 	 * @return void
 	 */
-	public function call($args)
+	public function call($args, $reportErrors=true)
 	{
 		$command = self::CLI_PATH.' -u '.$this->_username.' -p '.$this->_password.' -e \'OpenProject(id="'.$this->_idProject.'");';
 		$command .= $args;
 
 		$output = shell_exec($command.'\'');
 
-		if (strpos($output, 'ERROR')) {
+		if ($reportErrors && strpos($output, 'ERROR')) {
 			App_Debug::send($output, null, 'http.log');
 		}
 		echo $output;
@@ -85,7 +86,7 @@ class App_GoodData
 		$command = 'GetReports(fileName="'.APPLICATION_PATH.'/../tmp/reports.txt");';
 		$command .= 'ExecuteReports(fileName="'.APPLICATION_PATH.'/../tmp/reports.txt");';
 
-		$this->call($command);
+		$this->call($command, false);
 		system('rm -rf '.APPLICATION_PATH.'/../tmp/reports.txt');
 	}
 
