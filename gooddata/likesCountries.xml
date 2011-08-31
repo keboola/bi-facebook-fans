@@ -1,31 +1,31 @@
 <schema>
-	<name>LikesToCountries</name>
+	<name>FB_LikesToCountries</name>
 	<columns>
 		<column>
 			<name>id</name>
-			<title>ID (LikesToCountries)</title>
+			<title>ID (FB_LikesToCountries)</title>
 			<ldmType>CONNECTION_POINT</ldmType>
-			<folder>LikesToCountries</folder>
+			<folder>FB_LikesToCountries</folder>
 		</column>
 		<column>
 			<name>idlike</name>
-			<title>ID (Likes)</title>
+			<title>ID (FB_Likes)</title>
 			<ldmType>REFERENCE</ldmType>
 			<reference>id</reference>
-			<schemaReference>Likes</schemaReference>
-			<folder>LikesToCountries</folder>
+			<schemaReference>FB_Likes</schemaReference>
+			<folder>FB_LikesToCountries</folder>
 		</column>
 		<column>
 			<name>country</name>
-			<title>Country (LikesToCountries)</title>
+			<title>Country (FB_LikesToCountries)</title>
 			<ldmType>ATTRIBUTE</ldmType>
-			<folder>LikesToCountries</folder>
+			<folder>FB_LikesToCountries</folder>
 		</column>
 		<column>
 			<name>likes</name>
-			<title>Likes (LikesToCountries)</title>
+			<title>Likes (FB_LikesToCountries)</title>
 			<ldmType>FACT</ldmType>
-			<folder>LikesToCountries</folder>
+			<folder>FB_LikesToCountries</folder>
 		</column>
 	</columns>
 </schema>

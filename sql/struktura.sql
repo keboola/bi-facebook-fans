@@ -17,7 +17,8 @@ CREATE TABLE `fbi_age` (
   `name` varchar(15) NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`)
+  UNIQUE KEY `name` (`name`),
+  KEY `timestamp` (`timestamp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `fbi_cities`;
@@ -28,7 +29,8 @@ CREATE TABLE `fbi_cities` (
   `name` varchar(100) NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`)
+  UNIQUE KEY `name` (`name`),
+  KEY `timestamp` (`timestamp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `fbi_days`;
@@ -75,6 +77,7 @@ CREATE TABLE `fbi_days` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `idPage_date` (`idPage`,`date`),
+  KEY `idPage_timestamp` (`idPage`,`timestamp`),
   CONSTRAINT `fbi_days_ibfk_1` FOREIGN KEY (`idPage`) REFERENCES `fbi_pages` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -90,7 +93,7 @@ CREATE TABLE `fbi_daysCountries` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `idDay_country_idPage` (`idDay`,`country`,`idPage`),
-  KEY `idPage` (`idPage`),
+  KEY `idPage_timestamp` (`idPage`,`timestamp`),
   CONSTRAINT `fbi_daysCountries_ibfk_1` FOREIGN KEY (`idDay`) REFERENCES `fbi_days` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fbi_daysCountries_ibfk_2` FOREIGN KEY (`idPage`) REFERENCES `fbi_pages` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -109,6 +112,7 @@ CREATE TABLE `fbi_likes` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `idPage_month` (`idPage`,`month`),
+  KEY `idPage_timestamp` (`idPage`,`timestamp`),
   CONSTRAINT `fbi_likes_ibfk_1` FOREIGN KEY (`idPage`) REFERENCES `fbi_pages` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -124,7 +128,7 @@ CREATE TABLE `fbi_likesCountries` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `idLike_country_idPage` (`idLike`,`country`,`idPage`),
-  KEY `idPage` (`idPage`),
+  KEY `idPage_timestamp` (`idPage`,`timestamp`),
   CONSTRAINT `fbi_likesCountries_ibfk_1` FOREIGN KEY (`idLike`) REFERENCES `fbi_likes` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fbi_likesCountries_ibfk_2` FOREIGN KEY (`idPage`) REFERENCES `fbi_pages` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
@@ -142,6 +146,7 @@ CREATE TABLE `fbi_pages` (
   `token` varchar(90) DEFAULT NULL,
   `isActive` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `isInGD` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -158,7 +163,7 @@ CREATE TABLE `fbi_rDaysAge` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `idDay_idAge_idPage` (`idDay`,`idAge`,`idPage`),
   KEY `idUserAge` (`idAge`),
-  KEY `idPage` (`idPage`),
+  KEY `idPage_timestamp` (`idPage`,`timestamp`),
   CONSTRAINT `fbi_rDaysAge_ibfk_1` FOREIGN KEY (`idDay`) REFERENCES `fbi_days` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fbi_rDaysAge_ibfk_2` FOREIGN KEY (`idAge`) REFERENCES `fbi_age` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fbi_rDaysAge_ibfk_3` FOREIGN KEY (`idPage`) REFERENCES `fbi_pages` (`id`) ON DELETE CASCADE
@@ -178,7 +183,7 @@ CREATE TABLE `fbi_rDaysCities` (
   UNIQUE KEY `idDay_idCity_idPage` (`idDay`,`idCity`,`idPage`),
   KEY `idCity` (`idCity`),
   KEY `idDay` (`idDay`),
-  KEY `idPage` (`idPage`),
+  KEY `idPage_timestamp` (`idPage`,`timestamp`),
   CONSTRAINT `fbi_rDaysCities_ibfk_1` FOREIGN KEY (`idDay`) REFERENCES `fbi_days` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fbi_rDaysCities_ibfk_2` FOREIGN KEY (`idCity`) REFERENCES `fbi_cities` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fbi_rDaysCities_ibfk_3` FOREIGN KEY (`idPage`) REFERENCES `fbi_pages` (`id`) ON DELETE CASCADE
@@ -197,7 +202,7 @@ CREATE TABLE `fbi_rDaysReferrals` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `idDay_idReferral_idPage` (`idDay`,`idReferral`,`idPage`),
   KEY `idReferral` (`idReferral`),
-  KEY `idPage` (`idPage`),
+  KEY `idPage_timestamp` (`idPage`,`timestamp`),
   CONSTRAINT `fbi_rDaysReferrals_ibfk_3` FOREIGN KEY (`idReferral`) REFERENCES `fbi_referrals` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fbi_rDaysReferrals_ibfk_4` FOREIGN KEY (`idDay`) REFERENCES `fbi_days` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fbi_rDaysReferrals_ibfk_5` FOREIGN KEY (`idPage`) REFERENCES `fbi_pages` (`id`) ON DELETE CASCADE
@@ -216,7 +221,7 @@ CREATE TABLE `fbi_rLikesAge` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `idLike_idAge_idPage` (`idLike`,`idAge`,`idPage`),
   KEY `idAge` (`idAge`),
-  KEY `idPage` (`idPage`),
+  KEY `idPage_timestamp` (`idPage`,`timestamp`),
   CONSTRAINT `fbi_rLikesAge_ibfk_2` FOREIGN KEY (`idAge`) REFERENCES `fbi_age` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fbi_rLikesAge_ibfk_3` FOREIGN KEY (`idLike`) REFERENCES `fbi_likes` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fbi_rLikesAge_ibfk_4` FOREIGN KEY (`idPage`) REFERENCES `fbi_pages` (`id`) ON DELETE CASCADE
@@ -235,7 +240,7 @@ CREATE TABLE `fbi_rLikesCities` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `idLike_idCity_idPage` (`idLike`,`idCity`,`idPage`),
   KEY `idCity` (`idCity`),
-  KEY `idPage` (`idPage`),
+  KEY `idPage_timestamp` (`idPage`,`timestamp`),
   CONSTRAINT `fbi_rLikesCities_ibfk_2` FOREIGN KEY (`idCity`) REFERENCES `fbi_cities` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fbi_rLikesCities_ibfk_3` FOREIGN KEY (`idLike`) REFERENCES `fbi_likes` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fbi_rLikesCities_ibfk_4` FOREIGN KEY (`idPage`) REFERENCES `fbi_pages` (`id`) ON DELETE CASCADE
@@ -274,7 +279,8 @@ CREATE TABLE `fbi_referrals` (
   `type` enum('internal','external') NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`)
+  UNIQUE KEY `name` (`name`),
+  KEY `timestamp` (`timestamp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

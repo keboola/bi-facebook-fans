@@ -1,17 +1,17 @@
 <schema>
-	<name>Cities</name>
+	<name>FB_Cities</name>
 	<columns>
 		<column>
 			<name>id</name>
-			<title>ID (Cities)</title>
+			<title>ID (FB_Cities)</title>
 			<ldmType>CONNECTION_POINT</ldmType>
-			<folder>Cities</folder>
+			<folder>FB_Cities</folder>
 		</column>
 		<column>
 			<name>name</name>
-			<title>Name (Cities)</title>
+			<title>Name (FB_Cities)</title>
 			<ldmType>ATTRIBUTE</ldmType>
-			<folder>Cities</folder>
+			<folder>FB_Cities</folder>
 		</column>
 	</columns>
 </schema>

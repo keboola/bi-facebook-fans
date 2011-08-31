@@ -79,6 +79,16 @@ class App_GoodData
 		system('rm -rf '.APPLICATION_PATH.'/../tmp/temp.maql');
 	}
 
+	public function updateReports()
+	{
+		echo "\n".'*** Updating Reports'."\n";
+		$command = 'GetReports(fileName="'.APPLICATION_PATH.'/../tmp/reports.txt");';
+		$command .= 'ExecuteReports(fileName="'.APPLICATION_PATH.'/../tmp/reports.txt");';
+
+		$this->call($command);
+		system('rm -rf '.APPLICATION_PATH.'/../tmp/reports.txt');
+	}
+
 	/**
 	 * Set of commands which create a dataset
 	 * @param $xml

@@ -1,17 +1,17 @@
 <schema>
-	<name>Age</name>
+	<name>FB_Age</name>
 	<columns>
 		<column>
 			<name>id</name>
-			<title>ID (Age)</title>
+			<title>ID (FB_Age)</title>
 			<ldmType>CONNECTION_POINT</ldmType>
-			<folder>Age</folder>
+			<folder>FB_Age</folder>
 		</column>
 		<column>
 			<name>name</name>
-			<title>Name (Age)</title>
+			<title>Name (FB_Age)</title>
 			<ldmType>ATTRIBUTE</ldmType>
-			<folder>Age</folder>
+			<folder>FB_Age</folder>
 		</column>
 	</columns>
 </schema>

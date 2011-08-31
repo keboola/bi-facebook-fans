@@ -1,33 +1,33 @@
 <schema>
-	<name>DaysToCities</name>
+	<name>FB_DaysToCities</name>
 	<columns>
 		<column>
 			<name>id</name>
-			<title>ID (DaysToCities)</title>
+			<title>ID (FB_DaysToCities)</title>
 			<ldmType>CONNECTION_POINT</ldmType>
-			<folder>DaysToCities</folder>
+			<folder>FB_DaysToCities</folder>
 		</column>
 		<column>
 			<name>idday</name>
-			<title>ID (Days)</title>
+			<title>ID (FB_Days)</title>
 			<ldmType>REFERENCE</ldmType>
 			<reference>id</reference>
-			<schemaReference>Days</schemaReference>
-			<folder>DaysToCities</folder>
+			<schemaReference>FB_Days</schemaReference>
+			<folder>FB_DaysToCities</folder>
 		</column>
 		<column>
 			<name>idcity</name>
-			<title>ID (Cities)</title>
+			<title>ID (FB_Cities)</title>
 			<ldmType>REFERENCE</ldmType>
 			<reference>id</reference>
-			<schemaReference>Cities</schemaReference>
-			<folder>DaysToCities</folder>
+			<schemaReference>FB_Cities</schemaReference>
+			<folder>FB_DaysToCities</folder>
 		</column>
 		<column>
 			<name>views</name>
-			<title>Views (DaysToCities)</title>
+			<title>Views (FB_DaysToCities)</title>
 			<ldmType>FACT</ldmType>
-			<folder>DaysToCities</folder>
+			<folder>FB_DaysToCities</folder>
 		</column>
 	</columns>
 </schema>

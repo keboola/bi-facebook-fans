@@ -1,23 +1,23 @@
 <schema>
-	<name>Referrals</name>
+	<name>FB_Referrals</name>
 	<columns>
 		<column>
 			<name>id</name>
-			<title>ID (Referrals)</title>
+			<title>ID (FB_Referrals)</title>
 			<ldmType>CONNECTION_POINT</ldmType>
-			<folder>Referrals</folder>
+			<folder>FB_Referrals</folder>
 		</column>
 		<column>
 			<name>name</name>
-			<title>Name (Referrals)</title>
+			<title>Name (FB_Referrals)</title>
 			<ldmType>ATTRIBUTE</ldmType>
-			<folder>Referrals</folder>
+			<folder>FB_Referrals</folder>
 		</column>
 		<column>
 			<name>type</name>
-			<title>Type (Referrals)</title>
+			<title>Type (FB_Referrals)</title>
 			<ldmType>ATTRIBUTE</ldmType>
-			<folder>Referrals</folder>
+			<folder>FB_Referrals</folder>
 		</column>
 	</columns>
 </schema>

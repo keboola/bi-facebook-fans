@@ -1,33 +1,33 @@
 <schema>
-	<name>DaysToAge</name>
+	<name>FB_DaysToAge</name>
 	<columns>
 		<column>
 			<name>id</name>
-			<title>ID (DaysToAge)</title>
+			<title>ID (FB_DaysToAge)</title>
 			<ldmType>CONNECTION_POINT</ldmType>
-			<folder>DaysToAge</folder>
+			<folder>FB_DaysToAge</folder>
 		</column>
 		<column>
 			<name>idday</name>
-			<title>ID (Days)</title>
+			<title>ID (FB_Days)</title>
 			<ldmType>REFERENCE</ldmType>
 			<reference>id</reference>
-			<schemaReference>Days</schemaReference>
-			<folder>DaysToAge</folder>
+			<schemaReference>FB_Days</schemaReference>
+			<folder>FB_DaysToAge</folder>
 		</column>
 		<column>
 			<name>idage</name>
-			<title>ID (Age)</title>
+			<title>ID (FB_Age)</title>
 			<ldmType>REFERENCE</ldmType>
 			<reference>id</reference>
-			<schemaReference>Age</schemaReference>
-			<folder>DaysToAge</folder>
+			<schemaReference>FB_Age</schemaReference>
+			<folder>FB_DaysToAge</folder>
 		</column>
 		<column>
 			<name>views</name>
-			<title>Views (DaysToAge)</title>
+			<title>Views (FB_DaysToAge)</title>
 			<ldmType>FACT</ldmType>
-			<folder>DaysToAge</folder>
+			<folder>FB_DaysToAge</folder>
 		</column>
 	</columns>
 </schema>

@@ -58,40 +58,40 @@ class App_FacebookGoodData
 	{
 		switch($table) {
 			case 'age':
-				$sql = 'SELECT id, name FROM fbi_age';
+				$sql = 'SELECT t.id, t.name FROM fbi_age t';
 				break;
 			case 'cities' :
-				$sql = 'SELECT c.id, c.name FROM fbi_cities c LEFT JOIN fbi_rPagesCities pc ON (c.id=pc.idCity) WHERE pc.idPage = '.$this->_idPage;
+				$sql = 'SELECT t.id, t.name FROM fbi_cities t LEFT JOIN fbi_rPagesCities pc ON (t.id=pc.idCity) WHERE pc.idPage = '.$this->_idPage;
 				break;
 			case 'days':
-				$sql = 'SELECT *, id AS snapshot FROM fbi_days WHERE idPage ='.$this->_idPage;
+				$sql = 'SELECT t.*, id AS snapshot FROM fbi_days t WHERE t.idPage ='.$this->_idPage;
 				break;
 			case 'daysCountries':
-				$sql = 'SELECT id, idDay, country, views FROM fbi_daysCountries WHERE idPage = '.$this->_idPage;
+				$sql = 'SELECT t.id, t.idDay, t.country, t.views FROM fbi_daysCountries t WHERE t.idPage = '.$this->_idPage;
 				break;
 			case 'likes' :
-				$sql = 'SELECT id, date, male, female, unknownSex FROM fbi_likes WHERE idPage = '.$this->_idPage;
+				$sql = 'SELECT t.id, t.date, t.male, t.female, t.unknownSex FROM fbi_likes t WHERE t.idPage = '.$this->_idPage;
 				break;
 			case 'likesCountries' :
-				$sql = 'SELECT id, idLike, country, likes FROM fbi_likesCountries WHERE idPage = '.$this->_idPage;
+				$sql = 'SELECT t.id, t.idLike, t.country, t.likes FROM fbi_likesCountries t WHERE t.idPage = '.$this->_idPage;
 				break;
 			case 'rDaysAge' :
-				$sql = 'SELECT id, idDay, idAge, views FROM fbi_rDaysAge WHERE idPage = '.$this->_idPage;
+				$sql = 'SELECT t.id, t.idDay, t.idAge, t.views FROM fbi_rDaysAge t WHERE t.idPage = '.$this->_idPage;
 				break;
 			case 'rDaysCities' :
-				$sql = 'SELECT id, idDay, idCity, views FROM fbi_rDaysCities WHERE idPage = '.$this->_idPage;
+				$sql = 'SELECT t.id, t.idDay, t.idCity, t.views FROM fbi_rDaysCities t WHERE t.idPage = '.$this->_idPage;
 				break;
 			case 'rDaysReferrals' :
-				$sql = 'SELECT id, idDay, idReferral, views FROM fbi_rDaysReferrals WHERE idPage = '.$this->_idPage;
+				$sql = 'SELECT t.id, t.idDay, t.idReferral, t.views FROM fbi_rDaysReferrals t WHERE t.idPage = '.$this->_idPage;
 				break;
 			case 'rLikesAge' :
-				$sql = 'SELECT id, idLike, idAge, likes FROM fbi_rLikesAge WHERE idPage = '.$this->_idPage;
+				$sql = 'SELECT t.id, t.idLike, t.idAge, t.likes FROM fbi_rLikesAge t WHERE t.idPage = '.$this->_idPage;
 				break;
 			case 'rLikesCities' :
-				$sql = 'SELECT id, idLike, idCity, likes FROM fbi_rLikesCities WHERE idPage = '.$this->_idPage;
+				$sql = 'SELECT t.id, t.idLike, t.idCity, t.likes FROM fbi_rLikesCities t WHERE t.idPage = '.$this->_idPage;
 				break;
 			case 'referrals':
-				$sql = 'SELECT r.id, r.name, r.type FROM fbi_referrals r LEFT JOIN fbi_rPagesReferrals pr ON (r.id=pr.idReferral) WHERE pr.idPage = '.$this->_idPage;
+				$sql = 'SELECT t.id, t.name, t.type FROM fbi_referrals t LEFT JOIN fbi_rPagesReferrals pr ON (t.id=pr.idReferral) WHERE pr.idPage = '.$this->_idPage;
 				break;
 			default:
 				return false;
@@ -100,7 +100,7 @@ class App_FacebookGoodData
 		if ($structure) {
 			$sql .= ' LIMIT 1';
 		} elseif (!$all) {
-			$sql .= ' AND timestamp > \''.date('Y-m-d H:i:s', strtotime('-4 days')).'\'';
+			$sql .= ' AND t.timestamp > \''.date('Y-m-d H:i:s', strtotime('-4 days')).'\'';
 		}
 
 
@@ -146,7 +146,7 @@ class App_FacebookGoodData
 	 */
 	public function setup()
 	{
-		$this->_gd->createDate('FacebookDate', false);
+		$this->_gd->createDate('FB_Date', false);
 		
 		$this->createDataset('days');
 		$this->createDataset('daysCountries');
@@ -180,6 +180,8 @@ class App_FacebookGoodData
 		$this->loadDataset('rDaysReferrals', $all);
 		$this->loadDataset('rLikesAge', $all);
 		$this->loadDataset('rLikesCities', $all);
+
+		$this->_gd->updateReports();
 	}
 
 	/**

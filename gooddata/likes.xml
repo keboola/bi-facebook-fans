@@ -1,37 +1,37 @@
 <schema>
-	<name>Likes</name>
+	<name>FB_Likes</name>
 	<columns>
 		<column>
 			<name>id</name>
-			<title>ID (Likes)</title>
+			<title>ID (FB_Likes)</title>
 			<ldmType>CONNECTION_POINT</ldmType>
-			<folder>Likes</folder>
+			<folder>FB_Likes</folder>
 		</column>
 		<column>
 			<name>date</name>
-			<title>Date (Likes)</title>
+			<title>Date (FB_Likes)</title>
 			<ldmType>DATE</ldmType>
 			<format>yyyy-MM-dd</format>
-			<schemaReference>FacebookDate</schemaReference>
-			<folder>Likes</folder>
+			<schemaReference>FB_Date</schemaReference>
+			<folder>FB_Likes</folder>
 		</column>
 		<column>
 			<name>male</name>
-			<title>Male (Likes)</title>
+			<title>Male (FB_Likes)</title>
 			<ldmType>FACT</ldmType>
-			<folder>Likes</folder>
+			<folder>FB_Likes</folder>
 		</column>
 		<column>
 			<name>female</name>
-			<title>Female (Likes)</title>
+			<title>Female (FB_Likes)</title>
 			<ldmType>FACT</ldmType>
-			<folder>Likes</folder>
+			<folder>FB_Likes</folder>
 		</column>
 		<column>
 			<name>unknownsex</name>
-			<title>Unknown Sex (Likes)</title>
+			<title>Unknown Sex (FB_Likes)</title>
 			<ldmType>FACT</ldmType>
-			<folder>Likes</folder>
+			<folder>FB_Likes</folder>
 		</column>
 	</columns>
 </schema>

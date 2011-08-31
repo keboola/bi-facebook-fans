@@ -1,33 +1,33 @@
 <schema>
-	<name>LikesToCities</name>
+	<name>FB_LikesToCities</name>
 	<columns>
 		<column>
 			<name>id</name>
-			<title>ID (LikesToCities)</title>
+			<title>ID (FB_LikesToCities)</title>
 			<ldmType>CONNECTION_POINT</ldmType>
-			<folder>LikesToCities</folder>
+			<folder>FB_LikesToCities</folder>
 		</column>
 		<column>
 			<name>idlike</name>
-			<title>ID (Likes)</title>
+			<title>ID (FB_Likes)</title>
 			<ldmType>REFERENCE</ldmType>
 			<reference>id</reference>
-			<schemaReference>Days</schemaReference>
-			<folder>LikesToCities</folder>
+			<schemaReference>FB_Days</schemaReference>
+			<folder>FB_LikesToCities</folder>
 		</column>
 		<column>
 			<name>idcity</name>
-			<title>ID (Cities)</title>
+			<title>ID (FB_Cities)</title>
 			<ldmType>REFERENCE</ldmType>
 			<reference>id</reference>
-			<schemaReference>Cities</schemaReference>
-			<folder>LikesToCities</folder>
+			<schemaReference>FB_Cities</schemaReference>
+			<folder>FB_LikesToCities</folder>
 		</column>
 		<column>
 			<name>likes</name>
-			<title>Likes (LikesToCities)</title>
+			<title>Likes (FB_LikesToCities)</title>
 			<ldmType>FACT</ldmType>
-			<folder>LikesToCities</folder>
+			<folder>FB_LikesToCities</folder>
 		</column>
 	</columns>
 </schema>

@@ -1,11 +1,11 @@
 <schema>
-	<name>Days</name>
+	<name>FB_Days</name>
 	<columns>
 		<column>
 			<name>id</name>
-			<title>ID (Days)</title>
+			<title>ID (FB_Days)</title>
 			<ldmType>CONNECTION_POINT</ldmType>
-			<folder>Days</folder>
+			<folder>FB_Days</folder>
 		</column>
 		<column>
 			<name>idPage</name>
@@ -13,221 +13,221 @@
 		</column>
 		<column>
 			<name>date</name>
-			<title>Date (Days)</title>
+			<title>Date (FB_Days)</title>
 			<ldmType>DATE</ldmType>
 			<format>yyyy-MM-dd</format>
-			<schemaReference>FacebookDate</schemaReference>
-			<folder>Days</folder>
+			<schemaReference>FB_Date</schemaReference>
+			<folder>FB_Days</folder>
 		</column>
 		<column>
 			<name>dau</name>
-			<title>DAU (Days)</title>
+			<title>DAU (FB_Days)</title>
 			<ldmType>FACT</ldmType>
-			<folder>Days</folder>
+			<folder>FB_Days</folder>
 		</column>
 		<column>
 			<name>mau</name>
-			<title>MAU (Days)</title>
+			<title>MAU (FB_Days)</title>
 			<ldmType>FACT</ldmType>
-			<folder>Days</folder>
+			<folder>FB_Days</folder>
 		</column>
 		<column>
 			<name>views</name>
-			<title>Views (Days)</title>
+			<title>Views (FB_Days)</title>
 			<ldmType>FACT</ldmType>
-			<folder>Days</folder>
+			<folder>FB_Days</folder>
 		</column>
 		<column>
 			<name>viewstotal</name>
-			<title>Views Total (Days)</title>
+			<title>Views Total (FB_Days)</title>
 			<ldmType>FACT</ldmType>
-			<folder>Days</folder>
+			<folder>FB_Days</folder>
 		</column>
 		<column>
 			<name>viewsunique</name>
-			<title>Views Unique (Days)</title>
+			<title>Views Unique (FB_Days)</title>
 			<ldmType>FACT</ldmType>
-			<folder>Days</folder>
+			<folder>FB_Days</folder>
 		</column>
 		<column>
 			<name>viewslogin</name>
-			<title>Views Login (Days)</title>
+			<title>Views Login (FB_Days)</title>
 			<ldmType>FACT</ldmType>
-			<folder>Days</folder>
+			<folder>FB_Days</folder>
 		</column>
 		<column>
 			<name>viewslogout</name>
-			<title>Views Logout (Days)</title>
+			<title>Views Logout (FB_Days)</title>
 			<ldmType>FACT</ldmType>
-			<folder>Days</folder>
+			<folder>FB_Days</folder>
 		</column>
 		<column>
 			<name>viewsMale</name>
-			<title>Views Male (Days)</title>
+			<title>Views Male (FB_Days)</title>
 			<ldmType>FACT</ldmType>
-			<folder>Days</folder>
+			<folder>FB_Days</folder>
 		</column>
 		<column>
 			<name>viewsFemale</name>
-			<title>Views Female (Days)</title>
+			<title>Views Female (FB_Days)</title>
 			<ldmType>FACT</ldmType>
-			<folder>Days</folder>
+			<folder>FB_Days</folder>
 		</column>
 		<column>
 			<name>viewsunknownsex</name>
-			<title>Views Unknown Sex (Days)</title>
+			<title>Views Unknown Sex (FB_Days)</title>
 			<ldmType>FACT</ldmType>
-			<folder>Days</folder>
+			<folder>FB_Days</folder>
 		</column>
 		<column>
 			<name>likestotal</name>
-			<title>Likes Total (Days)</title>
+			<title>Likes Total (FB_Days)</title>
 			<ldmType>FACT</ldmType>
-			<folder>Days</folder>
+			<folder>FB_Days</folder>
 		</column>
 		<column>
 			<name>likesadded</name>
-			<title>Likes Added (Days)</title>
+			<title>Likes Added (FB_Days)</title>
 			<ldmType>FACT</ldmType>
-			<folder>Days</folder>
+			<folder>FB_Days</folder>
 		</column>
 		<column>
 			<name>likesremoved</name>
-			<title>Likes Removed (Days)</title>
+			<title>Likes Removed (FB_Days)</title>
 			<ldmType>FACT</ldmType>
-			<folder>Days</folder>
+			<folder>FB_Days</folder>
 		</column>
 		<column>
 			<name>contentlikesadded</name>
-			<title>Content Likes Added (Days)</title>
+			<title>Content Likes Added (FB_Days)</title>
 			<ldmType>FACT</ldmType>
-			<folder>Days</folder>
+			<folder>FB_Days</folder>
 		</column>
 		<column>
 			<name>contentlikesremoved</name>
-			<title>Content Likes Removed (Days)</title>
+			<title>Content Likes Removed (FB_Days)</title>
 			<ldmType>FACT</ldmType>
-			<folder>Days</folder>
+			<folder>FB_Days</folder>
 		</column>
 		<column>
 			<name>comments</name>
-			<title>Comments (Days)</title>
+			<title>Comments (FB_Days)</title>
 			<ldmType>FACT</ldmType>
-			<folder>Days</folder>
+			<folder>FB_Days</folder>
 		</column>
 		<column>
 			<name>feedviews</name>
-			<title>Feed Views (Days)</title>
+			<title>Feed Views (FB_Days)</title>
 			<ldmType>FACT</ldmType>
-			<folder>Days</folder>
+			<folder>FB_Days</folder>
 		</column>
 		<column>
 			<name>feedviewsunique</name>
-			<title>Feed Views Unique (Days)</title>
+			<title>Feed Views Unique (FB_Days)</title>
 			<ldmType>FACT</ldmType>
-			<folder>Days</folder>
+			<folder>FB_Days</folder>
 		</column>
 		<column>
 			<name>wallposts</name>
-			<title>Wall Posts (Days)</title>
+			<title>Wall Posts (FB_Days)</title>
 			<ldmType>FACT</ldmType>
-			<folder>Days</folder>
+			<folder>FB_Days</folder>
 		</column>
 		<column>
 			<name>wallpostsunique</name>
-			<title>Wall Posts Unique (Days)</title>
+			<title>Wall Posts Unique (FB_Days)</title>
 			<ldmType>FACT</ldmType>
-			<folder>Days</folder>
+			<folder>FB_Days</folder>
 		</column>
 		<column>
 			<name>photos</name>
-			<title>Photos (Days)</title>
+			<title>Photos (FB_Days)</title>
 			<ldmType>FACT</ldmType>
-			<folder>Days</folder>
+			<folder>FB_Days</folder>
 		</column>
 		<column>
 			<name>photoviews</name>
-			<title>Photo Views (Days)</title>
+			<title>Photo Views (FB_Days)</title>
 			<ldmType>FACT</ldmType>
-			<folder>Days</folder>
+			<folder>FB_Days</folder>
 		</column>
 		<column>
 			<name>photoviewsunique</name>
-			<title>Photo Views Unique (Days)</title>
+			<title>Photo Views Unique (FB_Days)</title>
 			<ldmType>FACT</ldmType>
-			<folder>Days</folder>
+			<folder>FB_Days</folder>
 		</column>
 		<column>
 			<name>videos</name>
-			<title>Videos (Days)</title>
+			<title>Videos (FB_Days)</title>
 			<ldmType>FACT</ldmType>
-			<folder>Days</folder>
+			<folder>FB_Days</folder>
 		</column>
 		<column>
 			<name>videoplays</name>
-			<title>Video Plays (Days)</title>
+			<title>Video Plays (FB_Days)</title>
 			<ldmType>FACT</ldmType>
-			<folder>Days</folder>
+			<folder>FB_Days</folder>
 		</column>
 		<column>
 			<name>videoplaysunique</name>
-			<title>Video Plays Unique (Days)</title>
+			<title>Video Plays Unique (FB_Days)</title>
 			<ldmType>FACT</ldmType>
-			<folder>Days</folder>
+			<folder>FB_Days</folder>
 		</column>
 		<column>
 			<name>audioplays</name>
-			<title>Audio Plays (Days)</title>
+			<title>Audio Plays (FB_Days)</title>
 			<ldmType>FACT</ldmType>
-			<folder>Days</folder>
+			<folder>FB_Days</folder>
 		</column>
 		<column>
 			<name>audioplaysunique</name>
-			<title>Audio Plays Unique (Days)</title>
+			<title>Audio Plays Unique (FB_Days)</title>
 			<ldmType>FACT</ldmType>
-			<folder>Days</folder>
+			<folder>FB_Days</folder>
 		</column>
 		<column>
 			<name>discussions</name>
-			<title>Discussions (Days)</title>
+			<title>Discussions (FB_Days)</title>
 			<ldmType>FACT</ldmType>
-			<folder>Days</folder>
+			<folder>FB_Days</folder>
 		</column>
 		<column>
 			<name>discussionsunique</name>
-			<title>Discussions Unique (Days)</title>
+			<title>Discussions Unique (FB_Days)</title>
 			<ldmType>FACT</ldmType>
-			<folder>Days</folder>
+			<folder>FB_Days</folder>
 		</column>
 		<column>
 			<name>reviewsadded</name>
-			<title>Reviews Added (Days)</title>
+			<title>Reviews Added (FB_Days)</title>
 			<ldmType>FACT</ldmType>
-			<folder>Days</folder>
+			<folder>FB_Days</folder>
 		</column>
 		<column>
 			<name>reviewsaddedunique</name>
-			<title>Reviews Added Unique (Days)</title>
+			<title>Reviews Added Unique (FB_Days)</title>
 			<ldmType>FACT</ldmType>
-			<folder>Days</folder>
+			<folder>FB_Days</folder>
 		</column>
 		<column>
 			<name>reviewsmodified</name>
-			<title>Reviews Modified (Days)</title>
+			<title>Reviews Modified (FB_Days)</title>
 			<ldmType>FACT</ldmType>
-			<folder>Days</folder>
+			<folder>FB_Days</folder>
 		</column>
 		<column>
 			<name>reviewsmodifiedunique</name>
-			<title>Reviews Modified Unique (Days)</title>
+			<title>Reviews Modified Unique (FB_Days)</title>
 			<ldmType>FACT</ldmType>
-			<folder>Days</folder>
+			<folder>FB_Days</folder>
 		</column>
 		<column>
 			<name>snapshot</name>
-			<title>Snapshot (Days)</title>
+			<title>Snapshot (FB_Days)</title>
 			<ldmType>FACT</ldmType>
-			<folder>Days</folder>
+			<folder>FB_Days</folder>
 		</column>
 	</columns>
 </schema>
