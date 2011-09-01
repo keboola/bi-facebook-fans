@@ -38,9 +38,10 @@ class App_Facebook
 	 * @param string $period period of the statistics, one of: day|week|month
 	 * @param string $since date in yyyy-mm-dd format
 	 * @param string $until date in yyyy-mm-dd format
+	 * @param int $tries nu,ber of tries when API call fails
 	 * @return void
 	 */
-	public function call($path, $period=null, $since=null, $until=null)
+	public function call($path, $period=null, $since=null, $until=null, $tries=3)
 	{
 		$url = self::API_URL.$this->_pageId.'/'.$path;
 		if ($period) {
@@ -66,7 +67,11 @@ class App_Facebook
 				return $result;
 		} else {
 			App_Debug::send($output);
-			throw new App_FacebookException($output);
+			if ($tries > 0) {
+				$this->call($path, $period, $since, $until, $tries-1);
+			} else {
+				throw new App_FacebookException($output);
+			}
 		}
 	}
 
