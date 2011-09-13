@@ -26,8 +26,9 @@ class App_Validate_FacebookPage extends Zend_Validate_Abstract
 				$this->_error(self::NOT_MATCH);
         		return false;
 			} else {
+				$this->_error(self::NOT_MATCH);
 				App_Debug::send('Confirmation of page id '.$value.' failed:'."\n".$result);
-				return true;
+				return false;
 			}
 		} else {
 			App_Debug::send('Confirmation of page id '.$value.' failed:'."\n".$output);

@@ -68,6 +68,7 @@ class App_Facebook
 		} else {
 			App_Debug::send($output);
 			if ($tries > 0) {
+				sleep(5);
 				$this->call($path, $period, $since, $until, $tries-1);
 			} else {
 				throw new App_FacebookException($output);
