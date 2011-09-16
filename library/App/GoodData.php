@@ -56,7 +56,7 @@ class App_GoodData
 		$output = shell_exec($command.'\'');
 
 		if ($reportErrors && strpos($output, 'ERROR')) {
-			App_Debug::send($output, null, 'http.log');
+			App_Debug::send($output, null, 'debug.log');
 		}
 		echo $output;
 

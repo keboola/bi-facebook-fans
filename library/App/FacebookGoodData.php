@@ -45,7 +45,7 @@ class App_FacebookGoodData
 		$this->_gd = new App_GoodData($config->gooddata->username, $config->gooddata->password, $idProject);
 		$this->_idPage = $idPage;
 		$this->_xmlPath = realpath(APPLICATION_PATH . '/../gooddata');
-		$this->_tmpPath = realpath(APPLICATION_PATH . '/../temp');
+		$this->_tmpPath = realpath(APPLICATION_PATH . '/../tmp');
 		$this->_config = $config;
 	}
 
@@ -58,13 +58,19 @@ class App_FacebookGoodData
 	{
 		switch($table) {
 			case 'age':
-				$sql = 'SELECT t.id, t.name FROM fbi_age t';
+				$sql = 'SELECT t.id, t.name FROM fbi_age t WHERE 1';
 				break;
 			case 'cities' :
 				$sql = 'SELECT t.id, t.name FROM fbi_cities t LEFT JOIN fbi_rPagesCities pc ON (t.id=pc.idCity) WHERE pc.idPage = '.$this->_idPage;
 				break;
 			case 'days':
-				$sql = 'SELECT t.*, id AS snapshot FROM fbi_days t WHERE t.idPage ='.$this->_idPage;
+				$sql = 'SELECT t.id, t.date, t.dau, t.mau, t.views, t.viewsTotal, t.viewsUnique, t.viewsLogin, t.viewsLogout, '
+					. 't.viewsMale, t.viewsFemale, t.viewsUnknownSex, t.likesTotal, t.likesAdded, t.likesRemoved, '
+					. 't.contentLikesAdded, t.contentLikesRemoved, t.comments, t.feedViews, t.feedViewsUnique, t.wallPosts, '
+					. 't.wallPostsUnique, t.photos, t.photoViews, t.photoViewsUnique, t.videos, t.videoPlays, t.videoPlaysUnique, '
+					. 't.audioPlays, t.audioPlaysUnique, t.discussions, t.discussionsUnique, t.reviewsAdded, t.reviewsAddedUnique, '
+					. 't.reviewsModified, t.reviewsModifiedUnique, t.idSnapshot AS snapshot '
+					. 'FROM fbi_days t WHERE t.idPage ='.$this->_idPage;
 				break;
 			case 'daysCountries':
 				$sql = 'SELECT t.id, t.idDay, t.country, t.views FROM fbi_daysCountries t WHERE t.idPage = '.$this->_idPage;
@@ -102,7 +108,6 @@ class App_FacebookGoodData
 		} elseif (!$all) {
 			$sql .= ' AND t.timestamp > \''.date('Y-m-d H:i:s', strtotime('-4 days')).'\'';
 		}
-
 
 		$file = null;
 		if (!$return)

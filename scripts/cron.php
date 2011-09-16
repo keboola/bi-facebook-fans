@@ -23,54 +23,16 @@ $application = new Zend_Application(
 );
 $application->bootstrap();
 
+$_p = new Model_Pages();
 
-// Setup console input
-$opts = new Zend_Console_Getopt(array(
-	'page|p-i' => 'Id of page in db',
-	'since|s-w' => 'Start date of export',
-	'until|u-w' => 'End date of export'
-));
-$opts->setHelp(array(
-	'p' => 'Id of page in db',
-	's' => 'Start date of export in yyyymmdd format',
-	'u' => 'End date of export in yyyymmdd format'
-));
-try {
-	$opts->parse();
-} catch (Zend_Console_Getopt_Exception $e) {
-	echo $opts->getUsageMessage();
+$page = $_p->fetchRow(array('id=?' => 1));
+if (!$page) {
+	echo "Can't find page id in db.\n";
 	exit;
 }
 
-
-$_p = new Model_Pages();
-
-$p = $opts->getOption('page');
-if ($p) {
-	$page = $_p->fetchRow(array('id=?' => $p));
-	if (!$page) {
-		echo "You have wrong page id.\n";
-		exit;
-	}
-	$pages = array($page);
-} else {
-	// get all pages which should fetch the data
-	$pages = $_p->fetchAll(array('isActive=?' => 1));
-}
-
-$since = $opts->getOption('since');
-if ($since) {
-	$since = date('Y-m-d', strtotime($since));
-} else {
-	$since = date('Y-m-d', strtotime('-4 days'));
-}
-
-$until = $opts->getOption('until');
-if ($until) {
-	$until = date('Y-m-d', strtotime($until));
-} else {
-	$until = date('Y-m-d');
-}
+$since = date('Y-m-d', strtotime('-4 days'));
+$until = date('Y-m-d');
 
 $config = Zend_Registry::get('config');
 
@@ -78,9 +40,14 @@ foreach($pages as $page) {
 	try {
 		$_i = new App_Import($page);
 		$result = $_i->run($since, $until);
-		if ($result && !$page->isImported) {
-			$page->isImported = 1;
-			$page->save();
+		if ($result) {
+			if (!$page->isImported) {
+				$page->isImported = 1;
+				$page->save();
+			}
+
+			$fgd = new App_FacebookGoodData($config, $page->idProject, $page->id);
+			$fgd->loadData();
 		}
 	} catch(App_FacebookException $e) {
 		App_Debug::send('Error for page '.$this->_page->id. '('.$this->_page->name.'), interval: '.$since.'-'.$until.' - '.$e->getMessage()."\n");

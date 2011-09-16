@@ -8,10 +8,6 @@
 			<folder>FB_Days</folder>
 		</column>
 		<column>
-			<name>idPage</name>
-			<ldmType>IGNORE</ldmType>
-		</column>
-		<column>
 			<name>date</name>
 			<title>Date (FB_Days)</title>
 			<ldmType>DATE</ldmType>

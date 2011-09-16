@@ -75,9 +75,12 @@ CREATE TABLE `fbi_days` (
   `reviewsModified` int(10) unsigned NOT NULL,
   `reviewsModifiedUnique` int(10) unsigned NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `idSnapshot` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `idPage_date` (`idPage`,`date`),
   KEY `idPage_timestamp` (`idPage`,`timestamp`),
+  KEY `idSnapshot` (`idSnapshot`),
+  CONSTRAINT `fbi_days_ibfk_2` FOREIGN KEY (`idSnapshot`) REFERENCES `fbi_snapshots` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fbi_days_ibfk_1` FOREIGN KEY (`idPage`) REFERENCES `fbi_pages` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -282,6 +285,16 @@ CREATE TABLE `fbi_referrals` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
   KEY `timestamp` (`timestamp`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `fbi_snapshots`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fbi_snapshots` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `date` date NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `date` (`date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
