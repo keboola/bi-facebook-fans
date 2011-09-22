@@ -62,14 +62,14 @@ $since = $opts->getOption('since');
 if ($since) {
 	$since = date('Y-m-d', strtotime($since));
 } else {
-	$since = date('Y-m-d', strtotime('-4 days'));
+	$since = strtotime(date('Y-m-d 00:00:00', strtotime('-4 days')));
 }
 
 $until = $opts->getOption('until');
 if ($until) {
 	$until = date('Y-m-d', strtotime($until));
 } else {
-	$until = date('Y-m-d');
+	$until = strtotime(date('Y-m-d 23:59:59', strtotime('-1 day')));
 }
 
 $config = Zend_Registry::get('config');
