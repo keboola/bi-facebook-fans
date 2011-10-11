@@ -8,5 +8,11 @@
 class Model_Pages extends Zend_Db_Table
 {
 	protected $_name = 'fbi_pages';
-
+	protected $_referenceMap = array(
+        'Account' => array(
+            'columns'           => 'idAccount',
+            'refTableClass'     => 'Model_Accounts',
+            'refColumns'        => 'id'
+        )
+	);
 }

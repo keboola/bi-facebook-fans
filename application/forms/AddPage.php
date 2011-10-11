@@ -9,19 +9,17 @@ class Form_AddPage extends App_Form
 	{
 		parent::init();
 
-		$this->addElement('text', 'name', array(
+		$this->addElement('text', 'email', array(
 			'required'	=> true,
-			'label'		=> 'Page Name',
-			'validators' => array('NotEmpty')
+			'label'		=> 'Email',
+			'validators' => array('NotEmpty', 'EmailAddress')
 		));
 
-		$this->addElement('text', 'idPage', array(
+		$this->addElement('multiCheckbox', 'pages', array(
 			'required'	=> true,
-			'label'		=> 'Facebook Page Id',
-			'validators' => array(
-				'NotEmpty',
-				new App_Validate_FacebookPage()
-			)
+			'label'		=> 'Pages',
+			'registerInArrayValidator' => false,
+			'validators' => array('NotEmpty')
 		));
 
 		$this->addElement('text', 'idProject', array(
@@ -30,14 +28,13 @@ class Form_AddPage extends App_Form
 
 		$this->addElement('hidden', 'fbToken');
 		$this->addElement('hidden', 'idUser');
-		$this->addElement('hidden', 'email');
 
 		$this->addElement('submit', 'submit', array(
 			'ignore'	=> true,
 			'label'		=> 'Send'
 		));
 
-		$this->addDisplayGroup(array('name', 'idPage', 'idProject', 'fbToken', 'idUser', 'email', 'submit'), 'basic');
+		$this->addDisplayGroup(array('email', 'pages', 'idProject', 'fbToken', 'idUser', 'email', 'submit'), 'basic');
 	}
 }
 ?>

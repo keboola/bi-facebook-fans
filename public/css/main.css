@@ -45,6 +45,11 @@ p.error {
 }
 
 
+
+.form {
+	width: 500px;
+	margin: 0 auto;
+}
 div.formElement {
 	overflow: visible;
 }
@@ -60,6 +65,33 @@ form strong.error,
 form ul.errors li {
 	color: #ea2803;
 	list-style: none;
+}
+
+form div label {
+	width: 190px;
+}
+form div input {
+	width: 260px;
+}
+form div .multiOptions {
+	float: none;
+	height: auto;
+	margin-left: 210px;
+	font-size: 90%;
+}
+form div .multiOptions label {
+	float: none;
+	display: block;
+	width: auto;
+}
+.multiElement {
+	height: auto;
+}
+form div .multiOptions input {
+	float: none;
+	width: auto;
+	margin-right: 10px;
+	vertical-align: top;
 }
 
 ul li, ol li {

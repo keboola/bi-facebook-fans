@@ -37,7 +37,7 @@ class App_Form_Decorator_Validate extends Zend_Form_Decorator_Abstract
 							break;
 						case 'Zend_Validate_EmailAddress':
 							$rules	.= "\t\t\t\temail: true,\n";
-							$messages .= "\t\t\t\temail: '"._t('v.invalidEmailAddress')."',\n";
+							$messages .= "\t\t\t\temail: 'Field must be valid email address.',\n";
 							break;
 					}
 					$count2++;

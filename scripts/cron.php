@@ -25,12 +25,7 @@ $application->bootstrap();
 
 $_p = new Model_Pages();
 
-$page = $_p->fetchRow(array('id=?' => 1));
-if (!$page) {
-	echo "Can't find page id in db.\n";
-	exit;
-}
-
+$pages = $_p->fetchAll(array('isActive=?' => 1));
 $since = date('Y-m-d', strtotime('-4 days'));
 $until = date('Y-m-d');
 
@@ -38,6 +33,7 @@ $config = Zend_Registry::get('config');
 
 foreach($pages as $page) {
 	try {
+		echo "**************\nFetching stats for: ".$page->name."\n";
 		$_i = new App_Import($page);
 		$result = $_i->run($since, $until);
 		if ($result) {
@@ -46,11 +42,18 @@ foreach($pages as $page) {
 				$page->save();
 			}
 
-			$fgd = new App_FacebookGoodData($config, $page->idProject, $page->id);
+			$fgd = new App_FacebookGoodData($config, $page->findParentRow('Model_Accounts')->idGD, $page->id);
+			if (!$page->isInGD) {
+				$fgd->setup();
+				$page->isInGD = 1;
+				$page->save();
+			}
+
 			$fgd->loadData();
 		}
+		echo "\n\n";
 	} catch(App_FacebookException $e) {
-		App_Debug::send('Error for page '.$this->_page->id. '('.$this->_page->name.'), interval: '.$since.'-'.$until.' - '.$e->getMessage()."\n");
+		App_Debug::send('Error for page '.$page->id. '('.$page->name.'), interval: '.$since.'-'.$until.' - '.$e->getMessage()."\n");
 
 		echo "There was an error during talking to Facebook API. Try again please.\n";
 		continue;

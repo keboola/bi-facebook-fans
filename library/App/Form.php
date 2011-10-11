@@ -56,6 +56,20 @@ class App_Form extends Zend_Form
 	);
 
 	/**
+	 * Decorators for multi elements
+	 *
+	 * @var array $_multiDecorators
+	 */
+	public $_multiDecorators = array(
+		array('ViewHelper'),
+		array(array('td' => 'HtmlTag'), array('tag' => 'div', 'class' => 'multiOptions')),
+		array('Errors'),
+		array('Label', array('requiredSuffix' => '*', 'escape' => false)),
+		array('Description', array('placement' => 'append', 'tag' => 'span', 'class' => 'note', 'escape' => false)),
+		array(array('row' => 'HtmlTag'), array('tag' => 'div', 'class' => 'formElement multiElement'))
+	);
+
+	/**
 	 * Decorators for text elements
 	 *
 	 * @var array $_textDecorators
@@ -146,6 +160,9 @@ class App_Form extends Zend_Form
 				case 'formFile':
 					$class = 'inputFile';
 					$decorators = $this->_fileDecorators;
+					break;
+				case 'formMultiCheckbox':
+					$decorators = $this->_multiDecorators;
 					break;
 				default:
 					$class = '';

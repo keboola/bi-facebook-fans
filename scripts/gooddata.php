@@ -66,7 +66,7 @@ if ($p) {
 $config = Zend_Registry::get('config');
 
 foreach ($pages as $page) {
-	$fgd = new App_FacebookGoodData($config, $page->idProject, $page->id);
+	$fgd = new App_FacebookGoodData($config, $page->idGD, $page->id);
 
 	if ($opts->getOption('setup')) {
 		$fgd->setup();

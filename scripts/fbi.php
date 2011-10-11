@@ -83,7 +83,7 @@ foreach($pages as $page) {
 			$page->save();
 		}
 	} catch(App_FacebookException $e) {
-		App_Debug::send('Error for page '.$this->_page->id. '('.$this->_page->name.'), interval: '.$since.'-'.$until.' - '.$e->getMessage()."\n");
+		App_Debug::send('Error for page '.$page->id. '('.$page->name.'), interval: '.$since.'-'.$until.' - '.$e->getMessage()."\n");
 
 		echo "There was an error during talking to Facebook API. Try again please.\n";
 		continue;

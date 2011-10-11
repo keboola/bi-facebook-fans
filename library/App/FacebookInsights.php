@@ -17,7 +17,7 @@ class App_FacebookInsights
 	 */
 	public function __construct($page)
 	{
-		$this->_api = new App_Facebook($page->idPage, $page->token);
+		$this->_api = new App_Facebook($page->idFB, $page->token);
 	}
 
 	public function getData($since, $until)
@@ -37,7 +37,7 @@ class App_FacebookInsights
 				$data[date('Y-m-d', strtotime($v['end_time']))]['mau'] = $v['value'];
 			}
 		}
-
+		
 		$results = $this->_api->call('insights/page_active_users_city', 'day', $since, $until);
 		if (isset($results['values'])) {
 			foreach($results['values'] as $v) {

@@ -17,20 +17,7 @@ class RegisterController extends Zend_Controller_Action
 		Zend_Session::start();
 
 		$this->_config = Zend_Registry::get('config');
-
 		$this->_pageUrl = 'http://' . $_SERVER['HTTP_HOST'] . '/register';
-	}
-
-	public function logoutAction()
-	{
-		if (!empty($this->_request->processed)) {
-			Zend_Session::destroy();
-			echo 'Logout';
-			die();
-		} else {
-			$this->_redirect('https://www.facebook.com/logout.php?next=' . $this->_pageUrl . '/logout?processed=1&access_token='
-							 . $this->_config->facebook->appId . '|' . $this->_config->facebook->appSecret);
-		}
 	}
 
 	/**
@@ -39,21 +26,35 @@ class RegisterController extends Zend_Controller_Action
 	public function indexAction()
 	{
 		$form = new Form_AddPage();
+		$ns = new Zend_Session_Namespace('RegisterForm');
+		$_a = new Model_Accounts();
+		$_p = new Model_Pages();
 
 		if ($this->_request->isPost()) {
+			if(!empty($ns->pages)) {
+				$form->getElement('pages')->setMultiOptions($ns->pages);
+			}
+			if (!empty($ns->knownPages)) {
+				$form->getElement('pages')->setAttrib('disable', $ns->knownPages);
+			}
+
 			if ($form->isValid($this->_request->getParams())) {
-				$_p = new Model_Pages();
-				$p = $_p->fetchRow(array('idPage=?' => $this->_request->idPage));
-				if ($p) {
-					$this->view->message = 'alreadyExists';
-				} else {
+				foreach($this->_request->pages as $p) {
+					$a = $_a->fetchRow(array('email=?' => $this->_request->email));
+					if (!$a) {
+						$idAccount = $_a->insert(array(
+								'email' => $this->_request->email,
+								'idFB' => $this->_request->idUser,
+								'idGD' => $this->_request->idProject,
+							));
+						$a = $_a->fetchRow(array('id=?' => $idAccount));
+					}
+
 					$_p->insert(array(
-						'email' => $this->_request->email,
-						'idUser' => $this->_request->idUser,
+						'idAccount' => $a->id,
 						'name' => $this->_request->name,
-						'idPage' => $this->_request->idPage,
-						'idProject' => $this->_request->idProject,
-						'token' => $this->_request->fbToken
+						'idFB' => $p,
+						'token' => $ns->pageTokens[$p]
 					));
 					$this->view->message = 'success';
 					$this->view->form = null;
@@ -71,7 +72,7 @@ class RegisterController extends Zend_Controller_Action
 		if (empty($this->_request->code)) {
 			$_SESSION['state'] = md5(uniqid(rand(), TRUE)); //CSRF protection
 			$dialogUrl = "http://www.facebook.com/dialog/oauth?client_id=" . $this->_config->facebook->appId
-						 . "&scope=offline_access,read_insights,email&redirect_uri=" . urlencode($this->_pageUrl)
+						 . "&scope=offline_access,read_insights,email,manage_pages&redirect_uri=" . urlencode($this->_pageUrl)
 						 . "&state=" . $_SESSION['state'];
 			$this->_redirect($dialogUrl);
 			return;
@@ -85,14 +86,46 @@ class RegisterController extends Zend_Controller_Action
 			$params = null;
 			parse_str($response, $params);
 
-			if ($params['access_token']) {
-				$tokenUrl = "https://graph.facebook.com/me?access_token=".$params['access_token'];
-				$response = file_get_contents($tokenUrl);
-				if ($response) {
-					$response = Zend_Json::decode($response);
-					$form->getElement('idUser')->setValue($response['id']);
-					$form->getElement('email')->setValue($response['email']);
+			if (!empty($params['access_token'])) {
+				$gd = new App_Facebook(null, $params['access_token']);
+
+				$userInfo = $gd->request('me');
+				if ($userInfo) {
+					$form->getElement('idUser')->setValue($userInfo['id']);
+					$form->getElement('email')->setValue($userInfo['email']);
 					$form->getElement('fbToken')->setValue($params['access_token']);
+
+					$ns->pageTokens = array();
+					$pages = array();
+					$knownPages = array();
+					$pagesList = $gd->request('/me/accounts');
+					if($pagesList && isset($pagesList['data'])) {
+						foreach($pagesList['data'] as $p) {
+							if ($p['category'] != 'Application') {
+								$pages[$p['id']] = $p['name'];
+
+								$kp = $_p->fetchRow(array('idFB=?' => $p['id']));
+								if($kp) {
+									$knownPages[] = $p['id'];
+								} else {
+									$ns->pageTokens[$p['id']] = $p['access_token'];
+								}
+							}
+						}
+					}
+					
+					if(!count($pages)) {
+						$this->view->message = 'noPages';
+						$this->view->logoutUrl = 'https://www.facebook.com/logout.php?next='.urlencode($this->_pageUrl).'&access_token='.$params['access_token'];
+						$form = null;
+					} else {
+						$ns->pages = $pages;
+						$form->getElement('pages')->setMultiOptions($pages);
+						if(count($knownPages)) {
+							$form->getElement('pages')->setAttrib('disable', $knownPages);
+							$ns->knownPages = $knownPages;
+						}
+					}
 				} else {
 					$this->view->message = 'apiError';
 				}

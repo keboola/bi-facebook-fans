@@ -145,9 +145,20 @@ class App_GoodData
 	 * @param $string
 	 * @return string
 	 */
-	public static function escapeString($string)
+	public static function escapeString($string, $stripQuotes=false)
 	{
-		return substr(trim(str_replace('"', '""', (string)$string)), 0, 255);
+		if($stripQuotes) {
+			$result = str_replace('"', '', $string);
+		} else {
+			$result = str_replace('"', '""', (string)$string);
+		}
+		$result = substr(trim($result), 0, 255);
+
+		// remove trailing quotation mark if there is only one in the end of string
+		if(substr($result, strlen($result)-1) == '"' && substr($result, strlen($result)-2) != '""') {
+			$result = substr($result, 0, strlen($result)-1);
+		}
+		return $result;
 	}
 
 }

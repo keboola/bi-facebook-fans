@@ -61,6 +61,7 @@ class App_Import
 		//sort by date key to have snapshots ordered by date
 		ksort($data);
 		foreach($data as $date => $values) if ($date != 'lifetime') {
+			echo $date.' ';
 			$age = isset($values['age']) ? $values['age'] : array();
 			$activeUsersCity = isset($values['activeUsersCity']) ? $values['activeUsersCity'] : array();
 			$activeUsersCountry = isset($values['activeUsersCountry']) ? $values['activeUsersCountry'] : array();
@@ -84,6 +85,7 @@ class App_Import
 			$day->addCountries($this->_page->id, $activeUsersCountry);
 			$day->addReferrals($this->_page->id, $internalReferrals, $externalReferrals);
 		}
+		echo "\n";
 
 		return true;
 	}
