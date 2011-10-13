@@ -23,11 +23,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		define('NETTE_VERSION_ID', 907); // v0.9.7
 		define('NETTE_PACKAGE', 'PHP 5.2 prefixed');
 
-		//if (APPLICATION_ENV == 'development') {
+		if (APPLICATION_ENV == 'development') {
 			NDebug::enable();
-		/*} else {
+		} else {
 			NDebug::enable('production', APPLICATION_PATH.'/../logs/php-error.log', $registry->config->adminEmail);
-		}*/
+		}
 	}
 
 	protected function _initAutoload()

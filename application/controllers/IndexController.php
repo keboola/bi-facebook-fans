@@ -9,7 +9,7 @@ class IndexController extends Zend_Controller_Action
 
 	public function init()
 	{
-		$this->_redirect('/register');
+		$this->_redirect('/api');
 	}
 
 }
