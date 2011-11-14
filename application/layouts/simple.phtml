@@ -1,0 +1,58 @@
+<?
+$this->headLink()
+	->appendStylesheet('/css/52framework/reset.css')
+	->appendStylesheet('/css/52framework/css3.css')
+	->appendStylesheet('/css/52framework/general.css')
+	->appendStylesheet('/css/main.css')
+	->appendStylesheet('/css/auth.css');
+$this->jQuery()
+	->setLocalPath('/js/jquery-1.6.1.min.js')
+	->addJavascriptFile('/js/modernizr-1.7.min.js')
+	->addJavascriptFile('/js/jquery.corner.js')
+	->enable();
+$this->headTitle($this->pageTitle)
+	->setSeparator(' | ')
+	->headTitle($this->translate('app.name'));
+$this->jQuery()->addOnLoad('
+	$(".inputText input").corner("3px");
+	$(".loginErrors").corner("5px");
+');
+
+if ($this->messages) {
+	$this->headStyle()->appendStyle('.loginErrors { display: block }');
+}
+?>
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+	<?=$this->headTitle();?>
+	<?=$this->headLink();?>
+	<?=$this->headStyle();?>
+	<?=$this->jQuery();?>
+</head>
+
+<body>
+	<div class="pageHeaderWrapper"><div class="pageHeader pageSection">
+		<div class="siteName"><a href="/"><img src="/img/logo.png" alt="keboolytics" /></a></div>
+	</div></div>
+	<div class="pageContentWrapper"><div class="pageContent pageSection">
+		<div class="loginErrorsWrapper"><div class="loginErrors">
+			<div class="wrap1"><div class="wrap2">
+			<?if ($this->messages) foreach($this->messages as $m) {
+				echo $this->translate($m).'<br />';
+			}?>
+			</div></div>
+		</div></div>
+		<?=$this->layout()->content;?>
+	</div></div>
+	<div class="pageFooter pageSection">
+		<p><?=$this->translate('layout.footer')?></p>
+	</div>
+</body>
+</html>
+
+

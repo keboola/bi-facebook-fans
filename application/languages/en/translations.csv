@@ -1,0 +1,84 @@
+app.name;keboolytics
+
+auth.index.lostPassword;Lost Password
+auth.index.signUp;Sign Up
+auth.index.title;Login
+
+auth.login.failed;Login failed.
+auth.login.notActivated;This account isn't activated yet.
+
+auth.activate.email;You have created new account for keboolytics. You have to active it first using this link:
+auth.activate.subject;Activation link
+auth.activate.alreadyActivated;Your account is already activated.
+auth.activate.failed;You used wrong activation link, check your activation email please.
+auth.activate.success;Activation was successful, you can login now.
+
+
+auth.register.title;Create account
+auth.register.back;Back
+auth.register.registrationComplete;You have created new account. Please wait for an email with activation link.
+
+index.index.title;Account
+index:index:connectorsInfo;Available connectors
+index:index:setup;Setup
+
+
+facebook.register.apiError;There was an error while talking to Facebook API. Try again please.
+facebook.register.back;Back
+facebook.register.badFBLogin;Your pages are administered by another Facebook account. You can logout here: <a href='%s'>Logout</a> and use this account.
+facebook.register.badUrl;You have wrong url, check your email again please.
+facebook.register.changePlan;Change plan
+facebook.register.choosePlan;Choose plan
+facebook.register.confirmationFailed;Confirmation of the payment failed. Contact our support please.
+facebook.register.csrfError;There was a security issue. Try again from <a href='/facebook/register'>this link</a> please.
+facebook.register.facebookLogin;Login to Facebook as another user
+facebook.register.info;Pick pages you administer which you want to watch
+facebook.register.noPages;Your Facebook account doesn't administer any pages!<br /><a href='%s'>Logout</a> and use another account.
+facebook.register.noSubscribedPlan;No subscribed plan.
+facebook.register.pagesCount;Pages count
+facebook.register.remaining;Remaining prepaid pages
+facebook.register.subscribeFirst;You have to subscribe to one of our plans before registering pages.
+facebook.register.price;Price
+facebook.register.revalidateSuccess;Your pages where successfully revalidated.
+facebook.register.subscribed;You've been successfully subscribed. You can choose Facebook pages to watch now.
+facebook.register.subscribedPlan;Subscribed plan
+facebook.register.success;Pages has been added to the account. It can take several minutes to update GoodData.
+facebook.register.title;Facebook connector
+facebook.register.usersCount;Users count
+
+form.facebookSetup.pages;Administered pages
+form.facebookSetup.order;Order
+
+form.login.email;Email
+form.login.login;Login
+form.login.password;Password
+
+form.register.captcha;Type the code shown
+form.register.captcha.description;Click on image to try another one.
+form.register.email;Email
+form.register.password;Password
+form.register.passwordConfirm;Password confirmation
+form.register.save;Save
+
+revalidate.facebook.title;Facebook revalidation
+
+
+email.signature;Best regards,<br />Keboola
+
+layout.account;Account
+layout.cancel;Cancel
+layout.facebook;Facebook
+layout.footer;All rights reserved - Keboola
+layout.loggedInAs;Logged in as
+layout.login;Login
+layout.logout;Logout
+layout.overview;Overview
+
+
+
+jquery.validation.date;The field has to be a date.
+jquery.validation.digits;The field may contain only digits.
+jquery.validation.email;The field has to be an email address.
+jquery.validation.email.required;Email must not be empty.
+jquery.validation.password.required;Password must not be empty.
+jquery.validation.required;The field must not be empty.

@@ -1,16 +1,14 @@
 <?php
-// Define path to application directory
-defined('APPLICATION_PATH')
-    || define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../application'));
+define('ROOT_PATH', dirname(dirname($_SERVER['SCRIPT_FILENAME'])));
+define('APPLICATION_PATH', ROOT_PATH . '/application');
 
 // Define application environment
-defined('APPLICATION_ENV')
-    || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
+define('APPLICATION_ENV', 'production');
 
 // Ensure library/ is on include_path
 set_include_path(implode(PATH_SEPARATOR, array(
-    realpath(APPLICATION_PATH . '/../library'),
-    get_include_path(),
+	realpath(ROOT_PATH . '/library'),
+	get_include_path(),
 )));
 
 /** Zend_Application */
@@ -18,44 +16,26 @@ require_once 'Zend/Application.php';
 
 // Create application, bootstrap, and run
 $application = new Zend_Application(
-    APPLICATION_ENV,
-    APPLICATION_PATH . '/configs/application.ini'
+	APPLICATION_ENV,
+	APPLICATION_PATH . '/configs/application.ini'
 );
-$application->bootstrap();
+$application->bootstrap(array('base', 'autoload', 'config', 'ndebug', 'cache', 'db', 'locale'));
 
-$_p = new Model_Pages();
-
-$pages = $_p->fetchAll(array('isActive=?' => 1));
-$since = date('Y-m-d', strtotime('-4 days'));
-$until = date('Y-m-d');
-
+$_c = new Model_Connectors();
+$_u = new Model_Users();
 $config = Zend_Registry::get('config');
+$_g = new App_GoodDataService($config->gooddata->username, $config->gooddata->password);
+$_f = new App_Connector_Facebook();
 
-foreach($pages as $page) {
-	try {
-		echo "**************\nFetching stats for: ".$page->name."\n";
-		$_i = new App_Import($page);
-		$result = $_i->run($since, $until);
-		if ($result) {
-			if (!$page->isImported) {
-				$page->isImported = 1;
-				$page->save();
-			}
+//@TODO other connectors?
+$connector = $_c->fetchRow(array('id=?' => 1));
+foreach($_u->fetchAll(array('export=1', 'idGD IS NULL')) as $user) {
+	echo "****************************\n***  Export: ".$user->email."\n";
 
-			$fgd = new App_FacebookGoodData($config, $page->findParentRow('Model_Accounts')->idGD, $page->id);
-			if (!$page->isInGD) {
-				$fgd->setup();
-				$page->isInGD = 1;
-				$page->save();
-			}
-
-			$fgd->loadData();
-		}
-		echo "\n\n";
-	} catch(App_FacebookException $e) {
-		App_Debug::send('Error for page '.$page->id. '('.$page->name.'), interval: '.$since.'-'.$until.' - '.$e->getMessage()."\n");
-
-		echo "There was an error during talking to Facebook API. Try again please.\n";
-		continue;
+	$idGD = $_g->createProject($config->app->name.' - '.$user->email, $connector->templateUri);
+	if($idGD) {
+		$user->idGD = $idGD;
+		$user->save();
+		$_f->userHasProject($user->id);
 	}
 }

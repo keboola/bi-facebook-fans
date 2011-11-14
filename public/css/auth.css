@@ -1,0 +1,109 @@
+body {
+    background: #29475a;
+}
+
+.pageHeader {
+    text-align: center;
+}
+
+.pageContentWrapper {
+    border: none;
+    background: #29475a url('../img/bg-auth.png') no-repeat 50% 0;
+}
+
+.pageContent {
+    position: relative;
+    color: #d7dfe4;
+}
+
+
+.loginErrorsWrapper {
+    position: absolute;
+    top: 150px;
+    width: 100%;
+}
+.loginErrors {
+    display:none;
+    margin: 0 auto;
+    width: 360px;
+    padding: 0 0 0 15px;
+    border: solid 1px #2f6c8a;
+    background: #cee6f3 url('../img/bg-info.png') repeat-x 0 0;
+    color: #2d2e2e;
+    font-weight: bold;
+}
+.loginErrors .wrap1 {
+    margin-bottom: -7px;
+    padding: 7px 0 14px 0;
+    background: url('../img/bg-info-bottom.png') no-repeat 50% 100%;
+}
+.loginErrors .wrap2 {
+    min-height: 9px;
+    padding: 10px 15px 10px 45px;
+    background: url('../img/ico-info.png') no-repeat 0 50%;
+}
+
+.loginErrors label {
+    display: block;
+
+}
+
+
+.loginForm {
+    padding-top: 270px;
+    min-height: 0;
+    width: 788px;
+    margin: 0 auto 150px;
+}
+.loginForm form {
+    width: auto;
+}
+.loginForm fieldset {
+    overflow: hidden;
+}
+.loginForm .formElement {
+    float: left;
+    padding: 0 5px;
+}
+.loginForm .noLabel {
+    padding: 0;
+}
+.formElement label {
+    display: block;
+    margin-bottom: .5em;
+    font-size: 80%;
+    font-weight: normal;
+    color: #d7dfe4;
+}
+.inputText input {
+    vertical-align: bottom;
+    padding: 1.1em 15px;
+    width: 260px;
+    background: #fff;
+    border: none;
+    font-size: 100%;
+}
+.loginButton {
+    margin-top: 1.5em;
+    width: 188px;
+    height: 55px;
+    padding: 0;
+    background: none;
+}
+p.links {
+    text-align: center;
+    margin-top: 1em;
+}
+p.links a {
+    color: #d7dfe4;
+    text-decoration: none;
+    font-size: 90%;
+}
+p.links a:hover {
+    text-decoration: underline;
+}
+
+.pageFooter {
+    text-align: center;
+    color: #94a3ad;
+}

@@ -1,0 +1,9 @@
+/*
+ http://www.gnu.org/licenses/gpl.html [GNU General Public License]
+ @param {jQuery} {sha1:function(string))
+ @return string
+ */
+(function(r){var k=function(d,a){return d<<a|d>>>32-a},l=function(d){var a="",b,h;for(b=7;b>=0;b--)h=d>>>b*4&15,a+=h.toString(16);return a};r.extend({sha1:function(d){var a,b,h=Array(80),m=1732584193,n=4023233417,o=2562383102,p=271733878,q=3285377520,c,e,f,i,j;a=d.replace(/\x0d\x0a/g,"\n");for(var g="",d=0;d<a.length;d++)b=a.charCodeAt(d),b<128?g+=String.fromCharCode(b):(b>127&&b<2048?g+=String.fromCharCode(b>>6|192):(g+=String.fromCharCode(b>>12|224),g+=String.fromCharCode(b>>6&63|128)),g+=String.fromCharCode(b&
+    63|128));d=g;c=d.length;g=[];for(a=0;a<c-3;a+=4)b=d.charCodeAt(a)<<24|d.charCodeAt(a+1)<<16|d.charCodeAt(a+2)<<8|d.charCodeAt(a+3),g.push(b);switch(c%4){case 0:a=2147483648;break;case 1:a=d.charCodeAt(c-1)<<24|8388608;break;case 2:a=d.charCodeAt(c-2)<<24|d.charCodeAt(c-1)<<16|32768;break;case 3:a=d.charCodeAt(c-3)<<24|d.charCodeAt(c-2)<<16|d.charCodeAt(c-1)<<8|128}for(g.push(a);g.length%16!=14;)g.push(0);g.push(c>>>29);g.push(c<<3&4294967295);for(d=0;d<g.length;d+=16){for(a=0;a<16;a++)h[a]=g[d+a];
+    for(a=16;a<=79;a++)h[a]=k(h[a-3]^h[a-8]^h[a-14]^h[a-16],1);b=m;c=n;e=o;f=p;i=q;for(a=0;a<=19;a++)j=k(b,5)+(c&e|~c&f)+i+h[a]+1518500249&4294967295,i=f,f=e,e=k(c,30),c=b,b=j;for(a=20;a<=39;a++)j=k(b,5)+(c^e^f)+i+h[a]+1859775393&4294967295,i=f,f=e,e=k(c,30),c=b,b=j;for(a=40;a<=59;a++)j=k(b,5)+(c&e|c&f|e&f)+i+h[a]+2400959708&4294967295,i=f,f=e,e=k(c,30),c=b,b=j;for(a=60;a<=79;a++)j=k(b,5)+(c^e^f)+i+h[a]+3395469782&4294967295,i=f,f=e,e=k(c,30),c=b,b=j;m=m+b&4294967295;n=n+c&4294967295;o=o+e&4294967295;
+    p=p+f&4294967295;q=q+i&4294967295}j=l(m)+l(n)+l(o)+l(p)+l(q);return j.toLowerCase()}})})(jQuery);

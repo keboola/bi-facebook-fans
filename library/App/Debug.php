@@ -13,7 +13,7 @@ class App_Debug
 	{
 		$output = date("Y-m-d H:i:s")."\n";
 		$output .= print_r($data, true);
-		
+
 		error_log(
 			$output."\n",
 			3,
@@ -34,8 +34,8 @@ class App_Debug
 		$m = new Zend_Mail('utf8');
 		$m->setFrom($c->app->email);
 		$m->addTo($c->app->admin);
-		$m->setSubject('Facebook-GoodData connector error');
-		$m->setBodyText($data);
+		$m->setSubject($c->app->name.' error');
+		$m->setBodyText(is_array($data) ? print_r($data, true) : $data);
 
 		if ($attachment && file_exists($attachment)) {
 			$a = new Zend_Mime_Part(file_get_contents($attachment));
@@ -43,7 +43,7 @@ class App_Debug
 			$a->disposition = Zend_Mime::DISPOSITION_ATTACHMENT;
 			$m->addAttachment($a);
 		}
-
+		
 		$m->send();
 	}
 }

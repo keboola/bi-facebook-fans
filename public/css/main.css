@@ -1,0 +1,337 @@
+body {
+    background-color: #d9dddf;
+    color: #28292b;
+}
+
+.pageSection {
+    width: 940px;
+    margin: 0 auto;
+}
+
+.pageHeaderWrapper {
+    background: #161d22 url('../img/bg-pageHeader.png') repeat-x;
+    border-bottom: solid 1px #3d5c70;
+}
+.pageHeader {
+    overflow: hidden;
+    min-height: 73px;
+}
+.pageHeader .loginBox {
+    float: right;
+    margin-top: 2em;
+    width: 170px;
+    font-size: 80%;
+    line-height: 1.8em;
+    color: #899397;
+    text-transform: uppercase;
+}
+.pageHeader .loginBox a {
+    float: right;
+    padding-right: 15px;
+    color: #fff;
+    text-decoration: none;
+    background: url('../img/ico-logout.png') no-repeat 100% 50%;
+}
+.pageHeader .loginBox .email {
+    color: #a9e2ff;
+    font-size: 110%;
+    text-transform: none;
+    font-weight: normal;
+}
+.pageHeader .siteName {
+    margin-top: 2.25em;
+}
+
+.pageSubHeaderWrapper {
+    min-height: 62px;
+    background: #273c48 url('../img/bg-pageSubHeader.png') repeat-x;
+    color: #fff;
+}
+.pageSubHeader {
+    padding: .8em 0;
+    overflow: hidden;
+}
+.pageSubHeader .navigation {
+    float: right;
+    overflow: hidden;
+    margin: 0;
+    padding: 4px;
+    background: url('../img/bg-navigation.png') repeat-x;
+    list-style: none;
+}
+.pageSubHeader .navigation li {
+    list-style: none;
+    display: block;
+    float: left;
+    height: 32px;
+    margin: 0;
+}
+.pageSubHeader .navigation a {
+    display: block;
+    padding: .75em 20px;
+    background: url('../img/bg-navigationItem.png') repeat-x;
+    border-left: solid 1px #6db1d6;
+    border-right: solid 1px #3e92bb;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+.pageSubHeader .navigation .active a {
+    background-image: url('../img/bg-navigationItem-active.png');
+    border-left-color: #164157;
+    border-right-color: #164258;
+}
+
+.pageTitleWrapper {
+    min-height: 62px;
+    background: #d1d6d8 url('../img/bg-pageTitle.png') repeat-x;
+    border-bottom: solid 1px #bbbec1;
+}
+.pageTitle {
+    overflow: hidden;
+    position: relative;
+}
+.pageTitle h1 {
+    margin: .75em 0;
+    color: #131416;
+    font-weight: normal;
+    font-size: 220%;
+}
+
+
+.pageFooterWrapper {
+    background: #d9dddf;
+    color: #7f8388;
+}
+.pageFooter {
+    padding: 2em 0 1em;
+}
+
+
+.pageContentWrapper {
+    border-bottom: solid 1px #c8ccce;
+    background-color: #edf2f4;
+    color: #1d1f20;
+}
+.pageContent {
+	padding: 0 0 2em;
+    min-height: 450px;
+	font-size: 1.2em;
+}
+
+.rightSidebar {
+    margin: 0 0 2em;
+    overflow: hidden;
+    min-height: 400px;
+    background: url('../img/bg-rightSidebar.png') repeat-y 100% 0;
+    border-bottom: solid 1px #d0d5d6;
+}
+.rightSidebar .content {
+    width: 640px;
+    padding: 2em 30px 2em 0;
+}
+.rightSidebar .sidebar {
+    float: right;
+    width: 270px;
+}
+.sidebar .box {
+    padding: 2em 0 2em 30px;
+    border-bottom: solid 1px #c8ccce;
+}
+.sidebar .lastBox {
+    border-bottom: none;
+}
+
+
+
+.notice {
+    margin: 0 0 1.5em;
+}
+.notice .wrap {
+    display: block;
+    padding: 1em 15px 1em 50px;
+}
+.warning {
+    border: solid 1px #edc42c;
+    background: #ffeb9a url('../img/bg-warning.png') repeat-x;
+}
+.warning .wrap {
+    background: url('../img/bg-warning-ico.png') no-repeat 0 50%;
+}
+.error {
+    border: solid 1px #e03441;
+    background: #ffbaba url('../img/bg-error.png') repeat-x;
+}
+.error .wrap {
+    background: url('../img/bg-error-ico.png') no-repeat 0 50%;
+}
+.loginErrors .error {
+    border: none;
+    background: none;
+}
+.loginErrors .error .wrap {
+    background: none;
+}
+
+
+.pageContent a {
+    color: #1d1f20;
+}
+.pageContent h2 {
+    color: #1c2c38;
+    text-transform: uppercase;
+    font-size: 100%;
+    margin: 0 0 1em;
+}
+
+
+
+
+.formCaptcha,
+.formElement {
+    margin: 0 0 1em;
+    position: relative;
+}
+.formCaptcha label,
+.formElement label {
+    display: block;
+    margin-bottom: .5em;
+    font-size: 80%;
+    font-weight: bold;
+    color: #63696e;
+}
+input.inputCaptcha,
+input.inputPassword,
+input.inputText {
+    vertical-align: bottom;
+    padding: 1.1em 15px;
+    width: 405px;
+    background: #fff url('../img/bg-inputText.png') repeat-x;
+    border: solid 1px #c4cacc;
+    font-size: 100%;
+}
+span.note {
+    display: block;
+    margin-top: .5em;
+    font-size: 70%;
+    color: #63696e;
+}
+input.error {
+    border: solid 2px #bc0606;
+    background: #fff url('../img/ico-inputError.png') no-repeat 100% 50%;
+}
+.formCaptcha strong,
+.formElement strong {
+    position: absolute;
+    top: -30px;
+    right: 30px;
+    margin: 0;
+    padding: 0;
+    background: #ffbaba url('../img/bg-error.png') repeat-x;
+    border: solid 1px #e03441;
+}
+.formCaptcha strong span,
+.formElement strong span {
+    display: block;
+    margin-bottom: -8px;
+    padding: 10px 15px 18px;
+    background: url('../img/bg-error-bottom.png') no-repeat 100% 100%;
+    border: none;
+}
+.formElement ul.errors li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+strong.error img {
+    position: absolute;
+    right: 0;
+    bottom: -8px;
+}
+
+
+.multiOptions input {
+	margin-right: 10px;
+	vertical-align: top;
+}
+
+
+.formCaptcha img {
+    cursor: pointer;
+    border: solid 1px #c4cacc;
+    vertical-align: bottom;
+}
+input.inputCaptcha {
+    width: 200px;
+    vertical-align: bottom;
+}
+
+.buttonsRow input, .buttonsRow img, .buttonsRow a {
+    vertical-align: top;
+    margin: 0;
+}
+.buttonsRow input {
+    margin-left: -5px;
+}
+
+
+ul li, ol li {
+	margin-bottom: .5em;
+}
+
+th {
+    padding: .25em 20px;
+}
+td {
+    padding: .25em 20px;
+}
+
+
+.registerForm form {
+    width: 470px;
+}
+.registerForm fieldset {
+    padding: 2em 0 1em;
+    border-right: solid 1px #d0d5d6;
+    border-bottom: solid 1px #d0d5d6;
+}
+.registerForm #fieldset-buttons {
+    border: none;
+}
+
+
+.facebookForm .multiElement {
+    margin: 0 0 2em;
+}
+.facebookForm .multiOptions {
+    margin: 1em 0 1em;
+}
+.facebookForm br {
+    display: none;
+}
+
+
+.subscribedPlan th {
+    font-weight: normal;
+    text-align: left;
+    padding-left: 0;
+}
+.subscribedPlan td {
+    font-weight: bold;
+}
+
+.paypal {
+    text-align: center;
+}
+.selectPlan {
+    margin: 0 0 1em;
+    font-size: 90%;
+    width: 240px;
+}
+.paypal input {
+    width: auto;
+    float: none;
+}
+.paypal img {
+    border: none;
+}

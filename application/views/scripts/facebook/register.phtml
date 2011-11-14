@@ -1,0 +1,119 @@
+<?
+$usedAccountsCount = count($this->userAccounts);
+$subscribedPlan = null;
+$paidAccountsCount = 0;
+$remainingAccountsCount = 0;
+
+$this->jQuery()->addJavascriptFile('/js/sha1.js')->addOnLoad('
+	$("#submit").attr("disabled", "disabled");
+	$("#selectPlan").change(function(){
+		$("#paypalButton").removeAttr("disabled").attr("src", "/img/button-subscribe.png");
+		var selectedPlan = $("#selectPlan option:selected").val();
+		$("#customField").val(idUser+"-"+selectedPlan+"-"+$.sha1(idUser+selectedPlan+"'.$this->user->salt.'"));
+	});
+');
+
+if($this->userToConnector) {
+	$subscribedPlan = $this->userToConnector->findParentRow('Model_PricePlans');
+	$paidAccountsCount = $subscribedPlan->accountsCount;
+	$remainingAccountsCount = $paidAccountsCount - $usedAccountsCount;
+	$this->jQuery()->addOnLoad('
+	$("input[type=\'checkbox\']").change(function(){
+		var checkedCount = $("input[type=\'checkbox\']:checked").not(":disabled").length;
+		var remainingCount = totalRemainingAccountsCount-checkedCount;
+		$("#remainingAccountsCount").text(remainingCount);
+		if (remainingCount >= 0 && $("input[type=\'checkbox\']:checked").size() > 0) {
+			$("#submit").removeAttr("disabled").attr("src", "/img/button-save.png");
+		} else {
+			$("#submit").attr("disabled", "disabled").attr("src", "/img/button-save-inactive.png");
+		}
+	});
+	');
+}
+
+$this->jQuery()->addJavascript('
+	var remainingAccountsCount = '.$remainingAccountsCount.';
+	var totalRemainingAccountsCount = '.$remainingAccountsCount.';
+	var idUser = '.$this->user->id.';
+');
+
+$errorMessage = '';
+switch ($this->message) {
+	case 'apiError':
+		$errorMessage = $this->translate('facebook.register.apiError');
+		break;
+	case 'csrfError':
+		$errorMessage = $this->translate('facebook.register.csrfError');
+		break;
+	case 'noPages':
+		$errorMessage = $this->translate('facebook.register.noPages', $this->logoutUrl);
+		break;
+}
+
+?>
+
+<div class="rightSidebar">
+	<div class="sidebar">
+		<div class="box">
+			<h2><?=$this->translate('facebook.register.subscribedPlan')?></h2>
+			<? if($this->userToConnector) {
+			$subscribedPlan = $this->userToConnector->findParentRow('Model_PricePlans');?>
+			<table class="subscribedPlan">
+				<tr>
+					<th><?=$this->translate('facebook.register.pagesCount')?></th>
+					<td class="pagesCount"><?=$usedAccountsCount?> / <?=$paidAccountsCount?></td>
+				</tr>
+				<tr>
+					<th><?=$this->translate('facebook.register.usersCount')?></th>
+					<td class="usersCount">1 / <?=$subscribedPlan->usersCount?></td>
+				</tr>
+				<tr>
+					<th><?=$this->translate('facebook.register.price')?></th>
+					<td class="price">$<?=$subscribedPlan->price?></td>
+				</tr>
+			</table>
+			<?} else {?>
+				<?=$this->translate('facebook.register.noSubscribedPlan')?>
+			<?}?>
+		</div>
+
+		<div class="box lastBox">
+			<h2><?=$this->translate('facebook.register.changePlan')?></h2>
+			<form action="https://www.paypal.com/cgi-bin/webscr" method="post" class="paypal">
+				<div>
+					<input type="hidden" name="cmd" value="_s-xclick" />
+					<input type="hidden" name="hosted_button_id" value="Z77KV45KZX6NL" />
+					<input type="hidden" name="on0" value="" />
+					<select name="os0" id="selectPlan" class="selectPlan">
+						<option selected="selected" disabled="disabled">- <?=$this->translate('facebook.register.choosePlan')?> -</option>
+						<?foreach($this->pricePlans as $p) {
+						$args = '';
+						if ($subscribedPlan && $p->accountsCount <= $subscribedPlan->accountsCount) {
+							// disable lower price plans than subscribed
+							$args = ' disabled="disabled"';
+						}
+						echo '<option'.$args.' value="'.$p->id.'">Up to '.$p->accountsCount.' FB Pages / '.$p->usersCount.' Users: $'.$p->price.'</option>';
+					}?>
+					</select>
+				</div>
+				<div>
+					<input type="hidden" name="currency_code" value="USD" />
+					<input type="hidden" name="custom" id="customField" value="" />
+					<input type="image" id="paypalButton" src="/img/button-subscribe-inactive.png" name="submit" alt="PayPal - The safer, easier way to pay online!" />
+					<img alt="" src="https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif" />
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="content">
+		<h2><?=$this->translate('facebook.register.info')?></h2>
+		<?if(!$this->userToConnector) {?>
+			<p class="warning notice"><span class="wrap"><?=$this->translate('facebook.register.subscribeFirst')?></span></p>
+		<?}?>
+		<?if($errorMessage) {?>
+			<p class="error notice"><span class="wrap"><?=$errorMessage?></span></p>
+		<?}?>
+		<p><?=$this->translate('facebook.register.remaining')?>: <strong id="remainingAccountsCount"><?=$remainingAccountsCount?></strong></p>
+		<?=$this->form?>
+	</div>
+</div>

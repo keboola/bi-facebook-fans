@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <overflow>
+        <label>layout.overview</label>
+        <class>first</class>
+        <controller>index</controller>
+        <action>index</action>
+    </overflow>
+    <facebook>
+        <label>layout.facebook</label>
+        <class>last</class>
+        <controller>facebook</controller>
+        <action>register</action>
+    </facebook>
+</config>

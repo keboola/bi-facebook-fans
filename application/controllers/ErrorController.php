@@ -38,11 +38,14 @@ class ErrorController extends Zend_Controller_Action
         
         $this->view->request   = $errors->request;
 
-		echo Zend_Json::encode(array(
+		echo '<p>'.$this->view->message.'</p>';
+		echo '<p>'.$this->view->info.'</p>';
+		echo '<pre>'.$errors->exception->getTraceAsString().'</pre>';
+		/*echo Zend_Json::encode(array(
 				'message' => $this->view->message,
 				'info' => $this->view->info,
 				'trace' => $errors->exception->getTraceAsString()
-			));
+			));*/
 		die();
     }
 
