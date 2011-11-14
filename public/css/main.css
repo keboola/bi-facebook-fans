@@ -334,4 +334,5 @@ td {
 }
 .paypal img {
     border: none;
+    display: none;
 }

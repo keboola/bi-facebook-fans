@@ -6,6 +6,7 @@ $remainingAccountsCount = 0;
 
 $this->jQuery()->addJavascriptFile('/js/sha1.js')->addOnLoad('
 	$("#submit").attr("disabled", "disabled");
+	$("#paypalButton").attr("disabled", "disabled");
 	$("#selectPlan").change(function(){
 		$("#paypalButton").removeAttr("disabled").attr("src", "/img/button-subscribe.png");
 		var selectedPlan = $("#selectPlan option:selected").val();
@@ -79,11 +80,14 @@ switch ($this->message) {
 
 		<div class="box lastBox">
 			<h2><?=$this->translate('facebook.register.changePlan')?></h2>
-			<form action="https://www.paypal.com/cgi-bin/webscr" method="post" class="paypal">
+			<form action="<?=$this->paypalUrl?>" method="post" class="paypal">
 				<div>
 					<input type="hidden" name="cmd" value="_s-xclick" />
-					<input type="hidden" name="hosted_button_id" value="Z77KV45KZX6NL" />
+					<input type="hidden" name="hosted_button_id" value="<?=$this->paypalButtonCode?>" />
 					<input type="hidden" name="on0" value="" />
+<?if($subscribedPlan) {?>
+					<input type="hidden" name="modify" value="2" />
+<?}?>
 					<select name="os0" id="selectPlan" class="selectPlan">
 						<option selected="selected" disabled="disabled">- <?=$this->translate('facebook.register.choosePlan')?> -</option>
 						<?foreach($this->pricePlans as $p) {
@@ -100,9 +104,12 @@ switch ($this->message) {
 					<input type="hidden" name="currency_code" value="USD" />
 					<input type="hidden" name="custom" id="customField" value="" />
 					<input type="image" id="paypalButton" src="/img/button-subscribe-inactive.png" name="submit" alt="PayPal - The safer, easier way to pay online!" />
-					<img alt="" src="https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif" />
+					<img alt="" src="https://www.paypal.com/en_US/i/scr/pixel.gif" />
 				</div>
 			</form>
+			<?if($subscribedPlan){?>
+			<div class="right"><a href="<?=$this->paypalUrl?>?cmd=_subscr-find&alias=<?=$this->paypalMerchantId?>"><?=$this->translate('facebook.register.unsubscribe')?></a></div>
+			<?}?>
 		</div>
 	</div>
 	<div class="content">

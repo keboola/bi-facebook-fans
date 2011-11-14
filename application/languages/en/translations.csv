@@ -44,6 +44,7 @@ facebook.register.subscribed;You've been successfully subscribed. You can choose
 facebook.register.subscribedPlan;Subscribed plan
 facebook.register.success;Pages has been added to the account. It can take several minutes to update GoodData.
 facebook.register.title;Facebook connector
+facebook.register.unsubscribe;Unsubscribe
 facebook.register.usersCount;Users count
 
 form.facebookSetup.pages;Administered pages

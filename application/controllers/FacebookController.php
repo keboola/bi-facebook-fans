@@ -9,6 +9,12 @@ class FacebookController extends App_Controller_Action
 	 */
 	const ID_CONNECTOR = 1;
 
+	const PAYPAL_BUTTON_CODE = 'Z77KV45KZX6NL'; //sandbox: KQ7M7FNLJQ8JG
+
+	const PAYPAL_MERCHANT_ID = 'ERN3KS448AF3E'; //sandbox: UJDWEFLU8ME88
+
+	const PAYPAL_URL = 'https://www.paypal.com/cgi-bin/webscr'; //sandbox: https://www.sandbox.paypal.com/cgi-bin/webscr'
+
 
 	/**
 	 * @var App_Connector_Facebook
@@ -148,6 +154,9 @@ class FacebookController extends App_Controller_Action
 
 			$this->view->userToConnector = $userToConnector;
 			$this->view->userAccounts = $this->_connector->accounts($this->_user->id);
+			$this->view->paypalButtonCode = self::PAYPAL_BUTTON_CODE;
+			$this->view->paypalMerchantId = self::PAYPAL_MERCHANT_ID;
+			$this->view->paypalUrl = self::PAYPAL_URL;
 		} else {
 			$this->view->message = 'csrfError';
 		}

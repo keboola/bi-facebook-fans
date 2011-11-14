@@ -12,13 +12,6 @@ class App_View_Helper_LoggedInAs extends Zend_View_Helper_Abstract
 				. '<strong class="email">' . $username . '</strong>';
 		}
 
-		$request = Zend_Controller_Front::getInstance()->getRequest();
-		$controller = $request->getControllerName();
-		$action = $request->getActionName();
-		if($controller == 'auth' && $action == 'index') {
-			return '';
-		}
-		$loginUrl = $this->view->url(array('controller'=>'auth', 'action'=>'index'));
-		return '<a href="'.$loginUrl.'">'.$this->view->translate('layout.login').'</a>';
+		return '';
 	}
 }

@@ -9,6 +9,7 @@ class Form_FacebookSetup extends App_Form
 	{
 		parent::init();
 		$this->setAttrib('class', 'facebookForm');
+		$this->setName('facebookForm');
 
 		$this->addElement('multiCheckbox', 'pages', array(
 			'required'	=> true,
