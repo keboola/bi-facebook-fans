@@ -1,11 +1,5 @@
 app.name;keboolytics
 
-auth.index.lostPassword;Lost Password
-auth.index.signUp;Sign Up
-auth.index.title;Login
-
-auth.login.failed;Login failed.
-auth.login.notActivated;This account isn't activated yet.
 
 auth.activate.email;You have created new account for keboolytics. You have to active it first using this link:
 auth.activate.subject;Activation link
@@ -13,10 +7,28 @@ auth.activate.alreadyActivated;Your account is already activated.
 auth.activate.failed;You used wrong activation link, check your activation email please.
 auth.activate.success;Activation was successful, you can login now.
 
+auth.index.lostPassword;Lost Password
+auth.index.signUp;Sign Up
+auth.index.title;Login
+
+auth.login.failed;Login failed.
+auth.login.notActivated;This account isn't activated yet.
+
+auth.lost-password.email;You've requested new password for your account. You may set it via this link: <a href='%s'>%s</a>. It is valid only for one hour.
+auth.lost-password.emailSent;Email with password retrieval url has been sent.
+auth.lost-password.info;We will send you a retrieval link to given email
+auth.lost-password.subject;Password retrieval link
+auth.lost-password.title;Lost Password
+
+auth.new-password.complete;Your password has been successfully changed.
+auth.new-password.failed;You used wrong retrieval link or link validity expired.
+auth.new-password.info;Enter your new password
+auth.new-password.title;New password
 
 auth.register.title;Create account
 auth.register.back;Back
 auth.register.registrationComplete;You have created new account. Please wait for an email with activation link.
+
 
 index.index.title;Account
 index:index:connectorsInfo;Available connectors
@@ -31,16 +43,22 @@ facebook.register.changePlan;Change plan
 facebook.register.choosePlan;Choose plan
 facebook.register.confirmationFailed;Confirmation of the payment failed. Contact our support please.
 facebook.register.csrfError;There was a security issue. Try again from <a href='/facebook/register'>this link</a> please.
-facebook.register.facebookLogin;Login to Facebook as another user
+facebook.register.facebookLogin;You are logged in to Facebook as <strong>%s</strong>. <a href='%s'>Login as another user</a>.
+facebook.register.getTokenError;There was an unknown error, try again later please.
 facebook.register.info;Pick pages you administer which you want to watch
+facebook.register.manyPagesAdded;You have chosen more pages then your plan allows.
 facebook.register.noPages;Your Facebook account doesn't administer any pages!<br /><a href='%s'>Logout</a> and use another account.
+facebook.register.noPagesAdded;You have to select at least one page.
 facebook.register.noSubscribedPlan;No subscribed plan.
 facebook.register.pagesCount;Pages count
-facebook.register.remaining;Remaining prepaid pages
-facebook.register.subscribeFirst;You have to subscribe to one of our plans before registering pages.
+facebook.register.planOption;Up to %d FB Pages / %d Users: $%d
 facebook.register.price;Price
+facebook.register.remaining;Remaining prepaid pages
 facebook.register.revalidateSuccess;Your pages where successfully revalidated.
+facebook.register.subscribeFirst;You have to subscribe to one of our plans before registering pages.
 facebook.register.subscribed;You've been successfully subscribed. You can choose Facebook pages to watch now.
+facebook.register.subscriptionChanged;Your subscription has been successfully changed. You can choose other Facebook pages to watch.
+facebook.register.subscribedTwice;You've been subscribed but your old subscription was not cancelled. Please do it yourself here: <a href='%s'>unsubscribe</a>
 facebook.register.subscribedPlan;Subscribed plan
 facebook.register.success;Pages has been added to the account. It can take several minutes to update GoodData.
 facebook.register.title;Facebook connector

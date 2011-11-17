@@ -90,18 +90,9 @@ class AuthController extends App_Controller_Action
 				));
 
 				$validation = md5($request->email.$salt);
+				$url = $this->_config->app->url."/auth/activate/id/".$idUser.'/verify/'.$validation;
 
-				$html = new Zend_View();
-				$html->setScriptPath(APPLICATION_PATH.'/views/emails/');
-				$html->url = $this->_config->app->url."/auth/activate/id/".$idUser.'/verify/'.$validation;
-				$bodyHtml = $html->render("activation.phtml");
-
-				$m = new Zend_Mail();
-				$m->addTo($request->email);
-				$m->setFrom($this->_config->app->email);
-				$m->setSubject($this->_translator->translate('auth.activate.subject'));
-				$m->setBodyHtml($bodyHtml);
-				$m->send();
+				App_Email::send($request->email, 'auth.activate.subject', 'activation', array('url' => $url));
 
 				$this->_helper->getHelper('FlashMessenger')->addMessage('auth.register.registrationComplete');
 				$this->_helper->redirector('index', 'auth');
@@ -150,6 +141,71 @@ class AuthController extends App_Controller_Action
 			'id' => $captcha->generate(),
 			'src' => $captcha->getImgUrl() . $captcha->getId() . $captcha->getSuffix()
 		));
+	}
+
+	public function lostPasswordAction()
+	{
+		$form = new Form_LostPassword();
+		$form->getElement('submit')->setDecorators(array(
+			array('viewScript', array('viewScript' => 'helpers/registerButtons.phtml'))
+		));
+
+		$request = $this->getRequest();
+		if ($request->isPost()) {
+			if ($form->isValid($request->getPost())) {
+
+				$_u = new Model_Users();
+
+				$u = $_u->fetchRow(array('email=?' => $request->email));
+				$u->changePasswordUntil = date('Y-m-d H:i:s', strtotime('+1 hour'));
+				$u->save();
+
+				$validation = md5($request->email.$u->salt);
+				$url = $this->_config->app->url."/auth/new-password/id/".$u->id.'/verify/'.$validation;
+
+				App_Email::send($request->email, 'auth.lost-password.subject', 'lostPassword', array('url' => $url));
+
+				$this->_helper->getHelper('FlashMessenger')->addMessage('auth.lost-password.emailSent');
+				$this->_helper->redirector('index', 'auth');
+				return;
+			}
+		}
+		$this->view->form = $form;
+	}
+
+	public function newPasswordAction()
+	{
+		$form = new Form_NewPassword();
+		$request = $this->getRequest();
+		if(!empty($request->id) && !empty($request->verify)) {
+			$_u = new Model_Users();
+
+			$u = $_u->fetchRow(array('id=?' => $request->id));
+			if ($u && $u->changePasswordUntil && date('Y-m-d H:i:s') <= $u->changePasswordUntil) {
+				if($request->verify == md5($u->email.$u->salt)) {
+
+					if ($request->isPost()) {
+						if ($form->isValid($request->getPost())) {
+							$salt = md5(date('YmdHis'));
+
+							$u->password = sha1($request->password.$salt);
+							$u->salt = $salt;
+							$u->changePasswordUntil = null;
+							$u->save();
+
+							$this->_helper->getHelper('FlashMessenger')->addMessage('auth.new-password.complete');
+							$this->_helper->redirector('index', 'auth');
+							return;
+						}
+					}
+					$this->view->form = $form;
+					return;
+				}
+			}
+		}
+
+		$this->_helper->getHelper('FlashMessenger')->addMessage('auth.new-password.failed');
+		$this->_helper->redirector('index', 'auth');
 	}
 
 

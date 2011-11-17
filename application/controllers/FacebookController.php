@@ -9,13 +9,6 @@ class FacebookController extends App_Controller_Action
 	 */
 	const ID_CONNECTOR = 1;
 
-	const PAYPAL_BUTTON_CODE = 'Z77KV45KZX6NL'; //sandbox: KQ7M7FNLJQ8JG
-
-	const PAYPAL_MERCHANT_ID = 'ERN3KS448AF3E'; //sandbox: UJDWEFLU8ME88
-
-	const PAYPAL_URL = 'https://www.paypal.com/cgi-bin/webscr'; //sandbox: https://www.sandbox.paypal.com/cgi-bin/webscr'
-
-
 	/**
 	 * @var App_Connector_Facebook
 	 */
@@ -42,9 +35,30 @@ class FacebookController extends App_Controller_Action
 
 		$pageUrl = urlencode($this->_baseUrl.'/facebook/register');
 		$userToConnector = $_uc->fetchRow(array('idUser=?' => $this->_user->id, 'idConnector=?' => self::ID_CONNECTOR));
+		$subscribedPlan = $userToConnector ? $userToConnector->findParentRow('Model_PricePlans') : null;
+		$userAccounts = $this->_connector->accounts($this->_user->id);
+
+		$paidAccountsCount = $subscribedPlan ? $subscribedPlan->accountsCount : 0;
+		$usedAccountsCount = count($userAccounts);
+		$remainingAccountsCount = $paidAccountsCount - $usedAccountsCount;
 
 		// Complete pages registration
 		if ($this->_request->isPost()) {
+
+			// Second check if jQuery validation fails - test no added pages or more added then subscribed
+			if(!isset($this->_request->pages)) {
+				$this->_helper->getHelper('FlashMessenger')->addMessage('facebook.register.noPagesAdded');
+				$this->_helper->redirector('register');
+				return;
+			} else {
+				if (count($this->_request->pages) > $remainingAccountsCount) {
+					$this->_helper->getHelper('FlashMessenger')->addMessage('facebook.register.manyPagesAdded');
+					$this->_helper->redirector('register');
+					return;
+				}
+			}
+
+
 			if(!empty($ns->pages)) {
 				$form->getElement('pages')->setMultiOptions($ns->pages);
 			}
@@ -80,25 +94,22 @@ class FacebookController extends App_Controller_Action
 
 		// Facebook authorization
 		if (empty($this->_request->code)) {
-			$ns->state = md5(uniqid(rand(), TRUE)); //CSRF protection
-			$dialogUrl = "http://www.facebook.com/dialog/oauth?client_id=" . $this->_config->facebook->appId
-				. "&scope=offline_access,read_insights,email,manage_pages&redirect_uri=" . $pageUrl
-				. "&state=" . $ns->state;
+			$this->addMessages($this->view->messages);
+
+			$ns->state = md5($this->_user->salt); //CSRF protection
+			$dialogUrl = App_Facebook::authorizationUrl($pageUrl, $ns->state);
 			$this->_redirect($dialogUrl);
 			return;
 		}
 
 		// show registration form
 		if ($this->_request->state == $ns->state) {
-			$tokenUrl = "https://graph.facebook.com/oauth/access_token?client_id=" . $this->_config->facebook->appId
-				. "&redirect_uri=" . $pageUrl . "&client_secret=" . $this->_config->facebook->appSecret
-				. "&code=" . $this->_request->code;
-			$response = file_get_contents($tokenUrl);
-			$params = null;
-			parse_str($response, $params);
+			$accessToken = App_Facebook::accessToken($pageUrl, $this->_request->code);
 
-			if (!empty($params['access_token'])) {
-				$gd = new App_Facebook(null, $params['access_token']);
+			$logoutUrl = 'https://www.facebook.com/logout.php?next='.$pageUrl.'&access_token='.$accessToken;
+
+			if (!empty($accessToken)) {
+				$gd = new App_Facebook(null, $accessToken);
 
 				$userInfo = $gd->request('me');
 				if ($userInfo) {
@@ -122,8 +133,7 @@ class FacebookController extends App_Controller_Action
 					}
 
 					if(!count($pages)) {
-						$this->view->message = 'noPages';
-						$form = null;
+						$this->addMessage($this->view->translate('facebook.register.noPages', $logoutUrl));
 					} else {
 						$ns->pages = $pages;
 						$form->getElement('pages')->setMultiOptions($pages);
@@ -133,17 +143,17 @@ class FacebookController extends App_Controller_Action
 							$form->getElement('pages')->setValue($knownPages);
 						}
 					}
+
+					$form->getElement('pages')->setDescription($this->view->translate('facebook.register.facebookLogin',
+						$userInfo['email'], $logoutUrl));
+
 				} else {
-					$this->view->message = 'apiError';
+					$this->addMessage('facebook.register.apiError');
 				}
 			} else {
-				$this->view->message = 'apiError';
+				$this->addMessage('facebook.register.apiError');
 			}
 
-			$logoutLink = '<a href="https://www.facebook.com/logout.php?next='.$pageUrl
-				.'&access_token='.$params['access_token'].'">'
-				.$this->view->translate('facebook.register.facebookLogin').'</a>';
-			$form->getElement('pages')->setDescription($logoutLink);
 			$form->getElement('submit')->setDecorators(array(
 				array('viewScript', array('viewScript' => 'helpers/facebookButtons.phtml'))
 			));
@@ -151,14 +161,12 @@ class FacebookController extends App_Controller_Action
 			$this->view->form = $form;
 			$this->view->pageUrl = $this->_baseUrl.'/facebook/register';
 			$this->view->pricePlans = $_pp->fetchAll(null, 'accountsCount ASC');
-
+			$this->view->subscribedPlan = $subscribedPlan;
+			$this->view->paidAccountsCount = $paidAccountsCount;
+			$this->view->userAccounts = $userAccounts;
 			$this->view->userToConnector = $userToConnector;
-			$this->view->userAccounts = $this->_connector->accounts($this->_user->id);
-			$this->view->paypalButtonCode = self::PAYPAL_BUTTON_CODE;
-			$this->view->paypalMerchantId = self::PAYPAL_MERCHANT_ID;
-			$this->view->paypalUrl = self::PAYPAL_URL;
 		} else {
-			$this->view->message = 'csrfError';
+			$this->addMessage('facebook.register.csrfError');
 		}
 	}
 
@@ -176,7 +184,7 @@ class FacebookController extends App_Controller_Action
 				CURLOPT_POSTFIELDS => http_build_query(array(
 					'cmd' => '_notify-synch',
 					'tx' => $this->_request->tx,
-					'at' => 'qQNu_Sw5bfX2ry5bcujvEYQ5fuD7OwOXxItL_7alwEXZVs-vrEoUxb3rC3u',
+					'at' => $this->_config->paypal->pdt,
 				)),
 				CURLOPT_RETURNTRANSFER => TRUE,
 				CURLOPT_HEADER => FALSE,
@@ -205,14 +213,36 @@ class FacebookController extends App_Controller_Action
 						'idUser' => $this->_user->id,
 						'idConnector' => self::ID_CONNECTOR,
 						'idPlan' => $verifier[1],
+						'idSubscription' => $response['subscr_id'],
 						'paidUntil' => date('Y-m-d', strtotime('+7 days'))
 					);
 					$utc = $_utc->fetchRow(array('idUser=?' => $this->_user->id, 'idConnector=?' => self::ID_CONNECTOR));
 					if(!$utc) {
 						$_utc->insert($utcData);
+						$this->addMessages(array('facebook.register.subscribed'));
 					} else {
-						$utc->setFromArray($utcData);
-						$utc->save();
+						$utcData['paidUntil'] = date('Y-m-d', strtotime('+1 month'));
+
+						// Suspend previous subscription
+						require_once 'PayPal/CallerService.php';
+						$nvpStr="&PROFILEID={$utc->idSubscription}&ACTION=Suspend";
+						$resArray = hash_call("ManageRecurringPaymentsProfileStatus", $nvpStr);
+
+						$ack = strtoupper($resArray["ACK"]);
+						if($ack == 'SUCCESS') {
+							$utc->setFromArray($utcData);
+							$utc->save();
+						} else {
+							App_Debug::send(array(
+								'error' => 'PayPal suspend subscription '.$utc->idSubscription.' for user '.$this->_user->email,
+								'data' => $resArray
+							));
+							$this->addMessages(array($this->view->translate('facebook.register.subscribedTwice',
+								$this->_config->paypal->url.'cmd=_subscr-find&alias='.$this->_config->paypal->merchantId)));
+							$this->_helper->redirector('register');
+							return;
+						}
+						$this->addMessages(array('facebook.register.subscriptionChanged'));
 					}
 
 					$_oh->insert(array(
@@ -221,7 +251,6 @@ class FacebookController extends App_Controller_Action
 						'price' => $response['payment_gross']
 					));
 
-					$this->_helper->getHelper('FlashMessenger')->addMessage('facebook.register.subscribed');
 					$this->_helper->redirector('register');
 					return;
 
@@ -235,6 +264,20 @@ class FacebookController extends App_Controller_Action
 
 		$this->_helper->getHelper('FlashMessenger')->addMessage('facebook.register.confirmationFailed');
 		$this->_helper->redirector('register');
+	}
+
+	public function generateTokenAction()
+	{
+
+		if (!empty($this->_request->plan))
+			$this->_helper->json(array(
+				'status' => 'ok',
+				'token' => sha1($this->_user->id.$this->_request->plan.$this->_user->salt)
+			));
+		else
+			$this->_helper->json(array(
+				'status' => 'noPlan'
+			));
 	}
 
 }

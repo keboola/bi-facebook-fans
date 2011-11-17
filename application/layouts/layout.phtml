@@ -41,13 +41,6 @@ $this->jQuery()->addOnLoad('
 	</div></div>
 	<?}?>
 	<div class="pageTitleWrapper"><div class="pageTitle pageSection">
-		<?if ($this->messages) {?>
-		<div class="messages"><div class="wrap">
-		<?foreach($this->messages as $m) {
-			echo '<div>'.$this->translate($m).'</div>';
-		}?>
-		</div></div>
-		<?}?>
 		<h1><?=$this->pageTitle?></h1>
 	</div></div>
 	<div class="pageContentWrapper"><div class="pageContent pageSection">

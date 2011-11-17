@@ -38,13 +38,12 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
 	protected function _initConfig()
 	{
-		$registry = Zend_Registry::getInstance();
-
 		$configCommon = new Zend_Config_Ini(APPLICATION_PATH . '/configs/common.ini', 'common', Array('allowModifications' => true));
-		$config = new Zend_Config_Ini(APPLICATION_PATH . '/configs/config.ini', 'config', Array('allowModifications' => true));
+		$config = new Zend_Config_Ini(APPLICATION_PATH . '/configs/config.ini', APPLICATION_ENV, Array('allowModifications' => true));
+
 		$configMerged = $configCommon->merge($config);
 		$configMerged->setReadOnly();
-		$registry->config = $configMerged;
+		Zend_Registry::set('config', $configMerged);
 	}
 
 	protected function _initNDebug()

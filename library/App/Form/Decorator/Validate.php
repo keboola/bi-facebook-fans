@@ -20,6 +20,7 @@ class App_Form_Decorator_Validate extends Zend_Form_Decorator_Abstract
 				$elementRules = array();
 				foreach($validators as $validatorName => $validator) {
 					switch ($validatorName) {
+						case 'Zend_Captcha_Image':
 						case 'Zend_Validate_NotEmpty':
 							$elementRules['required'] = 'true';
 							break;
@@ -56,6 +57,9 @@ class App_Form_Decorator_Validate extends Zend_Form_Decorator_Abstract
 			$outputMessages = '';
 			$elementsPosition = 0;
 			foreach ($validation as $name => $rules) {
+				if($name=='captcha')
+					$name .= '[input]';
+				$name = "'".$name."'";
 				$outputRules .= "\t\t\t{$name}: {\n";
 				$outputMessages .= "\t\t\t{$name}: {\n";
 				$validatorsPosition = 0;

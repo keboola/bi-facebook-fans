@@ -178,5 +178,66 @@ class App_Facebook
 		}
 	}
 
+
+	/**
+	 * @static
+	 * @param $callBack
+	 * @param $csrf
+	 * @return string
+	 */
+	public static function authorizationUrl($callBack, $csrf)
+	{
+		$c = Zend_Registry::get('config');
+		return "http://www.facebook.com/dialog/oauth?client_id=" . $c->facebook->appId
+			. "&scope=offline_access,read_insights,email,manage_pages&redirect_uri=" . $callBack
+			. "&state=" . $csrf;
+	}
+
+	/**
+	 * @static
+	 * @param $callBack
+	 * @param $csrf
+	 */
+	public static function accessToken($callBack, $csrf, $tries=3)
+	{
+		$c = Zend_Registry::get('config');
+		$url = "https://graph.facebook.com/oauth/access_token?client_id=" . $c->facebook->appId
+			. "&redirect_uri=" . $callBack . "&client_secret=" . $c->facebook->appSecret
+			. "&code=" . $csrf;
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+		$resultCurl = curl_exec($ch);
+		$curlError = curl_error($ch);
+
+		if ($resultCurl) {
+			if(substr($resultCurl, 0, 13) == 'access_token=') {
+				return substr($resultCurl, 13);
+			} else {
+				if ($tries > 0) {
+					App_Debug::log(array('Facebook error', $url, $resultCurl));
+					sleep(5);
+					return self::accessToken($callBack, $csrf, $tries-1);
+				} else {
+					App_Debug::send(array('Facebook error', $url, $resultCurl));
+					throw new App_FacebookException('There was an API error while calling '.$url.': '.$resultCurl);
+				}
+			}
+		} else {
+			if ($tries > 0) {
+				App_Debug::log(array('cUrl error', $url, $curlError));
+				sleep(5);
+				return self::accessToken($callBack, $csrf, $tries-1);
+			} else {
+				App_Debug::send(array('cUrl error', $url, $curlError));
+				throw new App_FacebookException('There was an error while calling '.$url.': '.$curlError);
+			}
+		}
+
+
+	}
 	
 }

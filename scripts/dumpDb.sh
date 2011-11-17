@@ -110,6 +110,14 @@ if [ "$db" == "" ]; then
 	exit;
 fi
 
+# host
+cfg=`grep -m 1 -E "^\s{0,}db.host" $fConf`
+host=`echo "$cfg" | tr -d " " | awk -F"db.host=" {'print $2'} | tr -d [:cntrl:]`
+if [ "$host" == "" ]; then
+	echo NepodaŇôilo se zjistit jm√©no databz√°ze z $fConf
+	exit;
+fi
+
 # app data
 cfg=`grep -m 1 -E "^\s{0,}db.appDataTables" $fConf`
 appDataTables=`echo "$cfg" | awk -F"=" {'print $2'} | tr -d [:cntrl:] | tr -s " " | sed 's/^[ ]//g'`
@@ -136,30 +144,30 @@ echo
 
 if [ $struktura == 1 ]; then
 	echo "Dumping structure... > $base$fStruktura"
-	echo "mysqldump --no-data --skip-opt --disable-keys --default-character-set=utf8 --set-charset --force --skip-comments --add-drop-table --create-options --skip-triggers -u $login --password=$pass $db > $base$fStruktura" | /bin/sh
+	echo "mysqldump --no-data --skip-opt --disable-keys --default-character-set=utf8 --set-charset --force --skip-comments --add-drop-table --create-options --skip-triggers -u $login --password=$pass --host=$host $db > $base$fStruktura" | /bin/sh
 	sed -e 's/\ AUTO_INCREMENT=[0-9]*//g' $base$fStruktura > "$base$fStruktura.tmp"
 	mv "$base$fStruktura.tmp" $base$fStruktura
 fi
 
 if [ $appdata == 1 ]; then
 	echo "Dumping application data... $method $base$fApp"
-	echo "mysqldump --no-create-info --disable-keys --complete-insert --extended-insert --skip-comments --skip-opt --set-charset --force --default-character-set=utf8 --skip-triggers -u $login --password=$pass $db $appDataTables $method $base$fApp" | /bin/sh
+	echo "mysqldump --no-create-info --disable-keys --complete-insert --extended-insert --skip-comments --skip-opt --set-charset --force --default-character-set=utf8 --skip-triggers -u $login --password=$pass --host=$host $db $appDataTables $method $base$fApp" | /bin/sh
 	#echo "Dumping core ds nodes... >> $fApp"
-	#echo "mysqldump --no-create-info --disable-keys --complete-insert --extended-insert --skip-comments --skip-opt --set-charset --force --default-character-set=utf8 --skip-triggers -w 'root=2' -u $login --password=$pass $db keboola_dsNodes >> $base$fApp" | /bin/sh
+	#echo "mysqldump --no-create-info --disable-keys --complete-insert --extended-insert --skip-comments --skip-opt --set-charset --force --default-character-set=utf8 --skip-triggers -w 'root=2' -u $login --password=$pass --host=$host $db keboola_dsNodes >> $base$fApp" | /bin/sh
 	sed -e s/INSERT\ INTO/REPLACE\ INTO/g $base$fApp > "$base$fApp.tmp"
 	mv "$base$fApp.tmp" $base$fApp
 fi
 
 if [ $userdata == 1 ]; then
 	echo "Dumping user data... $method $base$fUser"
-	echo "mysqldump --no-create-info --disable-keys --complete-insert --extended-insert --skip-comments --skip-opt --set-charset --force --default-character-set=utf8 --skip-triggers -u $login --password=$pass $db $userDataTables $method $base$fUser" | /bin/sh
+	echo "mysqldump --no-create-info --disable-keys --complete-insert --extended-insert --skip-comments --skip-opt --set-charset --force --default-character-set=utf8 --skip-triggers -u $login --password=$pass --host=$host $db $userDataTables $method $base$fUser" | /bin/sh
 	sed -e s/INSERT\ INTO/REPLACE\ INTO/g $base$fUser > "$base$fUser.tmp"
 	mv "$base$fUser.tmp" $base$fUser
 fi
 
 if [ $routines == 1 ]; then
 	echo "Dumping routines... $method $base$fRoutines"
-	echo "mysqldump --no-data --skip-opt --default-character-set=utf8 --set-charset --force --skip-comments --triggers --routines --no-create-info -u $login --password=$pass $db $method $base$fRoutines" | /bin/sh
+	echo "mysqldump --no-data --skip-opt --default-character-set=utf8 --set-charset --force --skip-comments --triggers --routines --no-create-info -u $login --password=$pass --host=$host $db $method $base$fRoutines" | /bin/sh
 fi
 
 echo 'Done.'

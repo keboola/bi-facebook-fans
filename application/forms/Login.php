@@ -48,7 +48,8 @@ class Form_Login extends Zend_Form
 
 		$this->addElement('hash', 'csrf', array(
 			'decorators'	=> array(
-				array('ViewHelper')
+				array('ViewHelper'),
+				array('Errors')
 			)
 		));
 
