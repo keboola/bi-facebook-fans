@@ -3,6 +3,13 @@
 	</div>
 	<div class="content">
 		<h2><?=$this->translate('index:index:connectorsInfo')?></h2>
+		<?if ($this->messages) {?>
+		<div class="flashMessages"><div class="wrap">
+			<?foreach($this->messages as $m) {?>
+			<p class="warning notice"><span class="wrap"><?=$this->translate($m)?></span></p>
+			<?}?>
+		</div></div>
+		<?}?>
 		<ul>
 			<li><a href="/facebook/register">Facebook</a></li>
 		</ul>

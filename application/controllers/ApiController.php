@@ -3,7 +3,7 @@
  * api controller
  *
  * @author Jakub Matejka <jakub@keboola.com>
- */
+ */die();
 class ApiController extends Zend_Controller_Action
 {
 

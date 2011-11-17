@@ -257,7 +257,6 @@ class FacebookController extends App_Controller_Action
 				}
 
 			} else {
-				// Log the error, ignore it, whatever
 				App_Debug::send(curl_error($request));
 			}
 		}
