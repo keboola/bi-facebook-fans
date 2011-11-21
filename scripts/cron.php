@@ -32,7 +32,7 @@ $connector = $_c->fetchRow(array('id=?' => 1));
 foreach($_u->fetchAll(array('export=1', 'idGD IS NULL')) as $user) {
 	echo "****************************\n***  Export: ".$user->email."\n";
 
-	$idGD = $_g->createProject($config->app->name.' - '.$user->email, $connector->templateUri);
+	$idGD = $_g->createProject($config->app->projectName.' - '.$user->email, $connector->templateUri);
 	if($idGD) {
 		$user->idGD = $idGD;
 		$user->save();

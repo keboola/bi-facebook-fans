@@ -46,23 +46,32 @@ class App_GoodDataService
 	 */
 	public function inviteUser($idProject, $email)
 	{
-		$project = new App_GoodDataProject($idProject, $this->_gd);
-		return $project->inviteUser($email);
+		$output = $this->_gd->call(
+			'OpenProject(id="'.$idProject.'"); ' .
+			'InviteUser(email="'.$email.'", msg="", role="editor");'
+		);
+
+		if(!strpos($output, 'ERROR')) {
+			return TRUE;
+		} else {
+			return FALSE;
+		}
 	}
 
 	/**
+	 * @TODO
 	 * @param $id
 	 * @param $templatePID
 	 * @param $targetPID
 	 */
 	public function copyMetaData($id, $templatePID, $targetPID)
 	{
-		$templateProject = new App_GoodDataProject($templatePID,  $this->gd());
+		/*$templateProject = new App_GoodDataProject($templatePID,  $this->gd());
 		echo $output = $templateProject->call('ExportMetadataObjects(tokenFile="token.txt", objectIDs="'.$id.'");');
 		if (strpos($output, 'Import token is ')) {
 			$targetProject = new App_GoodDataProject($targetPID,  $this->gd());
 			echo $targetProject->call('ImportMetadataObjects(tokenFile="token.txt", overwrite="true", updateLDM="false");');
-		}
+		}*/
 	}
 
 	/**

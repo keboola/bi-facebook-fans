@@ -1,8 +1,7 @@
 <?php
-// Define path to application directory
-defined('APPLICATION_PATH')
-    || define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../application'));
-define('TMP_PATH', realpath(APPLICATION_PATH.'/../tmp/'));
+define('ROOT_PATH', dirname(dirname(__FILE__)));
+define('APPLICATION_PATH', ROOT_PATH . '/application');
+define('TMP_PATH', realpath(ROOT_PATH.'/tmp/'));
 
 // Define application environment
 defined('APPLICATION_ENV')
@@ -26,15 +25,17 @@ $application->bootstrap();
 
 // Setup console input
 $opts = new Zend_Console_Getopt(array(
-		'create|c-s' => 'Create project with name',
+		'create|c-s' => 'Create project from template with uri',
 		'dashboard|d-s' => 'Copy dashboard',
 		'invite|i-s' => 'Invite user',
-		'project|p-s' => 'GoodData Project id'
+		'name|n-s' => 'Project name',
+		'project|p-s' => 'GoodData Project id',
 	));
 $opts->setHelp(array(
-		'c' => 'Create project with name. You have to specify email of user who will be invited to the project.',
+		'c' => 'Create project from template with given uri.',
 		'd' => 'Copy dashboard to given project.',
 		'i' => 'Invite user',
+		'n' => 'Project name',
 		'p' => 'GoodData Project id',
 	));
 try {
@@ -49,13 +50,13 @@ try {
 $config = Zend_Registry::get('config');
 $gds = new App_GoodDataService($config->gooddata->username, $config->gooddata->password);
 
-if ($opts->getOption('create')) {
+if ($opts->getOption('create') && $opts->getOption('name')) {
 
-	echo $gds->createProject($opts->getOption('create'));
+	echo $gds->createProject($opts->getOption('name'), $opts->getOption('create'));
 
 } else if ($opts->getOption('invite') && $opts->getOption('project')) {
 
-	echo $gds->inviteUser($opts->getOption('project'), $opts->getOption('invite'));
+	$gds->inviteUser($opts->getOption('project'), $opts->getOption('invite'));
 
 } else if ($opts->getOption('dashboard') && $opts->getOption('project')) {
 

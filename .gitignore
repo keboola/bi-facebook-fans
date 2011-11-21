@@ -1,5 +1,6 @@
 .idea
 application/configs/config.ini
+*.log*
 
 # osx noise
 .DS_Store
