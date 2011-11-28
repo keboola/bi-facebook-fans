@@ -2,6 +2,8 @@ body {
     background-color: #d9dddf;
     color: #28292b;
     line-height: 1.6em;
+    position: relative;
+    min-width: 1032px;
 }
 
 .pageSection {

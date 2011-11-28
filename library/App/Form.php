@@ -127,13 +127,13 @@ class App_Form extends Zend_Form
 		));
 
 		foreach ($this->getElements() as $element) {
+			$class = '';
 			if (get_class($element) == 'Zend_Form_Element_Captcha') {
 				$class = 'inputCaptcha';
 				$decorators = $this->_captchaDecorators;
 			} else switch($element->helper) {
 				case 'formHash':
 				case 'formHidden':
-					$class = '';
 					$decorators = $this->_hiddenDecorators;
 					break;
 				case 'formRadio':
@@ -174,7 +174,6 @@ class App_Form extends Zend_Form
 					$decorators = $this->_multiDecorators;
 					break;
 				default:
-					$class = '';
 					$decorators = $this->_textDecorators;
 					break;
 			}

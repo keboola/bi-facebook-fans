@@ -29,7 +29,9 @@ CREATE TABLE `bi_invitations` (
   `role` enum('editor','dashboard only') NOT NULL,
   `text` text,
   `isSent` tinyint(1) unsigned DEFAULT '0',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `idUserConnector` (`idUserConnector`),
+  CONSTRAINT `bi_invitations_ibfk_1` FOREIGN KEY (`idUserConnector`) REFERENCES `bi_rUsersConnectors` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `bi_ordersHistory`;

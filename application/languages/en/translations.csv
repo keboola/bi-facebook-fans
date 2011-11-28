@@ -35,7 +35,7 @@ auth.new-password.title;New password
 
 auth.register.title;Create account
 auth.register.back;Back
-auth.register.registrationComplete;You have created new account. The account needs to be activated; you will receive an e-mail with activation link shortly.
+auth.register.registrationComplete;"You have created new account. The account needs to be activated. You will receive an e-mail with activation link shortly."
 
 
 facebook.choose-plan.title;Choose your pricing plan
