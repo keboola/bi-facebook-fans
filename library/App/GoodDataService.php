@@ -44,11 +44,11 @@ class App_GoodDataService
 	 * @param $email
 	 * @return mixed
 	 */
-	public function inviteUser($idProject, $email)
+	public function inviteUser($idProject, $email, $role="editor", $text=null)
 	{
 		$output = $this->_gd->call(
 			'OpenProject(id="'.$idProject.'"); ' .
-			'InviteUser(email="'.$email.'", msg="", role="editor");'
+			'InviteUser(email="'.$email.'", msg="'.$text.'", role="'.$role.'");'
 		);
 
 		if(!strpos($output, 'ERROR')) {
@@ -56,6 +56,16 @@ class App_GoodDataService
 		} else {
 			return FALSE;
 		}
+	}
+
+	public function disableUser($idProject)
+	{
+
+		$output = $this->_gd->call(
+			'OpenProject(id="'.$idProject.'"); ' .
+			'GetProjectUsers(usersFile="'.ROOT_PATH.'/tmp/users-'.$idProject.'.txt", field="email", activeOnly="false");'
+		);
+		echo $output;
 	}
 
 	/**

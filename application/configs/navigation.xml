@@ -3,7 +3,7 @@
     <overflow>
         <label>layout.overview</label>
         <class>first</class>
-        <controller>index</controller>
+        <controller>account</controller>
         <action>index</action>
     </overflow>
     <facebook>

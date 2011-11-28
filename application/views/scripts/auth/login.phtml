@@ -1,0 +1,43 @@
+<?
+$this->jQuery()
+	->addJavascriptFile('/js/jquery.validate/jquery.validate.min.js')
+	->addOnLoad('
+	$("form").validate({
+		errorContainer: ".loginErrors2",
+		errorLabelContainer: ".loginErrors2 .wrap2",
+		rules: {
+			email: {
+				required: true,
+				email: true
+			},
+			password: {
+				required: true
+			}
+
+		},
+		messages: {
+			email: {
+				required: "'.$this->translate('jquery.validation.email.required').'",
+				email: "'.$this->translate('jquery.validation.email').'"
+			},
+			password: {
+				required: "'.$this->translate('jquery.validation.password.required').'"
+			}
+
+		}
+	});
+');
+?>
+
+<div class="loginForm loginFormAlone">
+	<div class="loginErrorsWrapper loginErrorsWrapper2"><div class="loginErrors loginErrors2">
+		<div class="wrap1"><div class="wrap2">
+		</div></div>
+	</div></div>
+	<?=$this->flashMessagesSimple()?>
+	<?=$this->form;?>
+	<p class="links">
+		<a href="/auth/register"><?=$this->translate('layout.signUp')?></a> |
+		<a href="/auth/lost-password"><?=$this->translate('layout.lostPassword')?></a>
+	</p>
+</div>

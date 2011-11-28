@@ -46,14 +46,35 @@ class Form_Register extends App_Form
 			)
 		));
 
+		$this->addElement('checkbox', 'terms', array(
+			'label'				=> 'form.register.terms',
+			'description' 		=> 'form.register.termsAgree',
+			'uncheckedValue'	=> FALSE,
+			'required'			=> TRUE,
+			'validators'		=> array('NotEmpty')
+		));
+
 		$this->addElement('image', 'submit', array(
 			'src'		=> '/img/button-register.png',
 			'ignore'	=> true,
 			'label'		=> 'form.register.save'
 		));
 
-		$this->addDisplayGroup(array('email', 'password', 'passwordConfirm', 'captcha'), 'basic');
+		$this->addDisplayGroup(array('email', 'password', 'passwordConfirm', 'captcha', 'terms'), 'basic');
 		$this->addDisplayGroup(array('submit'), 'buttons');
+	}
+
+	public function loadDefaultDecorators()
+	{
+		parent::loadDefaultDecorators();
+
+		$this->getElement('terms')->setDecorators(array(
+			array('viewScript', array('viewScript' => 'helpers/terms.phtml'))
+		));
+
+		$this->getElement('submit')->setDecorators(array(
+			array('viewScript', array('viewScript' => 'helpers/registerButtons.phtml'))
+		));
 	}
 }
 ?>

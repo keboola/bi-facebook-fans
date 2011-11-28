@@ -55,11 +55,11 @@ class Form_Login extends Zend_Form
 
 		$this->addElement('image', 'submit', array(
 			'src'			=> '/img/button-login.png',
-			'ignore'		=> true,
-			'label'			=> 'form.login.login',
+			'label'			=> '&nbsp;',
 			'class'			=> 'loginButton',
 			'decorators'	=> array(
 				array('ViewHelper'),
+				array('Label', array('escape' => false)),
 				array(array('row' => 'HtmlTag'), array('tag' => 'div', 'class' => 'formElement noLabel'))
 			)
 		));

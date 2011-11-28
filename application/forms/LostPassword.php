@@ -48,4 +48,13 @@ class Form_LostPassword extends App_Form
 		$this->addDisplayGroup(array('email', 'captcha'), 'basic');
 		$this->addDisplayGroup(array('submit'), 'buttons');
 	}
+
+	public function loadDefaultDecorators()
+	{
+		parent::loadDefaultDecorators();
+
+		$this->getElement('submit')->setDecorators(array(
+			array('viewScript', array('viewScript' => 'helpers/registerButtons.phtml'))
+		));
+	}
 }

@@ -4,9 +4,9 @@
  * @date 2011-11-09
  */
 
-class Model_PricePlans extends App_Db_Table
+class Model_PricingPlans extends App_Db_Table
 {
-	protected $_name = 'pricePlans';
+	protected $_name = 'pricingPlans';
 	protected $_dependentTables = array('Model_UsersToConnectors');
 
 	/**

@@ -1,0 +1,12 @@
+.pageSection {
+    width: auto;
+    margin: 0;
+}
+.content {
+    width: auto;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+.content h1 {
+    font-size: 200%;
+}

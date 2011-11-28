@@ -1,0 +1,79 @@
+<?
+$subscribedToFacebook = isset($this->connectors[1]);
+
+$this->headLink()
+	->appendStylesheet('/js/fancybox/jquery.fancybox-1.3.4.css');
+$this->jQuery()
+	->addJavascriptFile('/js/fancybox/jquery.fancybox-1.3.4.pack.js')
+	->addOnLoad('
+	$("a.iframe").fancybox();
+	');
+?>
+<div class="rightSidebar">
+	<div class="sidebar">
+	</div>
+	<div class="content">
+		<div class="firstBox">
+			<h2><?=$this->translate('account.index.connectorsInfo')?></h2>
+			<?if ($this->messages) {?>
+			<div class="flashMessages"><div class="wrap">
+				<?foreach($this->messages as $m) {?>
+				<p class="warning notice"><span class="wrap"><?=$this->translate($m)?></span></p>
+				<?}?>
+			</div></div>
+			<?}?>
+			<p><?=$this->translate('account.index.welcome', $this->config->app->support->url)?></p>
+			<table class="connectorsTable">
+				<tr>
+					<td class="logo">
+						<a href="/facebook?iframe=1" class="iframe"><img src="/img/logo/s-facebook.png" alt="Facebook" /></a>
+					</td>
+					<td class="links">
+						<?if($subscribedToFacebook) {?>
+						<a href="/facebook/register"><?=$this->translate('account.index.connectorSettings')?></a>
+						<?} else {?>
+						<a href="/facebook/choose-plan"><?=$this->translate('account.index.activateConnector')?></a>
+						<?}?>
+						<br />
+						<a href="/facebook?iframe=1" class="smaller iframe"><?=$this->translate('account.index.appInfoPricing')?></a>
+					</td>
+					<td class="info">
+						<?if($subscribedToFacebook) {
+							echo $this->translate('account.index.facebookSubscribedInfo',
+								$this->connectors[1]['usedAccountsCount'],
+								$this->connectors[1]['maxAccountsCount'],
+								$this->connectors[1]['usedUsersCount'],
+								$this->connectors[1]['maxUsersCount']);
+						} else {
+							echo $this->translate('account.index.facebookInfo');
+						}?>
+					</td>
+				</tr>
+				<tr>
+					<td class="logo">
+						<img src="/img/logo/s-twitter.png" alt="Twitter" />
+					</td>
+					<td class="links">
+						<?=$this->translate('account.index.comingSoon')?>
+					</td>
+				</tr>
+				<tr>
+					<td class="logo">
+						<img src="/img/logo/s-linkedin.png" alt="LinkedIn" />
+					</td>
+					<td class="links">
+						<?=$this->translate('account.index.comingSoon')?>
+					</td>
+				</tr>
+				<tr>
+					<td class="logo">
+						<img src="/img/logo/s-plus.png" alt="Google+" />
+					</td>
+					<td class="links">
+						<?=$this->translate('account.index.comingSoon')?>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>

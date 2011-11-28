@@ -1,41 +1,51 @@
-app.name;keboolytics
+app.name;Keboola Analytics
 
 
-auth.activate.email;You have created new account for keboolytics. You have to active it first using this link:
+account.index.activateConnector;Activate Connector
+account.index.appInfoPricing;App info & pricing
+account.index.comingSoon;Coming soon!
+account.index.connectorSettings;Connector Settings
+account.index.connectorsInfo;Available connectors
+account.index.disclaimer;In order to use GoodData platform, you need to read and agree with GoodData Terms of Use.
+account.index.facebookInfo;Facebook App shows growth and structure of your fan base, page reach, stories and much more. Try our 1 week, 1 user, 1 page, $1.00 trial!
+account.index.facebookSubscribedInfo;This connector is active.<br />You are using %d accounts of %d and %d GoodData users of %d in your package.
+account.index.title;Account settings
+account.index.welcome;Welcome to your account settings. Please select the app(s) you wish to use below. Each of them has its own pricing policy and creates a separate GoodData project. However, all selected then can be managed and accessed through this single account and also viewed using the same GoodData user information. Please <a href="%s">contact us</a> if you have any questions or special requests, as everything you see here can be further customized to fit your needs.
+
+auth.activate.email;You have created new account for Keboola Analytics. Please activate it first using this link:
 auth.activate.subject;Activation link
-auth.activate.alreadyActivated;Your account is already activated.
-auth.activate.failed;You used wrong activation link, check your activation email please.
-auth.activate.success;Activation was successful, you can login now.
-
-auth.index.lostPassword;Lost Password
-auth.index.signUp;Sign Up
-auth.index.title;Login
+auth.activate.alreadyActivated;Your account is already active.
+auth.activate.failed;You used invalid activation link, please check your activation email.
+auth.activate.success;Activation was successful, proceed to log in!
 
 auth.login.failed;Login failed.
-auth.login.notActivated;This account isn't activated yet.
+auth.login.notActivated;This account is not active yet.
+auth.login.title;Login
 
-auth.lost-password.email;You've requested new password for your account. You may set it via this link: <a href='%s'>%s</a>. It is valid only for one hour.
-auth.lost-password.emailSent;Email with password retrieval url has been sent.
-auth.lost-password.info;We will send you a retrieval link to given email
+auth.lost-password.email;You've requested new password for your account. You may set it via this link: <a href='%s'>%s</a>. It is valid for one hour.
+auth.lost-password.emailSent;Email with password retrieval link has been sent.
+auth.lost-password.info;We will send you password retrieval link via email
 auth.lost-password.subject;Password retrieval link
 auth.lost-password.title;Lost Password
 
 auth.new-password.complete;Your password has been successfully changed.
-auth.new-password.failed;You used wrong retrieval link or link validity expired.
+auth.new-password.failed;You used incorrect or expired retrieval link.
 auth.new-password.info;Enter your new password
 auth.new-password.title;New password
 
 auth.register.title;Create account
 auth.register.back;Back
-auth.register.registrationComplete;You have created new account. Please wait for an email with activation link.
+auth.register.registrationComplete;You have created new account. The account needs to be activated; you will receive an e-mail with activation link shortly.
 
 
-index.index.title;Account
-index:index:connectorsInfo;Available connectors
-index:index:setup;Setup
+facebook.choose-plan.title;Choose your pricing plan
 
+facebook.disable.failed;There was an error. Try again please.
+facebook.disable.success;The user has been successfully disabled.
 
-facebook.register.apiError;There was an error while talking to Facebook API. Try again please.
+facebook.index.title;Keboola Analytics' Facebook App
+
+facebook.register.apiError;There was an error while talking to Facebook API. Try again later please.
 facebook.register.back;Back
 facebook.register.badFBLogin;Your pages are administered by another Facebook account. You can logout here: <a href='%s'>Logout</a> and use this account.
 facebook.register.badUrl;You have wrong url, check your email again please.
@@ -43,61 +53,101 @@ facebook.register.changePlan;Change plan
 facebook.register.choosePlan;Choose plan
 facebook.register.confirmationFailed;Confirmation of the payment failed. Contact our support please.
 facebook.register.csrfError;There was a security issue. Try again from <a href='/facebook/register'>this link</a> please.
+facebook.register.disable;Disable
 facebook.register.facebookLogin;You are logged in to Facebook as <strong>%s</strong>. <a href='%s'>Login as another user</a>.
-facebook.register.getTokenError;There was an unknown error, try again later please.
-facebook.register.info;Pick pages you administer which you want to watch
-facebook.register.manyPagesAdded;You have chosen more pages then your plan allows.
-facebook.register.noPages;Your Facebook account doesn't administer any pages!<br /><a href='%s'>Logout</a> and use another account.
-facebook.register.noPagesAdded;You have to select at least one page.
-facebook.register.noSubscribedPlan;No subscribed plan.
+facebook.register.getTokenError;There was an unknown error, try again later please or contact our support.
+facebook.register.hideInvitationForm;Hide invitation form
+facebook.register.info;Select pages you administer which you want to monitor:
+facebook.register.invitationExists;You have already sent invitation for this email address.
+facebook.register.invitationSent;Invitation was sent.
+facebook.register.invite;Invite
+facebook.register.invitedUsers;Invited users
+facebook.register.inviteInfo;Invite more users to see your dashboard
+facebook.register.inviteRemaining;Remaining prepaid invitations
+facebook.register.manyPagesAdded;You have chosen more pages than your plan allows. Please upgrade your plan to add more pages.
+facebook.register.noPages;Your Facebook account does not administer any pages!<br /><a href='%s'>Logout</a> and use another account.
+facebook.register.noPagesAdded;Please select at least one page.
+facebook.register.noRemainingInvitations;You have no remaining invitations. Please upgrade your plan to add more users.
+facebook.register.noSubscribedPlan;Please subscribe to one of our plans first.
 facebook.register.pagesCount;Pages count
 facebook.register.planOption;Up to %d FB Pages / %d Users: $%d
 facebook.register.price;Price
 facebook.register.remaining;Remaining prepaid pages
-facebook.register.revalidateSuccess;Your pages where successfully revalidated.
-facebook.register.subscribeFirst;You have to subscribe to one of our plans before registering pages.
-facebook.register.subscribed;You've been successfully subscribed. You can choose Facebook pages to watch now.
+facebook.register.revalidateSuccess;Your pages were successfully revalidated.
+facebook.register.save;Save
+facebook.register.showInvitationForm;Show invitation form
+facebook.register.subscribeFirst;Please subscribe to one of our plans before registering pages.
+facebook.register.subscribed;You subscription was successful. Please select Facebook pages which you wish to monitor.
 facebook.register.subscriptionChanged;Your subscription has been successfully changed. You can choose other Facebook pages to watch.
-facebook.register.subscribedTwice;You've been subscribed but your old subscription was not cancelled. Please do it yourself here: <a href='%s'>unsubscribe</a>
-facebook.register.subscribedPlan;Subscribed plan
-facebook.register.success;Pages has been added to the account. It can take several minutes to update GoodData.
+facebook.register.subscribedTwice;Your subscription was successful but we were not able to cancel your previous one. Please <a href='%s'>unsubscribe</a> manually.
+facebook.register.subscribedPlan;Selected plan
+facebook.register.success;Pages added to your account. It will take several minutes for data to appear on your GoodData dashboards.
 facebook.register.title;Facebook connector
 facebook.register.unsubscribe;Unsubscribe
 facebook.register.usersCount;Users count
 
+
+index.index.title;
+index.index.availableNow;Available NOW!
+index.index.comingSoon;Coming soon!
+index.index.header;<strong>Social Analytics</strong> by Keboola<br />powered by GoodData
+index.index.info1;A collection of ready-to-use connector and apps, Keboola Analytics allow unprecedented insight into the life of your brand on the social networks and the Web in general. Thanks to Keboola’s cooperation with GoodData, we can offer all the flexibility and analytic power of the GoodData platform for cost of a small single-purpose dashboard. We started with <a href="/facebook">Facebook</a> - more coming soon!
+index.index.info2;Sign up for a free account (takes just a few seconds) and then select from our available options:
+
+
+
 form.facebookSetup.pages;Administered pages
 form.facebookSetup.order;Order
+
+form.invite.dashboardOnly;Embedded dashboards only
+form.invite.editor;Editor
+form.invite.email;Email
+form.invite.role;User's role
+form.invite.text;Custom message for your invitation
 
 form.login.email;Email
 form.login.login;Login
 form.login.password;Password
 
 form.register.captcha;Type the code shown
-form.register.captcha.description;Click on image to try another one.
+form.register.captcha.description;Click on an image to try another one.
 form.register.email;Email
 form.register.password;Password
 form.register.passwordConfirm;Password confirmation
 form.register.save;Save
+form.register.terms;Terms of use
+form.register.termsAgree;Check to agree with the terms of use
+
+
+pricing.month;month
+pricing.1page;Stats for <strong>1 page</strong>
+pricing.1user;Access for <strong>1 user</strong>
+pricing.pages;Stats for <strong>%d pages</strong>
+pricing.users;Access for <strong>%d users</strong>
+pricing.trial;%d days trial for $%d!
 
 revalidate.facebook.title;Facebook revalidation
 
 
-email.signature;Best regards,<br />Keboola
+email.signature;Best regards,<br />Keboola Analytics team
 
 layout.account;Account
 layout.cancel;Cancel
 layout.facebook;Facebook
-layout.footer;All rights reserved - Keboola
 layout.loggedInAs;Logged in as
 layout.login;Login
 layout.logout;Logout
+layout.lostPassword;Lost Password
 layout.overview;Overview
+layout.signUp;Sign Up
+layout.support;Support
 
 
 
+jquery.validation.checkbox;The checkbox has to be checked to proceed.
 jquery.validation.date;The field has to be a date.
-jquery.validation.digits;The field may contain only digits.
-jquery.validation.email;The field has to be an email address.
+jquery.validation.digits;The field may only contain digits.
+jquery.validation.email;The field has to contain a valid email address.
 jquery.validation.email.required;Email must not be empty.
 jquery.validation.password.required;Password must not be empty.
 jquery.validation.required;The field must not be empty.

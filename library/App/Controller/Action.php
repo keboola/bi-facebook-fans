@@ -34,19 +34,18 @@ class App_Controller_Action extends Zend_Controller_Action
 	public function preDispatch()
 	{
 		parent::preDispatch();
-		$this->view->messages = $this->_helper->getHelper('FlashMessenger')->getMessages();
-
-		$ns = new Zend_Session_Namespace('Messages');
-		if (isset($ns->messages)) {
-			$this->view->messages += $ns->messages;
-			unset($ns->messages);
-		}
 
 		$auth = Zend_Auth::getInstance();
-
 		$controller = $this->_request->getControllerName();
-        if ($controller != 'auth' && $controller != 'revalidate' && !$auth->hasIdentity()) {
-			$this->_helper->redirector('index', 'auth');
+		$action = $this->_request->getActionName();
+
+		$publicAccess = $controller == 'index'
+			|| $controller == 'auth'
+			|| $controller == 'revalidate'
+			|| ($controller == 'facebook' && $action == 'index');
+
+        if (!$publicAccess && !$auth->hasIdentity()) {
+			$this->_helper->redirector('login', 'auth');
 		} else {
 			$identity = $auth->getIdentity();
 			if ($auth->hasIdentity() && $identity) {
@@ -82,26 +81,4 @@ class App_Controller_Action extends Zend_Controller_Action
 		parent::init();
 	}
 
-	/**
-	 * @param $message
-	 */
-	public function addMessage($message)
-	{
-		if(!is_array($this->view->messages)) {
-			$this->view->messages = array();
-		}
-		$this->view->messages[] = $message;
-	}
-
-	/**
-	 * @param $messages
-	 */
-	public function addMessages($messages)
-	{
-		$ns = new Zend_Session_Namespace('Messages');
-		if(!is_array($ns->messages)) {
-			$ns->messages = $messages;
-		}
-		$ns->messages += $messages;
-	}
 }

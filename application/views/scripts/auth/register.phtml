@@ -7,6 +7,7 @@ $this->jQuery()->addJavascriptFile('/js/livequery.js')->addJavascript('
 $this->jQuery()->addOnLoad('
 	setTimeout("$(\".zendError\").remove();", 5000);
 	$(".inputText, .inputPassword, .inputCaptcha").corner("5px");
+	$(".terms").corner("5px");
 	$(".formCaptcha img").corner("10px");
 	$(".formCaptcha img").click(function() {
 		$.ajax({

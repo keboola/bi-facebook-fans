@@ -19,6 +19,19 @@ CREATE TABLE `bi_connectors` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `bi_invitations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bi_invitations` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `idUserConnector` int(10) unsigned NOT NULL,
+  `email` varchar(100) NOT NULL DEFAULT '',
+  `role` enum('editor','dashboard only') NOT NULL,
+  `text` text,
+  `isSent` tinyint(1) unsigned DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `bi_ordersHistory`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -32,7 +45,7 @@ CREATE TABLE `bi_ordersHistory` (
   KEY `idUser` (`idUser`),
   KEY `idPlan` (`idPlan`),
   CONSTRAINT `bi_ordersHistory_ibfk_1` FOREIGN KEY (`idUser`) REFERENCES `bi_users` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `bi_ordersHistory_ibfk_2` FOREIGN KEY (`idPlan`) REFERENCES `bi_pricePlans` (`id`) ON DELETE CASCADE
+  CONSTRAINT `bi_ordersHistory_ibfk_2` FOREIGN KEY (`idPlan`) REFERENCES `bi_pricingPlans` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `bi_paymentsHistory`;
@@ -48,13 +61,13 @@ CREATE TABLE `bi_paymentsHistory` (
   KEY `idUser` (`idUser`),
   KEY `idPlan` (`idPlan`),
   CONSTRAINT `bi_paymentsHistory_ibfk_1` FOREIGN KEY (`idUser`) REFERENCES `bi_users` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `bi_paymentsHistory_ibfk_2` FOREIGN KEY (`idPlan`) REFERENCES `bi_pricePlans` (`id`) ON DELETE CASCADE
+  CONSTRAINT `bi_paymentsHistory_ibfk_2` FOREIGN KEY (`idPlan`) REFERENCES `bi_pricingPlans` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `bi_pricePlans`;
+DROP TABLE IF EXISTS `bi_pricingPlans`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `bi_pricePlans` (
+CREATE TABLE `bi_pricingPlans` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `accountsCount` int(10) unsigned NOT NULL,
   `usersCount` int(10) unsigned NOT NULL,
@@ -78,7 +91,7 @@ CREATE TABLE `bi_rUsersConnectors` (
   KEY `idPlan` (`idPlan`),
   CONSTRAINT `bi_rUsersConnectors_ibfk_1` FOREIGN KEY (`idUser`) REFERENCES `bi_users` (`id`) ON DELETE CASCADE,
   CONSTRAINT `bi_rUsersConnectors_ibfk_2` FOREIGN KEY (`idConnector`) REFERENCES `bi_connectors` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `bi_rUsersConnectors_ibfk_3` FOREIGN KEY (`idPlan`) REFERENCES `bi_pricePlans` (`id`) ON DELETE CASCADE
+  CONSTRAINT `bi_rUsersConnectors_ibfk_3` FOREIGN KEY (`idPlan`) REFERENCES `bi_pricingPlans` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `bi_users`;

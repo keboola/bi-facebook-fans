@@ -20,9 +20,10 @@ class Model_UsersToConnectors extends App_Db_Table
 		),
 		'Plan' => array(
 			'columns'           => array('idPlan'),
-			'refTableClass'     => 'Model_PricePlans',
+			'refTableClass'     => 'Model_PricingPlans',
 			'refColumns'        => array('id')
 		)
 	);
+	protected $_dependentTables = array('Model_UsersToConnectors');
 
 }

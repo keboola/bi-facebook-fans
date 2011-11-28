@@ -50,7 +50,6 @@ class RevalidateController extends App_Controller_Action
 
 							$userInfo = $gd->request('me');
 							if ($userInfo) {
-
 								$fbPages = array();
 								$this->view->revalidatedPages = array();
 								$pagesList = $gd->request('/me/accounts');
@@ -70,27 +69,28 @@ class RevalidateController extends App_Controller_Action
 										}
 									}
 
-									$this->view->messages = array('facebook.register.revalidateSuccess');
+									$this->_helper->getHelper('FlashMessenger')->addMessage('success|facebook.register.revalidateSuccess');
 								} else {
 									$logoutUrl = 'https://www.facebook.com/logout.php?next='.urlencode($pageUrl).'&access_token='.$params['access_token'];
-									$this->view->messages = array('facebook.register.badFBLogin', $logoutUrl);
+									$this->_helper->getHelper('FlashMessenger')->addMessage('error|facebook.register.badFBLogin', $logoutUrl);
 								}
 
 							} else {
-								$this->view->messages = array('facebook.register.apiError');
+								$this->_helper->getHelper('FlashMessenger')->addMessage('error|facebook.register.apiError');
 							}
 						} else {
-							$this->view->messages = array('facebook.register.apiError');
+							$this->_helper->getHelper('FlashMessenger')->addMessage('error|facebook.register.apiError');
 						}
 					} else {
-						$this->view->messages = array('facebook.register.csrfError');
+						$this->_helper->getHelper('FlashMessenger')->addMessage('error|facebook.register.csrfError');
 					}
-
+					$this->_helper->redirector('login', 'auth');
 					return;
 				}
 			}
 		}
 
-		$this->view->messages = array('facebook.register.badUrl');
+		$this->_helper->getHelper('FlashMessenger')->addMessage('error|facebook.register.badUrl');
+		$this->_helper->redirector('login', 'auth');
 	}
 }

@@ -1,6 +1,7 @@
 body {
     background-color: #d9dddf;
     color: #28292b;
+    line-height: 1.6em;
 }
 
 .pageSection {
@@ -19,17 +20,22 @@ body {
 .pageHeader .loginBox {
     float: right;
     margin-top: 2em;
-    width: 170px;
+    width: 200px;
     font-size: 80%;
     line-height: 1.8em;
     color: #899397;
     text-transform: uppercase;
 }
 .pageHeader .loginBox a {
-    float: right;
-    padding-right: 15px;
     color: #fff;
     text-decoration: none;
+}
+.pageHeader .loginBox a.right {
+    float: right;
+}
+.pageHeader .loginBox a.ico {
+    float: right;
+    padding-right: 15px;
     background: url('../img/ico-logout.png') no-repeat 100% 50%;
 }
 .pageHeader .loginBox .email {
@@ -39,7 +45,7 @@ body {
     font-weight: normal;
 }
 .pageHeader .siteName {
-    margin-top: 2.25em;
+    margin-top: 2.15em;
 }
 
 .pageSubHeaderWrapper {
@@ -58,6 +64,7 @@ body {
     padding: 4px;
     background: url('../img/bg-navigation.png') repeat-x;
     list-style: none;
+    line-height: 1.2em;
 }
 .pageSubHeader .navigation li {
     list-style: none;
@@ -106,6 +113,9 @@ body {
 .pageFooter {
     padding: 2em 0 1em;
 }
+.pageFooter a {
+    padding: 0 5px;
+}
 
 
 .pageContentWrapper {
@@ -127,8 +137,16 @@ body {
     border-bottom: solid 1px #d0d5d6;
 }
 .rightSidebar .content {
-    width: 640px;
+    width: 670px;
+    padding: 2em 0;
+}
+.content .firstBox {
+    padding-right: 30px;
+}
+.content .box {
+    margin-top: 2em;
     padding: 2em 30px 2em 0;
+    border-top: solid 1px #c8ccce;
 }
 .rightSidebar .sidebar {
     float: right;
@@ -170,6 +188,13 @@ body {
 }
 .error .wrap {
     background: url('../img/bg-error-ico.png') no-repeat 0 50%;
+}
+.success {
+    border: solid 1px #96bd23;
+    background: #e4f7a5 url('../img/bg-success.png') repeat-x;
+}
+.success .wrap {
+    background: url('../img/bg-success-ico.png') no-repeat 0 50%;
 }
 .loginErrors .error {
     border: none;
@@ -311,6 +336,17 @@ td {
 .registerForm #fieldset-buttons {
     border: none;
 }
+.registerForm .terms {
+    margin: 0 0 .5em;
+    padding: .5em 10px;
+    background: #fff;
+    color: #63696E;
+    border: solid 1px #d0d5d6;
+    font-size: 80%;
+    height: 100px;
+    width: 415px;
+    overflow-y: scroll;
+}
 
 
 .facebookForm .multiElement {
@@ -348,4 +384,107 @@ td {
 .paypal img {
     border: none;
     display: none;
+}
+
+
+#hideInviteForm,
+.inviteForm {
+    display: none;
+}
+.inviteForm .formElement {
+    float: left;
+    margin-right: 5px;
+}
+.inviteForm textarea {
+    border: solid 1px #C4CACC;
+    width: 412px;
+    height: 70px;
+}
+.inviteForm .inputText {
+    width: 200px;
+}
+.inviteForm .inputButton {
+    margin-top: 2px;
+}
+
+
+.connectorsTable {
+    margin: 2em 0;
+}
+.connectorsTable td {
+    padding: 0 5px 4em;
+}
+.connectorsTable img {
+    vertical-align: top;
+}
+.connectorsTable .logo {
+    padding-right: 30px;
+    width: 180px;
+    text-align: right;
+}
+.connectorsTable .links {
+    width: 150px;
+}
+.connectorsTable .info {
+    font-size: 80%;
+    color: #63696E;
+}
+.connectorsTable .smaller {
+    font-size: 80%;
+}
+
+
+.pricingPlans {
+    overflow: hidden;
+    padding: 2em 0;
+}
+.pricingPlans .plan {
+    float: left;
+    margin: 0 10px 2em;
+    padding: 2em 10px 1em;
+    width: 270px;
+    border: solid 1px #c8ccce;
+    text-align: center;
+}
+.pricingPlans .trialPlan {
+    float: none;
+    margin: 0 auto 2em;
+    width: 370px;
+}
+.pricingPlans .price {
+    margin: 0 0 1em;
+    color: #63696E;
+}
+.pricingPlans .price strong {
+    font-size: 160%;
+    color: #000;
+}
+.pricingPlans .accounts {
+    margin: 0 0 .5em;
+}
+.pricingPlans .users {
+    margin: 0 0 1.5em;
+}
+.pricingPlans .button {
+    margin: 0 0 .5em;
+}
+.pricingPlans .trial {
+    color: #63696E;
+}
+
+
+.invitedUsers a,
+.invitedUsers span {
+    color: #63696E;
+    font-size: 70%;
+}
+
+/**
+ * Common classes
+ */
+.clear {
+    clear: both;
+}
+.center {
+    text-align: center;
 }

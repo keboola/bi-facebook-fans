@@ -22,7 +22,11 @@ class App_Form_Decorator_Validate extends Zend_Form_Decorator_Abstract
 					switch ($validatorName) {
 						case 'Zend_Captcha_Image':
 						case 'Zend_Validate_NotEmpty':
-							$elementRules['required'] = 'true';
+							if($element->helper=='formCheckbox') {
+								$elementRules['checkbox'] = 'true';
+							} else {
+								$elementRules['required'] = 'true';
+							}
 							break;
 						case 'Zend_Validate_Date':
 							$elementRules['dateDE'] = 'true';
@@ -64,8 +68,13 @@ class App_Form_Decorator_Validate extends Zend_Form_Decorator_Abstract
 				$outputMessages .= "\t\t\t{$name}: {\n";
 				$validatorsPosition = 0;
 				foreach ($rules as $ruleName => $ruleValue) {
-					$outputRules .= "\t\t\t\t".$ruleName.": ".$ruleValue;
-					$outputMessages .= "\t\t\t\t".$ruleName.": '".$translator->translate('jquery.validation.'.$ruleName)."'";
+					$outputRuleName = $ruleName;
+					if ($outputRuleName=='checkbox') {
+						$outputRuleName = 'required';
+					}
+
+					$outputRules .= "\t\t\t\t".$outputRuleName.": ".$ruleValue;
+					$outputMessages .= "\t\t\t\t".$outputRuleName.": '".$translator->translate('jquery.validation.'.$ruleName)."'";
 					if ($validatorsPosition != count($rules)-1) {
 						//include trailing comma only if it's not last row
 						$outputRules .= ",";

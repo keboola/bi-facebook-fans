@@ -18,14 +18,27 @@ class Form_FacebookSetup extends App_Form
 			'validators' => array('NotEmpty')
 		));
 
+		$this->addElement('hidden', 'job', array(
+			'value'		=> 'register'
+		));
+
 		$this->addElement('image', 'submit', array(
 			'src'		=> '/img/button-save-inactive.png',
 			'ignore'	=> true,
-			'label'		=> 'form.facebookSetup.order'
+			'label'		=> 'form.facebookSetup.save'
 		));
 
 		$this->addDisplayGroup(array('pages'), 'basic');
 		$this->addDisplayGroup(array('submit'), 'buttons');
+	}
+
+	public function loadDefaultDecorators()
+	{
+		parent::loadDefaultDecorators();
+
+		$this->getElement('submit')->setDecorators(array(
+			array('viewScript', array('viewScript' => 'helpers/facebookButtons.phtml'))
+		));
 	}
 }
 ?>

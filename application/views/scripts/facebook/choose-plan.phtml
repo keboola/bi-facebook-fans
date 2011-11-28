@@ -1,0 +1,92 @@
+<?
+$this->jQuery()->addOnLoad('
+	$(".pricingPlans .plan").corner("5px");
+');
+?>
+<div class="pricingPlans">
+	<div class="plan trialPlan">
+		<div class="price"><strong>$19</strong> /<?=$this->translate('pricing.month')?></div>
+		<div class="accounts"><?=$this->translate('pricing.1page')?></div>
+		<div class="users"><?=$this->translate('pricing.1user')?></div>
+		<form action="<?=$this->config->paypal->url?>" method="post" class="paypal"><div class="button">
+			<input type="hidden" name="business" value="<?=$this->config->paypal->merchantId?>" />
+			<input type="hidden" name="cmd" value="_xclick-subscriptions" />
+			<input type="hidden" name="item_name" value="<?=$this->config->app->name?>" />
+			<input type="hidden" name="currency_code" value="USD" />
+			<input type="hidden" name="a1" value="1" />
+			<input type="hidden" name="p1" value="7" />
+			<input type="hidden" name="t1" value="D" />
+			<input type="hidden" name="a3" value="19" />
+			<input type="hidden" name="p3" value="1" />
+			<input type="hidden" name="t3" value="M" />
+			<input type="hidden" name="src" value="1" />
+			<input type="hidden" name="return" value="<?=$this->baseUrl?>/facebook/subscribe" />
+			<input type="hidden" name="cancel_return" value="<?=$this->baseUrl?>/facebook/register" />
+			<input type="hidden" name="custom" value="<?=$this->user->paypalToken(1)?>" />
+			<input type="image" src="/img/button-subscribe.png" name="submit" alt="Subscribe" />
+			<img alt="" src="https://www.paypal.com/en_US/i/scr/pixel.gif" />
+		</div></form>
+		<div class="trial"><?=$this->translate('pricing.trial', 7, 1)?></div>
+	</div>
+	<div class="clear">&nbsp;</div>
+	<div class="plan">
+		<div class="price"><strong>$99</strong> /<?=$this->translate('pricing.month')?></div>
+		<div class="accounts"><?=$this->translate('pricing.pages', 6)?></div>
+		<div class="users"><?=$this->translate('pricing.users', 4)?></div>
+		<form action="<?=$this->config->paypal->url?>" method="post" class="paypal"><div class="button">
+			<input type="hidden" name="business" value="<?=$this->config->paypal->merchantId?>" />
+			<input type="hidden" name="cmd" value="_xclick-subscriptions" />
+			<input type="hidden" name="item_name" value="<?=$this->config->app->name?>" />
+			<input type="hidden" name="currency_code" value="USD" />
+			<input type="hidden" name="a3" value="99" />
+			<input type="hidden" name="p3" value="1" />
+			<input type="hidden" name="t3" value="M" />
+			<input type="hidden" name="src" value="1" />
+			<input type="hidden" name="return" value="<?=$this->baseUrl?>/facebook/subscribe" />
+			<input type="hidden" name="cancel_return" value="<?=$this->baseUrl?>/facebook/register" />
+			<input type="hidden" name="custom" value="<?=$this->user->paypalToken(2)?>" />
+			<input type="image" src="/img/button-subscribe.png" name="submit" alt="Subscribe" />
+			<img alt="" src="https://www.paypal.com/en_US/i/scr/pixel.gif" />
+		</div></form>
+	</div>
+	<div class="plan">
+		<div class="price"><strong>$299</strong> /<?=$this->translate('pricing.month')?></div>
+		<div class="accounts"><?=$this->translate('pricing.pages', 20)?></div>
+		<div class="users"><?=$this->translate('pricing.users', 10)?></div>
+		<form action="<?=$this->config->paypal->url?>" method="post" class="paypal"><div class="button">
+			<input type="hidden" name="business" value="<?=$this->config->paypal->merchantId?>" />
+			<input type="hidden" name="cmd" value="_xclick-subscriptions" />
+			<input type="hidden" name="item_name" value="<?=$this->config->app->name?>" />
+			<input type="hidden" name="currency_code" value="USD" />
+			<input type="hidden" name="a3" value="299" />
+			<input type="hidden" name="p3" value="1" />
+			<input type="hidden" name="t3" value="M" />
+			<input type="hidden" name="src" value="1" />
+			<input type="hidden" name="return" value="<?=$this->baseUrl?>/facebook/subscribe" />
+			<input type="hidden" name="cancel_return" value="<?=$this->baseUrl?>/facebook/register" />
+			<input type="hidden" name="custom" value="<?=$this->user->paypalToken(3)?>" />
+			<input type="image" src="/img/button-subscribe.png" name="submit" alt="Subscribe" />
+			<img alt="" src="https://www.paypal.com/en_US/i/scr/pixel.gif" />
+		</div></form>
+	</div>
+	<div class="plan">
+		<div class="price"><strong>$499</strong> /<?=$this->translate('pricing.month')?></div>
+		<div class="accounts"><?=$this->translate('pricing.pages', 40)?></div>
+		<div class="users"><?=$this->translate('pricing.users', 20)?></div>
+		<form action="<?=$this->config->paypal->url?>" method="post" class="paypal"><div class="button">
+			<input type="hidden" name="business" value="<?=$this->config->paypal->merchantId?>" />
+			<input type="hidden" name="cmd" value="_xclick-subscriptions" />
+			<input type="hidden" name="item_name" value="<?=$this->config->app->name?>" />
+			<input type="hidden" name="currency_code" value="USD" />
+			<input type="hidden" name="a3" value="499" />
+			<input type="hidden" name="p3" value="1" />
+			<input type="hidden" name="t3" value="M" />
+			<input type="hidden" name="src" value="1" />
+			<input type="hidden" name="return" value="<?=$this->baseUrl?>/facebook/subscribe" />
+			<input type="hidden" name="cancel_return" value="<?=$this->baseUrl?>/facebook/register" />
+			<input type="hidden" name="custom" value="<?=$this->user->paypalToken(4)?>" />
+			<input type="image" src="/img/button-subscribe.png" name="submit" alt="Subscribe" />
+			<img alt="" src="https://www.paypal.com/en_US/i/scr/pixel.gif" />
+		</div></form>
+	</div>
+</div>

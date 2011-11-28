@@ -1,16 +1,40 @@
-<div class="rightSidebar">
-	<div class="sidebar">
+<?
+$this->jQuery()
+	->addJavascriptFile('/js/cufon-yui.js')
+	->addJavascriptFile('/js/HelveticaNeue.font.js')
+	->addJavascript('
+	Cufon.replace("h1");
+	Cufon.replace("#th");
+	');
+?>
+<div class="content hp">
+	<h1><?=$this->translate('index.index.header')?></h1>
+	<div class="screenshots">
+		<img src="/img/screenshots/t3.png" alt="" />
+		<img src="/img/screenshots/t4.png" alt="" />
+		<img src="/img/screenshots/t5.png" class="last" alt="" />
 	</div>
-	<div class="content">
-		<h2><?=$this->translate('index:index:connectorsInfo')?></h2>
-		<?if ($this->messages) {?>
-		<div class="flashMessages"><div class="wrap">
-			<?foreach($this->messages as $m) {?>
-			<p class="warning notice"><span class="wrap"><?=$this->translate($m)?></span></p>
-			<?}?>
-		</div></div>
-		<?}?>
-		<ul>
-			<li><a href="/facebook/register">Facebook</a></li>
-		</ul>
+	<p><?=$this->translate('index.index.info1')?></p>
+	<p><?=$this->translate('index.index.info2')?></p>
+</div>
+<div class="center">
+	<a href="/auth/register"><img src="/img/button-signup.png" alt="<?=$this->translate('layout.signUp')?>" /></a>
+</div>
+<div class="connectors">
+	<div class="connector">
+		<div><a href="/facebook"><img src="/img/logo/facebook.png" alt="" /></a></div>
+		<a href="/facebook"><?=$this->translate('index.index.availableNow')?></a>
+	</div>
+	<div class="connector twitter">
+		<div><img src="/img/logo/twitter.png" alt="" /></div>
+		<?=$this->translate('index.index.comingSoon')?>
+	</div>
+	<div class="connector linkedin">
+		<div><img src="/img/logo/linkedin.png" alt="" /></div>
+		<?=$this->translate('index.index.comingSoon')?>
+	</div>
+	<div class="connector plus">
+		<div><img src="/img/logo/plus.png" class="last" alt="" /></div>
+		<?=$this->translate('index.index.comingSoon')?>
+	</div>
 </div>

@@ -2,8 +2,8 @@ body {
     background: #29475a;
 }
 
-.pageHeader {
-    text-align: center;
+.pageHeader .siteName {
+    margin-left: 80px;
 }
 
 .pageContentWrapper {
@@ -15,15 +15,54 @@ body {
     position: relative;
     color: #d7dfe4;
 }
+.pageContent a {
+    color: #94A3AD;
+}
+.pageContent table {
+    margin: 2em 0;
+}
+
+
+.content {
+    margin: 0 auto;
+    padding: 2em 0 1em;
+    width: 788px;
+}
+.content h1 {
+    margin: 1em 0;
+    font-size: 250%;
+    line-height: 1.4em;
+    letter-spacing: -.03em;
+    font-weight: normal;
+    color: #fff;
+}
+.hp h1 {
+    margin: 1.5em 0;
+    font-size: 350%;
+    line-height: 1.4em;
+    letter-spacing: -.03em;
+    font-weight: normal;
+    color: #fff;
+}
+.content .screenshots {
+    margin: 3em auto 3em;
+}
+.content .screenshots img {
+    margin-right: 75px;
+    border: solid 4px #284558;
+}
+.content .screenshots img.last {
+    margin-right: 0;
+}
+.content .screenshots2 {
+    width: 500px;
+}
 
 
 .loginErrorsWrapper {
-    position: absolute;
-    top: 150px;
-    width: 100%;
+    margin: 0 0 2em;
 }
 .loginErrors {
-    display:none;
     margin: 0 auto;
     width: 360px;
     padding: 0 0 0 15px;
@@ -31,6 +70,12 @@ body {
     background: #cee6f3 url('../img/bg-info.png') repeat-x 0 0;
     color: #2d2e2e;
     font-weight: bold;
+}
+.loginErrorsWrapper2 {
+    min-height: 5em;
+}
+.loginErrors2 {
+    display:none;
 }
 .loginErrors .wrap1 {
     margin-bottom: -7px;
@@ -48,12 +93,21 @@ body {
 
 }
 
+.loginErrors .success,
+.loginErrors .error {
+    border: none;
+    background: none;
+}
+
 
 .loginForm {
-    padding-top: 270px;
+    padding-top: 1em;
     min-height: 0;
     width: 788px;
-    margin: 0 auto 150px;
+    margin: 0 auto 5em;
+}
+.loginFormAlone {
+    padding-top: 15em;
 }
 .loginForm form {
     width: auto;
@@ -77,14 +131,14 @@ body {
 }
 .inputText input {
     vertical-align: bottom;
-    padding: 1.1em 15px;
+    padding: 15px 15px;
     width: 260px;
     background: #fff;
     border: none;
     font-size: 100%;
 }
 .loginButton {
-    margin-top: 1.5em;
+    margin-top: -3px;
     width: 188px;
     height: 55px;
     padding: 0;
@@ -103,7 +157,40 @@ p.links a:hover {
     text-decoration: underline;
 }
 
+
+.connectors {
+    margin: 2em 0 3em;
+    overflow: hidden;
+}
+.connectors .connector {
+    float: left;
+    width: 235px;
+    text-align: center;
+}
+.connectors .connector div {
+    height: 55px;
+    margin: 0 0 1em;
+}
+.connectors .twitter img {
+    margin-top: 15px;
+}
+.connectors .linkedin img {
+    margin-top: 5px;
+}
+.connectors .plus img {
+    margin-top: 20px;
+}
+.connectors a {
+    color: #D7DFE4;
+}
+
+
+
+
 .pageFooter {
     text-align: center;
+    color: #94a3ad;
+}
+.pageFooter a {
     color: #94a3ad;
 }
