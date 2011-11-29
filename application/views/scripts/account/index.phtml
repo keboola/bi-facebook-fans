@@ -38,21 +38,21 @@ $this->jQuery()
 						<a href="/facebook?iframe=1" class="smaller iframe"><?=$this->translate('account.index.appInfoPricing')?></a>
 						<?if($this->user->idGD){?>
 						<br />
-						<a href="https://secure.gooddata.com/#s=/gdc/projects/<?=$this->user->idGD?>|projectDashboardPage" class="smaller"><?=$this->translate('account.index.dashboard')?></a>
+						<a href="https://secure.gooddata.com/#s=/gdc/projects/<?=$this->user->idGD?>|projectDashboardPage" class="smaller" target="_blank"><?=$this->translate('account.index.dashboard')?></a>
 						<?}?>
 					</td>
 					<td class="info">
 						<?if($subscribedToFacebook) {
 							echo $this->translate('account.index.facebookSubscribedInfo',
 								$this->connectors[1]['usedAccountsCount'],
-								$this->connectors[1]['maxAccountsCount'],
 								$this->connectors[1]['usedUsersCount'],
+								$this->connectors[1]['maxAccountsCount'],
 								$this->connectors[1]['maxUsersCount']);
 						} else {
 							echo $this->translate('account.index.facebookInfo');
 						}?>
 					</td>
-				</tr>
+				</tr>q
 				<tr>
 					<td class="logo">
 						<img src="/img/logo/s-twitter.png" alt="Twitter" />

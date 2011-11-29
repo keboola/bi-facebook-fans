@@ -21,7 +21,7 @@ class AccountController extends App_Controller_Action
 				'maxAccountsCount' => $subscribedPlan->accountsCount,
 				'usedAccountsCount' => count($userAccounts),
 				'maxUsersCount' => $subscribedPlan->usersCount,
-				'usedUsersCount' => $userToConnector->findDependentRowset('Model_Invitations')->count()
+				'usedUsersCount' => $userToConnector->findDependentRowset('Model_Invitations')->count()+1
 			);
 		}
 

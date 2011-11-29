@@ -9,7 +9,7 @@ account.index.connectorsInfo;Available connectors
 account.index.dashboard;Dashboard
 account.index.disclaimer;In order to use GoodData platform, you need to read and agree with GoodData Terms of Use.
 account.index.facebookInfo;Facebook App shows growth and structure of your fan base, page reach, stories and much more. Try our 1 week, 1 user, 1 page, $1.00 trial!
-account.index.facebookSubscribedInfo;This connector is active.<br />You are using %d accounts of %d and %d GoodData users of %d in your package.
+account.index.facebookSubscribedInfo;This connector is active.<br />You have %d page(s) and %d GoodData user(s) enrolled of %d and %d available in your package.
 account.index.title;Account settings
 account.index.welcome;Welcome to your account settings. Please select the app(s) you wish to use below. Each of them has its own pricing policy and creates a separate GoodData project. However, all selected then can be managed and accessed through this single account and also viewed using the same GoodData user information. Please <a href="%s">contact us</a> if you have any questions or special requests, as everything you see here can be further customized to fit your needs.
 
