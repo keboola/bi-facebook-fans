@@ -6,6 +6,7 @@ account.index.appInfoPricing;App info & pricing
 account.index.comingSoon;Coming soon!
 account.index.connectorSettings;Connector Settings
 account.index.connectorsInfo;Available connectors
+account.index.dashboard;Dashboard
 account.index.disclaimer;In order to use GoodData platform, you need to read and agree with GoodData Terms of Use.
 account.index.facebookInfo;Facebook App shows growth and structure of your fan base, page reach, stories and much more. Try our 1 week, 1 user, 1 page, $1.00 trial!
 account.index.facebookSubscribedInfo;This connector is active.<br />You are using %d accounts of %d and %d GoodData users of %d in your package.
@@ -81,7 +82,8 @@ facebook.register.subscribed;You subscription was successful. Please select Face
 facebook.register.subscriptionChanged;Your subscription has been successfully changed. You can choose other Facebook pages to watch.
 facebook.register.subscribedTwice;Your subscription was successful but we were not able to cancel your previous one. Please <a href='%s'>unsubscribe</a> manually.
 facebook.register.subscribedPlan;Selected plan
-facebook.register.success;Pages added to your account. It will take several minutes for data to appear on your GoodData dashboards.
+facebook.register.success;Adding the pages you selected was successful. It will take several minutes for data to upload to GoodData dashboards. <a href="%s">Login to your GoodData account</a>.
+facebook.register.successFirst;Keboola Analytics created a project on GoodData platform. You will receive an invitation to join the project by e-mail shortly. If you are not a current GoodData user, please follow the registration instructions from this e-mail to access your data.
 facebook.register.title;Facebook connector
 facebook.register.unsubscribe;Unsubscribe
 facebook.register.usersCount;Users count

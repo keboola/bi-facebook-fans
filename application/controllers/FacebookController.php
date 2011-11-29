@@ -42,7 +42,7 @@ class FacebookController extends App_Controller_Action
 			if($i) {
 				$_g = new App_GoodDataService($this->_config->gooddata->username, $this->_config->gooddata->password);
 				$_g->disableUser($this->_user->idGD, $i->email);
-
+				//@TODO
 				die();
 				$this->_helper->getHelper('FlashMessenger')->addMessage('error|facebook.disable.success');
 				$this->_helper->redirector('register');
@@ -110,6 +110,8 @@ class FacebookController extends App_Controller_Action
 				}
 
 				if ($facebookSetupForm->isValid($this->_request->getParams())) {
+					$userAlreadyHasAccounts = $this->_user->idGD && count($this->_connector->accounts($this->_user->id));
+
 					$accounts = array();
 					foreach($this->_request->pages as $p) {
 						$accounts[$p] = array('name' => $ns->pages[$p], 'token' => $ns->pageTokens[$p]);
@@ -123,7 +125,11 @@ class FacebookController extends App_Controller_Action
 						$this->_user->save();
 					}
 
-					$this->_helper->getHelper('FlashMessenger')->addMessage('success|facebook.register.success');
+					if($userAlreadyHasAccounts) {
+						$this->_helper->getHelper('FlashMessenger')->addMessage('success|facebook.register.success', 'https://secure.gooddata.com/#s=/gdc/projects/'.$this->_user->idGD.'|projectDashboardPage');
+					} else {
+						$this->_helper->getHelper('FlashMessenger')->addMessage('success|facebook.register.successFirst');
+					}
 					$this->_helper->redirector('register');
 					return;
 				}
@@ -323,6 +329,11 @@ class FacebookController extends App_Controller_Action
 						'idPlan' => $verifier[1],
 						'price' => $response['payment_gross']
 					));
+
+					if(!$this->_user->export) {
+						$this->_user->export = 1;
+						$this->_user->save();
+					}
 
 					$this->_helper->redirector('register');
 					return;

@@ -108,6 +108,7 @@ CREATE TABLE `bi_users` (
   `changePasswordUntil` datetime DEFAULT NULL,
   `idGD` varchar(40) DEFAULT NULL,
   `export` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
