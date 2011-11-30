@@ -33,6 +33,10 @@ $this->jQuery()
 			$("#submit").attr("disabled", "disabled").attr("src", "/img/button-save-inactive.png");
 		}
 	});
+');
+
+if ($this->user->idGD) {
+	$this->jQuery()->addOnLoad('
 	$("#showInviteForm").click(function(){
 		$(".inviteForm").show("slow", function(){
 			$("#hideInviteForm").show();
@@ -47,7 +51,8 @@ $this->jQuery()
 		});
 		return false;
 	});
-');
+	');
+}
 
 if ($remainingInvitationsCount > 0) {
 	$this->jQuery()->addOnLoad('
@@ -157,7 +162,10 @@ $this->jQuery()->addJavascript('
 		<div class="box">
 			<h2><?=$this->translate('facebook.register.inviteInfo')?></h2>
 			<p><?=$this->translate('facebook.register.inviteRemaining')?>: <strong id="remainingInvitationsCount"><?=$remainingInvitationsCount?></strong></p>
-			<?if($remainingInvitationsCount > 0) {?>
+			<?if(!$this->user->idGD) {?>
+			<p class="warning notice"><span class="wrap"><?=$this->translate('facebook.register.projectNotReady')?></span></p>
+			<?}?>
+			<?if($this->user->idGD && $remainingInvitationsCount > 0) {?>
 			<p>
 				<a href="#" id="showInviteForm"><?=$this->translate('facebook.register.showInvitationForm')?></a>
 				<a href="#" id="hideInviteForm"><?=$this->translate('facebook.register.hideInvitationForm')?></a>
@@ -171,7 +179,9 @@ $this->jQuery()->addJavascript('
 				<h2><?=$this->translate('facebook.register.invitedUsers')?></h2>
 				<ul class="invitedUsers">
 					<?foreach($this->usedInvitations as $u) {?>
-					<li><?=$u->email?> <!--a href="/facebook/disable/id/<?=$u->id?>" class="confirm"><?=$this->translate('facebook.register.disable')?></a--></li>
+					<li><?=$u->email?> <a href="mailto:<?=$this->config->app->support->email?>?subject=Disable%20user&body=Email:%20<?=$u->email?>%0APID:%20<?=$this->user->idGD?>%0ACode:%20<?=$u->code?>">
+						<?=$this->translate('facebook.register.disable')?></a></li>
+					<?/*li><?=$u->email?> <a href="/facebook/disable/id/<?=$u->id?>" class="confirm"><?=$this->translate('facebook.register.disable')?></a></li*/?>
 					<?}?>
 				</ul>
 			<?}?>

@@ -56,10 +56,11 @@ facebook.register.choosePlan;Choose plan
 facebook.register.confirmationFailed;Confirmation of the payment failed. Contact our support please.
 facebook.register.csrfError;There was a security issue. Try again from <a href='/facebook/register'>this link</a> please.
 facebook.register.disable;Disable
+facebook.register.disableSubject;Disable user %s
 facebook.register.facebookLogin;You are logged in to Facebook as <strong>%s</strong>. <a href='%s'>Login as another user</a>.
 facebook.register.getTokenError;There was an unknown error, try again later please or contact our support.
 facebook.register.hideInvitationForm;Hide invitation form
-facebook.register.info;Select pages you administer which you want to monitor:
+facebook.register.info;Select pages to analyze
 facebook.register.invitationExists;You have already sent invitation for this email address.
 facebook.register.invitationSent;Invitation was sent.
 facebook.register.invite;Invite
@@ -74,6 +75,7 @@ facebook.register.noSubscribedPlan;Please subscribe to one of our plans first.
 facebook.register.pagesCount;Pages count
 facebook.register.planOption;Up to %d FB Pages / %d Users: $%d
 facebook.register.price;Price
+facebook.register.projectNotReady;You will be able to use this feature as soon as your GoodData project is ready.
 facebook.register.remaining;Remaining prepaid pages
 facebook.register.revalidateSuccess;Your pages were successfully revalidated.
 facebook.register.save;Save

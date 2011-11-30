@@ -28,6 +28,7 @@ CREATE TABLE `bi_invitations` (
   `email` varchar(100) NOT NULL DEFAULT '',
   `role` enum('editor','dashboard only') NOT NULL,
   `text` text,
+  `code` char(5) DEFAULT NULL,
   `isSent` tinyint(1) unsigned DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `idUserConnector` (`idUserConnector`),

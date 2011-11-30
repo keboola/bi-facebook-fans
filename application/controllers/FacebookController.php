@@ -177,7 +177,8 @@ class FacebookController extends App_Controller_Action
 								'idUserConnector'	=> $userToConnector->id,
 								'email'				=> $this->_request->email,
 								'role'				=> $this->_request->role,
-								'text'				=> $this->_request->text
+								'text'				=> $this->_request->text,
+								'code'				=> substr(md5(uniqid(rand(), true)), 0, 5)
 							));
 							$this->_helper->getHelper('FlashMessenger')->addMessage('success|facebook.register.invitationSent');
 						} else {

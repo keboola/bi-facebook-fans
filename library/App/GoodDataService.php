@@ -42,7 +42,9 @@ class App_GoodDataService
 	/**
 	 * @param $idProject
 	 * @param $email
-	 * @return mixed
+	 * @param string $role
+	 * @param null $text
+	 * @return bool
 	 */
 	public function inviteUser($idProject, $email, $role="editor", $text=null)
 	{
@@ -50,6 +52,24 @@ class App_GoodDataService
 			'OpenProject(id="'.$idProject.'"); ' .
 			'InviteUser(email="'.$email.'", msg="'.$text.'", role="'.$role.'");'
 		);
+
+		/*
+		 //@TODO Get users GD id
+		 $uriFile = ROOT_PATH.'/tmp/users-uri-'.$idProject.'.txt';
+		$emailFile = ROOT_PATH.'/tmp/users-email-'.$idProject.'.txt';
+
+		shell_exec('rm -rf '.$uriFile);
+		shell_exec('rm -rf '.$emailFile);
+		$output = $this->_gd->call(
+			'OpenProject(id="'.$idProject.'"); ' .
+			'GetProjectUsers(usersFile="'.$emailFile.'", field="email", activeOnly="false");'.
+				'GetProjectUsers(usersFile="'.$uriFile.'", field="uri", activeOnly="false");'
+		);
+
+		$emails = file_get_contents($emailFile);
+		$uris = file_get_contents($uriFile);
+
+		Zend_Debug::dump($emails);Zend_Debug::dump($uris);die();*/
 
 		if(!strpos($output, 'ERROR')) {
 			return TRUE;
