@@ -31,7 +31,35 @@ class FacebookController extends App_Controller_Action
 
 	public function choosePlanAction()
 	{
+		if ($this->_request->order=='trial') {
+			$_utc = new Model_UsersToConnectors();
+			$_oh = new Model_OrdersHistory();
 
+			$utc = $_utc->fetchRow(array('idUser=?' => $this->_user->id, 'idConnector=?' => self::ID_CONNECTOR));
+			if(!$utc) {
+				$_utc->insert(array(
+					'idUser' 			=> $this->_user->id,
+					'idConnector' 		=> self::ID_CONNECTOR,
+					'idPlan'			=> 1,
+					'idSubscription'	=> null,
+					'paidUntil'			=> date('Y-m-d', strtotime('+7 days'))
+				));
+
+				$_oh->insert(array(
+					'idUser'	=> $this->_user->id,
+					'idPlan'	=> 1,
+					'price'		=> 0
+				));
+
+				if(!$this->_user->export) {
+					$this->_user->export = 1;
+					$this->_user->save();
+				}
+
+				$this->_helper->getHelper('FlashMessenger')->addMessage('success|facebook.register.subscribed');
+				$this->_helper->redirector('register');
+			}
+		}
 	}
 
 	public function disableAction()

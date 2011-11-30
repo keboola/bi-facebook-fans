@@ -471,7 +471,9 @@ td {
     margin: 0 0 .5em;
 }
 .pricingPlans .trial {
+    margin: 0 0 1em;
     color: #63696E;
+    font-weight: bold;
 }
 
 
