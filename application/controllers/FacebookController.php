@@ -286,7 +286,7 @@ class FacebookController extends App_Controller_Action
 
 			$request = curl_init();
 			curl_setopt_array($request, array(
-				CURLOPT_URL => 'https://www.paypal.com/cgi-bin/webscr',
+				CURLOPT_URL => $this->_config->paypal->api->url,
 				CURLOPT_POST => TRUE,
 				CURLOPT_POSTFIELDS => http_build_query(array(
 					'cmd' => '_notify-synch',

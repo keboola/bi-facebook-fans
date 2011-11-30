@@ -1,8 +1,8 @@
 .formCaptcha strong,
 .formElement strong {
-    top: 0px;
+	top: 0px;
 }
 .formCaptcha strong span,
 .formElement strong span {
-    background: none;
+	background: none;
 }

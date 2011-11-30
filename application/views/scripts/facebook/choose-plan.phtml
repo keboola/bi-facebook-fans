@@ -3,16 +3,35 @@ $this->jQuery()->addOnLoad('
 	$(".pricingPlans .plan").corner("5px");
 ');
 ?>
-<!--p><?=$this->translate('facebook.choose-plan.info', "/facebook/choose-plan?order=trial")?></p-->
 <div class="pricingPlans">
+	<p><?=$this->translate('facebook.choose-plan.info', "/facebook/choose-plan?order=trial")?></p>
 	<div class="plan trialPlan">
-		<div class="price"><strong>$19</strong> /<?=$this->translate('pricing.month')?></div>
+		<div class="price"><strong><?=$this->translate('pricing.free', 7)?></strong> /7 <?=$this->translate('pricing.days')?></div>
 		<div class="accounts"><?=$this->translate('pricing.1page')?></div>
 		<div class="users"><?=$this->translate('pricing.1user')?></div>
-		<div class="trial"><?=$this->translate('pricing.trial', 7)?></div>
 		<div class="button">
 			<a href="/facebook/choose-plan?order=trial"><img src="/img/button-subscribe.png" alt="Subscribe" /></a>
 		</div>
+	</div>
+	<div class="plan">
+		<div class="price"><strong>$19</strong> /<?=$this->translate('pricing.month')?></div>
+		<div class="accounts"><?=$this->translate('pricing.1page')?></div>
+		<div class="users"><?=$this->translate('pricing.1user')?></div>
+		<form action="<?=$this->config->paypal->url?>" method="post" class="paypal"><div class="button">
+			<input type="hidden" name="business" value="<?=$this->config->paypal->merchantId?>" />
+			<input type="hidden" name="cmd" value="_xclick-subscriptions" />
+			<input type="hidden" name="item_name" value="<?=$this->config->app->name?>" />
+			<input type="hidden" name="currency_code" value="USD" />
+			<input type="hidden" name="a3" value="19" />
+			<input type="hidden" name="p3" value="1" />
+			<input type="hidden" name="t3" value="M" />
+			<input type="hidden" name="src" value="1" />
+			<input type="hidden" name="return" value="<?=$this->baseUrl?>/facebook/subscribe" />
+			<input type="hidden" name="cancel_return" value="<?=$this->baseUrl?>/facebook/register" />
+			<input type="hidden" name="custom" value="<?=$this->user->paypalToken(1)?>" />
+			<input type="image" src="/img/button-subscribe.png" name="submit" alt="Subscribe" />
+			<img alt="" src="https://www.paypal.com/en_US/i/scr/pixel.gif" />
+		</div></form>
 	</div>
 	<div class="clear">&nbsp;</div>
 	<div class="plan">
@@ -75,4 +94,7 @@ $this->jQuery()->addOnLoad('
 			<img alt="" src="https://www.paypal.com/en_US/i/scr/pixel.gif" />
 		</div></form>
 	</div>
+</div>
+<div class="content pricingScreenshots">
+	<?=$this->partial('facebook/advantages.phtml')?>
 </div>

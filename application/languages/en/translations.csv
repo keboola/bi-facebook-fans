@@ -125,9 +125,11 @@ form.register.termsAgree;Check to agree with the terms of use
 pricing.month;month
 pricing.1page;Stats for <strong>1 page</strong>
 pricing.1user;Access for <strong>1 user</strong>
+pricing.days;days
+pricing.free;FREE
 pricing.pages;Stats for <strong>%d pages</strong>
 pricing.users;Access for <strong>%d users</strong>
-pricing.trial;%d days free trial!
+
 
 revalidate.facebook.title;Facebook revalidation
 

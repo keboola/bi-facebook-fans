@@ -1,17 +1,25 @@
 body {
-    width: 560px;
-    min-width: 560px;
+	width: 545px;
+	min-width: 545px;
+}
+.pageContentWrapper {
+	background-image: none;
 }
 .pageSection {
-    width: 560px;
-    margin: 0;
+	width: 545px;
+	margin: 0;
 }
 .content {
-    width: auto;
-    padding-left: 30px;
-    padding-right: 30px;
+	width: auto;
+	padding-left: 30px;
+	padding-right: 30px;
 }
 .content h1 {
-    margin: .5em 0 1em;
-    font-size: 200%;
+	margin: .5em 0 1em;
+	font-size: 200%;
+}
+
+.screenshots .screenshot {
+	width: 225px;
+	padding: 0 5px;
 }

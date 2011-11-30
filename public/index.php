@@ -5,7 +5,7 @@ define('APPLICATION_PATH', ROOT_PATH . '/application');
 define('TMP_PATH', ini_get('upload_tmp_dir'));
 define('EXEC_PATH', ROOT_PATH . '/exec');
 defined('APPLICATION_ENV')
-    || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
+    || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'development'));
 
 // Ensure library/ is on include_path
 set_include_path(implode(PATH_SEPARATOR, array(
