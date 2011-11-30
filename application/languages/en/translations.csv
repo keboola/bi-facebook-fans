@@ -78,7 +78,7 @@ facebook.register.remaining;Remaining prepaid pages
 facebook.register.revalidateSuccess;Your pages were successfully revalidated.
 facebook.register.save;Save
 facebook.register.showInvitationForm;Show invitation form
-facebook.register.subscribeFirst;Please subscribe to one of our plans before registering pages.
+facebook.register.subscribeFirst;Please <a href="%s">subscribe</a> to one of our plans before registering pages.
 facebook.register.subscribed;You subscription was successful. Please select Facebook pages which you wish to monitor.
 facebook.register.subscriptionChanged;Your subscription has been successfully changed. You can choose other Facebook pages to watch.
 facebook.register.subscribedTwice;Your subscription was successful but we were not able to cancel your previous one. Please <a href='%s'>unsubscribe</a> manually.

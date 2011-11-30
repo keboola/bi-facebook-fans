@@ -83,10 +83,10 @@ $this->jQuery()->addJavascript('
 ?>
 
 <div class="rightSidebar">
+<? if($this->userToConnector) {?>
 	<div class="sidebar">
 		<div class="box">
 			<h2><?=$this->translate('facebook.register.subscribedPlan')?></h2>
-			<? if($this->userToConnector) {?>
 			<table class="subscribedPlan">
 				<tr>
 					<th><?=$this->translate('facebook.register.pagesCount')?></th>
@@ -101,9 +101,6 @@ $this->jQuery()->addJavascript('
 					<td class="price">$<?=$this->subscribedPlan->price?></td>
 				</tr>
 			</table>
-			<?} else {?>
-				<?=$this->translate('facebook.register.noSubscribedPlan')?>
-			<?}?>
 		</div>
 
 		<div class="box lastBox">
@@ -114,11 +111,6 @@ $this->jQuery()->addJavascript('
 					<input type="hidden" name="cmd" value="_xclick-subscriptions" />
 					<input type="hidden" name="item_name" value="<?=$this->config->app->name?>" />
 					<input type="hidden" name="currency_code" value="USD" />
-<?if(!$this->subscribedPlan) {?>
-					<input type="hidden" name="a1" value="1" />
-					<input type="hidden" name="p1" value="7" />
-					<input type="hidden" name="t1" value="D" />
-<?}?>
 					<select name="a3" id="selectPlan" class="selectPlan">
 						<option selected="selected" disabled="disabled">- <?=$this->translate('facebook.register.choosePlan')?> -</option>
 						<?foreach($this->pricingPlans as $p) {
@@ -149,10 +141,11 @@ $this->jQuery()->addJavascript('
 			<?}?>
 		</div>
 	</div>
+<? }?>
 	<div class="content">
 		<div class="firstBox">
 			<?if(!$this->userToConnector) {?>
-			<p class="warning notice"><span class="wrap"><?=$this->translate('facebook.register.subscribeFirst')?></span></p>
+			<p class="warning notice"><span class="wrap"><?=$this->translate('facebook.register.subscribeFirst', '/facebook/choose-plan')?></span></p>
 			<?}?>
 			<?=$this->flashMessages()?>
 
@@ -160,6 +153,7 @@ $this->jQuery()->addJavascript('
 			<p><?=$this->translate('facebook.register.remaining')?>: <strong id="remainingAccountsCount"><?=$remainingAccountsCount?></strong></p>
 			<?=$this->facebookSetupForm?>
 		</div>
+<? if($this->userToConnector) {?>
 		<div class="box">
 			<h2><?=$this->translate('facebook.register.inviteInfo')?></h2>
 			<p><?=$this->translate('facebook.register.inviteRemaining')?>: <strong id="remainingInvitationsCount"><?=$remainingInvitationsCount?></strong></p>
@@ -182,5 +176,6 @@ $this->jQuery()->addJavascript('
 				</ul>
 			<?}?>
 		</div>
+<? }?>
 	</div>
 </div>

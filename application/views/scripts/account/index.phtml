@@ -29,11 +29,7 @@ $this->jQuery()
 						<a href="/facebook?iframe=1" class="iframe"><img src="/img/logo/s-facebook.png" alt="Facebook" /></a>
 					</td>
 					<td class="links">
-						<?if($subscribedToFacebook) {?>
-						<a href="/facebook/register"><?=$this->translate('account.index.connectorSettings')?></a>
-						<?} else {?>
-						<a href="/facebook/choose-plan"><?=$this->translate('account.index.activateConnector')?></a>
-						<?}?>
+						<a href="/facebook/register"><?=$this->translate($subscribedToFacebook ? 'account.index.connectorSettings' : 'account.index.activateConnector')?></a>
 						<br />
 						<a href="/facebook?iframe=1" class="smaller iframe"><?=$this->translate('account.index.appInfoPricing')?></a>
 						<?if($this->user->idGD){?>

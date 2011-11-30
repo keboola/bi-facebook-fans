@@ -96,20 +96,17 @@ class FacebookController extends App_Controller_Action
 		$pageUrl = urlencode($this->_baseUrl.'/facebook/register');
 		$userToConnector = $_uc->fetchRow(array('idUser=?' => $this->_user->id, 'idConnector=?' => self::ID_CONNECTOR));
 
-		if (!$userToConnector) {
-			$this->_helper->redirector('choose-plan');
-			return;
+		if ($userToConnector) {
+			$subscribedPlan = $userToConnector->findParentRow('Model_PricingPlans');
+			$userAccounts = $this->_connector->accounts($this->_user->id);
+
+			$paidAccountsCount = $subscribedPlan->accountsCount;
+			$usedAccountsCount = count($userAccounts);
+			$remainingAccountsCount = $paidAccountsCount - $usedAccountsCount;
+
+			$paidUsersCount = $subscribedPlan->usersCount;
+			$usedInvitations = $userToConnector->findDependentRowset('Model_Invitations');
 		}
-
-		$subscribedPlan = $userToConnector->findParentRow('Model_PricingPlans');
-		$userAccounts = $this->_connector->accounts($this->_user->id);
-
-		$paidAccountsCount = $subscribedPlan->accountsCount;
-		$usedAccountsCount = count($userAccounts);
-		$remainingAccountsCount = $paidAccountsCount - $usedAccountsCount;
-
-		$paidUsersCount = $subscribedPlan->usersCount;
-		$usedInvitations = $userToConnector->findDependentRowset('Model_Invitations');
 
 		// Complete pages registration
 		if ($this->_request->isPost()) {
@@ -205,19 +202,19 @@ class FacebookController extends App_Controller_Action
 				$this->_redirect($dialogUrl);
 				return;
 			}
-	
+
 			// show registration form
 			if ($this->_request->state == $ns->state) {
 				$accessToken = App_Facebook::accessToken($pageUrl, $this->_request->code);
-	
+
 				$logoutUrl = 'https://www.facebook.com/logout.php?next='.$pageUrl.'&access_token='.$accessToken;
-	
+
 				if (!empty($accessToken)) {
 					$gd = new App_Facebook(null, $accessToken);
-	
+
 					$userInfo = $gd->request('me');
 					if ($userInfo) {
-	
+
 						$ns->idFB = $userInfo['id'];
 						$ns->pageTokens = array();
 						$pages = array();
@@ -227,7 +224,7 @@ class FacebookController extends App_Controller_Action
 							foreach($pagesList['data'] as $p) {
 								if ($p['category'] != 'Application') {
 									$pages[$p['id']] = $p['name'];
-	
+
 									if ($this->_connector->isKnownUserToAccount($this->_user->id, $p['id']))
 										$knownPages[] = $p['id'];
 									else
@@ -235,7 +232,7 @@ class FacebookController extends App_Controller_Action
 								}
 							}
 						}
-	
+
 						if(!count($pages)) {
 							$this->_helper->getHelper('FlashMessenger')->addMessage('error|'.$this->view->translate('facebook.register.noPages', $logoutUrl));
 						} else {
@@ -247,10 +244,10 @@ class FacebookController extends App_Controller_Action
 								$facebookSetupForm->getElement('pages')->setValue($knownPages);
 							}
 						}
-	
+
 						$facebookSetupForm->getElement('pages')->setDescription($this->view->translate('facebook.register.facebookLogin',
 							$userInfo['email'], $logoutUrl));
-	
+
 					} else {
 						$this->_helper->getHelper('FlashMessenger')->addMessage('error|facebook.register.apiError');
 					}
@@ -262,18 +259,21 @@ class FacebookController extends App_Controller_Action
 			}
 		}
 
+		if ($userToConnector) {
+			$this->view->subscribedPlan = $subscribedPlan;
+
+			$this->view->userToConnector = $userToConnector;
+			$this->view->paidAccountsCount = $paidAccountsCount;
+			$this->view->userAccounts = $userAccounts;
+			$this->view->paidUsersCount = $paidUsersCount;
+			$this->view->usedInvitations = $usedInvitations;
+		}
+
 		$this->view->inviteForm = $inviteForm;
 		$this->view->facebookSetupForm = $facebookSetupForm;
 		$this->view->pageUrl = $this->_baseUrl.'/facebook/register';
-
 		$this->view->pricingPlans = $_pp->fetchAll(null, 'accountsCount ASC');
-		$this->view->subscribedPlan = $subscribedPlan;
 
-		$this->view->userToConnector = $userToConnector;
-		$this->view->paidAccountsCount = $paidAccountsCount;
-		$this->view->userAccounts = $userAccounts;
-		$this->view->paidUsersCount = $paidUsersCount;
-		$this->view->usedInvitations = $usedInvitations;
 	}
 
 
