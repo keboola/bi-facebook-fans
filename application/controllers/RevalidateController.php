@@ -65,7 +65,7 @@ class RevalidateController extends App_Controller_Action
 										if (isset($fbPages[$account['idFB']])) {
 											$_cf->saveNewToken($user->id, $id, $fbPages[$account['idFB']]['token']);
 
-											$this->view->revalidatedPages[] = $fbPages[$account->idFB]['name'];
+											$this->view->revalidatedPages[] = $fbPages[$account['idFB']]['name'];
 										}
 									}
 
