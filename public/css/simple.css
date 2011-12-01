@@ -45,6 +45,15 @@ body {
 	color: #fff;
 }
 
+.hp {
+	position: relative;
+}
+.hp .gdCertified {
+	position: absolute;
+	top: 20px;
+	right: -50px;
+}
+
 
 .content .screenshots img {
 	border-color: #1b3847;
