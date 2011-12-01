@@ -126,7 +126,7 @@ class App_Connector_Facebook extends App_Connector
 	{
 		$this->_db->query('
 			UPDATE '.$this->_usersToAccountsTable.'
-			SET oauthToken = ?
+			SET oauthToken = ?, isValid = 1
 			WHERE idUser = ?
 			AND idAccount = ?',
 			array($token, $idUser, $idAccount));
