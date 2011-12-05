@@ -59,6 +59,46 @@ class FacebookController extends App_Controller_Action
 				$this->_helper->getHelper('FlashMessenger')->addMessage('success|facebook.register.subscribed');
 				$this->_helper->redirector('register');
 			}
+		} else {
+			$ns = new Zend_Session_Namespace('FacebookPricePlan');
+			$pageUrl = urlencode($this->_baseUrl.'/facebook/choose-plan');
+
+			// Facebook authorization
+			if (empty($this->_request->code)) {
+				$ns->state = md5($this->_user->salt); //CSRF protection
+				$dialogUrl = App_Facebook::authorizationUrl($pageUrl, $ns->state);
+				$this->_redirect($dialogUrl);
+				return;
+			}
+
+			if ($this->_request->state == $ns->state) {
+				$accessToken = App_Facebook::accessToken($pageUrl, $this->_request->code);
+				if (!empty($accessToken)) {
+					$fb = new App_Facebook(null, $accessToken);
+
+					$userInfo = $fb->request('me');
+					if ($userInfo) {
+						$pages = array();
+						$pagesList = $fb->request('/me/accounts');
+						if($pagesList && isset($pagesList['data'])) {
+							foreach($pagesList['data'] as $p) {
+								if ($p['category'] != 'Application') {
+									$pages[$p['id']] = $p['name'];
+								}
+							}
+						}
+
+						$this->view->pages = $pages;
+
+					} else {
+						$this->_helper->getHelper('FlashMessenger')->addMessage('error|facebook.register.apiError');
+					}
+				} else {
+					$this->_helper->getHelper('FlashMessenger')->addMessage('error|facebook.register.apiError');
+				}
+			} else {
+				$this->_helper->getHelper('FlashMessenger')->addMessage('error|facebook.register.csrfError');
+			}
 		}
 	}
 
@@ -106,6 +146,9 @@ class FacebookController extends App_Controller_Action
 
 			$paidUsersCount = $subscribedPlan->usersCount;
 			$usedInvitations = $userToConnector->findDependentRowset('Model_Invitations');
+		} else {
+			$this->_helper->redirector('choose-plan');
+			return;
 		}
 
 		// Complete pages registration
@@ -211,16 +254,16 @@ class FacebookController extends App_Controller_Action
 				$logoutUrl = 'https://www.facebook.com/logout.php?next='.$pageUrl.'&access_token='.$accessToken;
 
 				if (!empty($accessToken)) {
-					$gd = new App_Facebook(null, $accessToken);
+					$fb = new App_Facebook(null, $accessToken);
 
-					$userInfo = $gd->request('me');
+					$userInfo = $fb->request('me');
 					if ($userInfo) {
 
 						$ns->idFB = $userInfo['id'];
 						$ns->pageTokens = array();
 						$pages = array();
 						$knownPages = array();
-						$pagesList = $gd->request('/me/accounts');
+						$pagesList = $fb->request('/me/accounts');
 						if($pagesList && isset($pagesList['data'])) {
 							foreach($pagesList['data'] as $p) {
 								if ($p['category'] != 'Application') {

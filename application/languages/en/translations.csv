@@ -39,6 +39,7 @@ auth.register.back;Back
 auth.register.registrationComplete;"You have created new account. The account needs to be activated. You will receive an e-mail with activation link shortly."
 
 
+facebook.choose-plan.fbPages;The Facebook account you used to log in administers %d page(s), %s.
 facebook.choose-plan.info;Please select a plan that best suits your needs. Feel free to start small - it is easy and seamless to upgrade later. However, the sooner you subscribe your Facebook page, the further into history we will be able to go! And, if you just want to try it out - <a href="%s">FREE trial</a> is available for one week.
 facebook.choose-plan.title;Choose your pricing plan
 

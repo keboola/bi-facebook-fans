@@ -5,6 +5,7 @@ $this->jQuery()->addOnLoad('
 ?>
 <div class="pricingPlans">
 	<p><?=$this->translate('facebook.choose-plan.info', "/facebook/choose-plan?order=trial")?></p>
+	<p><?=$this->translate('facebook.choose-plan.fbPages', count($this->pages), implode(',', $this->pages))?></p>
 	<div class="plan trialPlan">
 		<div class="price"><strong><?=$this->translate('pricing.free', 7)?></strong> /7 <?=$this->translate('pricing.days')?></div>
 		<div class="accounts"><?=$this->translate('pricing.1page')?></div>
@@ -94,7 +95,4 @@ $this->jQuery()->addOnLoad('
 			<img alt="" src="https://www.paypal.com/en_US/i/scr/pixel.gif" />
 		</div></form>
 	</div>
-</div>
-<div class="content pricingScreenshots">
-	<?=$this->partial('facebook/advantages.phtml')?>
 </div>

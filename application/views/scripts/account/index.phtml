@@ -5,8 +5,28 @@ $this->headLink()
 	->appendStylesheet('/js/fancybox/jquery.fancybox-1.3.4.css');
 $this->jQuery()
 	->addJavascriptFile('/js/fancybox/jquery.fancybox-1.3.4.pack.js')
+	->addJavascript('
+	function isiOS(){
+    	return (
+        	(navigator.platform.indexOf("iPhone") != -1) ||
+        	(navigator.platform.indexOf("iPod") != -1) ||
+        	(navigator.platform.indexOf("iPad") != -1)
+    	);
+	}
+	')
 	->addOnLoad('
-	$("a.iframe").fancybox();
+		if(isiOS()) {
+        	$("a.iframe").fancybox({
+            	"type" : "inline",
+            	"width" : 560,
+            	"autoScale" : false
+        	});
+        } else {
+        	$("a.iframe").fancybox({
+        		"type" : "iframe",
+            	"width" : 560
+        	});
+        }
 	');
 ?>
 <div class="rightSidebar">
