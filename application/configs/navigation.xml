@@ -13,8 +13,13 @@
     </facebook>
     <googleAnalytics>
         <label>layout.googleAnalytics</label>
-        <class>last</class>
         <controller>google-analytics</controller>
         <action>register</action>
     </googleAnalytics>
+    <twitter>
+        <label>layout.twitter</label>
+        <class>last</class>
+        <controller>twitter</controller>
+        <action>register</action>
+    </twitter>
 </config>

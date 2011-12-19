@@ -103,6 +103,9 @@ index.index.info1;A collection of ready-to-use connector and apps, Keboola Analy
 index.index.info2;Sign up for a free account (takes just a few seconds) and then select from our available options:
 
 
+twitter.register.title;Twitter
+
+
 
 form.facebookSetup.pages;Administered pages
 form.facebookSetup.order;Order
@@ -152,7 +155,7 @@ layout.lostPassword;Lost Password
 layout.overview;Overview
 layout.signUp;Sign Up
 layout.support;Support
-
+layout.twitter;Twitter
 
 
 jquery.validation.checkbox;The checkbox has to be checked to proceed.

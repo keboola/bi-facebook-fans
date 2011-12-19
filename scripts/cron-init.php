@@ -33,17 +33,39 @@ foreach($_u->fetchAll(array('export=1', 'idGD IS NULL')) as $user) {
 	}
 }
 
-//@TODO temporary creation of separate projects for other connectors
-//@TODO init your connector db wrapper: $_c = new App_Connector_Facebook();
+
+
+/***********************************************************************************************************************
+ * @TODO temporary creation of separate projects for other connectors
+ */
 $_uc = new Model_UsersToConnectors();
+
+
+//Google Analytics
+$_c = new App_Connector_GoogleAnalytics();
 foreach($_uc->fetchAll(array('idConnector=?' => 2, 'idGD IS NULL')) as $uc) {
 	echo "****************************\n***  Export: ".$user->email."\n";
 
 	$connector = $uc->findParentRow('Connectors');
-	$idGD = $_g->createProject($config->app->projectName.' - '.$connector->name.' - '.$user->email, $connector->templateUri);
+	$idGD = $_g->createProject($config->app->projectName.' - '.$connector->name.' - '.$user->email);
 	if($idGD) {
 		$uc->idGD = $idGD;
 		$uc->save();
-		//@TODO tell your connector that project is ready: $_c->userHasProject($user->id);
+		$_c->userHasProject($user->id);
+	}
+}
+
+
+//Twitter
+$_c = new App_Connector_Twitter();
+foreach($_uc->fetchAll(array('idConnector=?' => 3, 'idGD IS NULL')) as $uc) {
+	echo "****************************\n***  Export: ".$user->email."\n";
+
+	$connector = $uc->findParentRow('Connectors');
+	$idGD = $_g->createProject($config->app->projectName.' - '.$connector->name.' - '.$user->email);
+	if($idGD) {
+		$uc->idGD = $idGD;
+		$uc->save();
+		$_c->userHasProject($user->id);
 	}
 }

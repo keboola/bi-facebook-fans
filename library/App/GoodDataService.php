@@ -26,7 +26,7 @@ class App_GoodDataService
 	 * @param $templateUri
 	 * @return bool|string
 	 */
-	public function createProject($name, $templateUri)
+	public function createProject($name, $templateUri=null)
 	{
 		$output = $this->_gd->call('CreateProject(name="'.$name.'" templateUri="'.$templateUri.'");');
 
