@@ -9,12 +9,12 @@ class App_Connector_GoogleAnalytics extends App_Connector
 	/**
 	 * @var string
 	 */
-	private $_accountsTable;
+	private $_profilesTable;
 
 	/**
 	 * @var string
 	 */
-	private $_usersToAccountsTable;
+	private $_usersToProfilesTable;
 
 	/**
 	 * @var string
@@ -27,8 +27,8 @@ class App_Connector_GoogleAnalytics extends App_Connector
 	{
 		parent::__construct('google-analytics');
 
-		$this->_accountsTable = $this->_dbPrefix.'accounts';
-		$this->_usersToAccountsTable = $this->_dbPrefix.'rUsersAccounts';
+		$this->_profilesTable = $this->_dbPrefix.'profiles';
+		$this->_usersToProfilesTable = $this->_dbPrefix.'rUsersProfiles';
 		$this->_usersTable = $this->_dbPrefix.'users';
 	}
 
@@ -38,29 +38,27 @@ class App_Connector_GoogleAnalytics extends App_Connector
 	 * @param $idFB
 	 * @param $accounts
 	 */
-	public function addAccountsToUser($idUser, $idFB, $accounts)
+	public function addProfilesToUser($idUser, $profiles)
 	{
-		foreach($accounts as $id => $account) {
-			$idAccount = $this->_db->fetchOne('SELECT id FROM '.$this->_accountsTable.' WHERE idFB=?', $id);
-			if (!$idAccount) {
-				$this->_db->insert($this->_accountsTable, array(
-					'name'		=> $account['name'],
-					'idFB'		=> $id
+		foreach($profiles as $profileId) {
+
+			$dbProfileId = $this->_db->fetchOne('SELECT id FROM '.$this->_profilesTable.' WHERE gaProfileId=?', $profileId);
+
+			if (!$dbProfileId) {
+				$this->_db->insert($this->_profilesTable, array(
+					'gaName'		=> $session->profiles[$profileId]['name'],
+					'gaAccountId'	=> $session->profiles[$profileId]['accountId'],
+					'gaProfileId'	=> $profileId,
+					'gaWebPropertyId'	=> $session->profiles[$profileId]['webPropertyId']
 				));
-				$idAccount = $this->_db->lastInsertId($this->_accountsTable);
+				$dbProfileId = $this->_db->lastInsertId($this->_profilesTable);
 			}
 
-			$isUserSaved = $this->_db->fetchOne('SELECT COUNT(*) FROM '.$this->_usersTable.' WHERE id = ?', $idUser);
-			if(!$isUserSaved) {
-				$this->_db->insert($this->_usersTable, array('id' => $idUser));
-			}
-
-			$this->_db->insert($this->_usersToAccountsTable, array(
-				'idUser'		=> $idUser,
-				'idAccount'		=> $idAccount,
-				'idFBUser'		=> $idFB,
-				'oauthToken'	=> $account['token']
+			$this->_db->insert($this->_usersToProfilesTable, array(
+				'userId'	=> $idUser,
+				'profileId'	=> $dbProfileId
 			));
+
 		}
 	}
 
