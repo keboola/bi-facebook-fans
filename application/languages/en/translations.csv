@@ -93,6 +93,8 @@ facebook.register.unsubscribe;Unsubscribe
 facebook.register.usersCount;Users count
 
 
+google-analytics.register.title;Google Analytics
+
 index.index.title;
 index.index.availableNow;Available NOW!
 index.index.comingSoon;Coming soon!
@@ -142,6 +144,7 @@ email.signature;Best regards,<br />Keboola Analytics team
 layout.account;Account
 layout.cancel;Cancel
 layout.facebook;Facebook
+layout.googleAnalytics;Google Analytics
 layout.loggedInAs;Logged in as
 layout.login;Login
 layout.logout;Logout

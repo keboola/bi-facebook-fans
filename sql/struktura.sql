@@ -15,7 +15,7 @@ DROP TABLE IF EXISTS `bi_connectors`;
 CREATE TABLE `bi_connectors` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL DEFAULT '',
-  `templateUri` varchar(50) NOT NULL DEFAULT '',
+  `templateUri` varchar(50) DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -88,6 +88,7 @@ CREATE TABLE `bi_rUsersConnectors` (
   `idPlan` int(10) unsigned DEFAULT NULL,
   `idSubscription` varchar(19) DEFAULT NULL,
   `paidUntil` date DEFAULT NULL,
+  `idGD` varchar(40) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idUser` (`idUser`),
   KEY `idConnector` (`idConnector`),

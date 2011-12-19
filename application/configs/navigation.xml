@@ -8,8 +8,13 @@
     </overflow>
     <facebook>
         <label>layout.facebook</label>
-        <class>last</class>
         <controller>facebook</controller>
         <action>register</action>
     </facebook>
+    <googleAnalytics>
+        <label>layout.googleAnalytics</label>
+        <class>last</class>
+        <controller>google-analytics</controller>
+        <action>register</action>
+    </googleAnalytics>
 </config>

@@ -46,13 +46,13 @@ class RevalidateController extends App_Controller_Action
 						parse_str($response, $params);
 
 						if (!empty($params['access_token'])) {
-							$gd = new App_Facebook(null, $params['access_token']);
+							$fb = new App_Facebook($params['access_token']);
 
-							$userInfo = $gd->request('me');
+							$userInfo = $fb->request('me');
 							if ($userInfo) {
 								$fbPages = array();
 								$this->view->revalidatedPages = array();
-								$pagesList = $gd->request('/me/accounts');
+								$pagesList = $fb->request('/me/accounts');
 								if($pagesList && isset($pagesList['data'])) {
 									foreach($pagesList['data'] as $p) {
 										if ($p['category'] != 'Application') {

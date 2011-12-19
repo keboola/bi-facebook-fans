@@ -74,7 +74,7 @@ class FacebookController extends App_Controller_Action
 			if ($this->_request->state == $ns->state) {
 				$accessToken = App_Facebook::accessToken($pageUrl, $this->_request->code);
 				if (!empty($accessToken)) {
-					$fb = new App_Facebook(null, $accessToken);
+					$fb = new App_Facebook($accessToken);
 
 					$userInfo = $fb->request('me');
 					if ($userInfo) {
@@ -102,7 +102,7 @@ class FacebookController extends App_Controller_Action
 		}
 	}
 
-	public function disableAction()
+	public function disableUserAction()
 	{
 		if(!empty($this->_request->id)) {
 			$_i = new Model_Invitations();
@@ -254,7 +254,7 @@ class FacebookController extends App_Controller_Action
 				$logoutUrl = 'https://www.facebook.com/logout.php?next='.$pageUrl.'&access_token='.$accessToken;
 
 				if (!empty($accessToken)) {
-					$fb = new App_Facebook(null, $accessToken);
+					$fb = new App_Facebook($accessToken);
 
 					$userInfo = $fb->request('me');
 					if ($userInfo) {

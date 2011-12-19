@@ -65,6 +65,31 @@ class App_GoodData
 		}
 	}
 
+
+	/**
+	 * Clone project from template
+	 * @param $name
+	 * @param null $templateUri
+	 * @return bool|string
+	 */
+	public function createProject($name, $templateUri=NULL)
+	{
+		$template = NULL;
+		if($templateUri) {
+			$template = 'templateUri="'.$templateUri.'"';
+		}
+		$output = $this->call('CreateProject(name="'.$name.'"'.$template.');');
+
+		if(!strpos($output, 'ERROR')) {
+			$start = strpos($output, 'id = \'');
+			$end = strpos($output, '\' created.');
+			return trim(substr($output, $start+6, $end-$start-6));
+		} else {
+			return FALSE;
+		}
+	}
+
+
 	/**
 	 * Double all double quotes because of GoodData escaping
 	 * @static
