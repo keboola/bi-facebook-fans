@@ -17,7 +17,7 @@ $application->bootstrap(array('base', 'autoload', 'config', 'ndebug', 'cache', '
 $config = Zend_Registry::get('config');
 $_c = new Model_Connectors();
 $_u = new Model_Users();
-$_g = new App_GoodDataService($config->gooddata->username, $config->gooddata->password);
+$_g = new App_GoodData($config->gooddata->username, $config->gooddata->password);
 
 
 $_f = new App_Connector_Facebook();
@@ -47,7 +47,7 @@ foreach($_uc->fetchAll(array('idConnector=?' => 2, 'idGD IS NULL')) as $uc) {
 	echo "****************************\n***  Export: ".$user->email."\n";
 
 	$connector = $uc->findParentRow('Connectors');
-	$idGD = $_g->createProject($config->app->projectName.' - '.$connector->name.' - '.$user->email);
+	$idGD = $_g->createProject($connector->name.' - '.$user->email);
 	if($idGD) {
 		$uc->idGD = $idGD;
 		$uc->save();
@@ -62,7 +62,7 @@ foreach($_uc->fetchAll(array('idConnector=?' => 3, 'idGD IS NULL')) as $uc) {
 	echo "****************************\n***  Export: ".$user->email."\n";
 
 	$connector = $uc->findParentRow('Connectors');
-	$idGD = $_g->createProject($config->app->projectName.' - '.$connector->name.' - '.$user->email);
+	$idGD = $_g->createProject($connector->name.' - '.$user->email);
 	if($idGD) {
 		$uc->idGD = $idGD;
 		$uc->save();

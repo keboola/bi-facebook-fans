@@ -23,7 +23,7 @@ $application->bootstrap(array('base', 'autoload', 'config', 'ndebug', 'cache', '
 
 $config = Zend_Registry::get('config');
 $_i = new Model_Invitations();
-$_g = new App_GoodDataService($config->gooddata->username, $config->gooddata->password);
+$_g = new App_GoodData($config->gooddata->username, $config->gooddata->password);
 
 
 foreach($_i->fetchAll(array('isSent=0')) as $i) {

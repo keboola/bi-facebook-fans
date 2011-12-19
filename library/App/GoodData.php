@@ -67,7 +67,7 @@ class App_GoodData
 
 
 	/**
-	 * Clone project from template
+	 * Clone project from template or create empty
 	 * @param $name
 	 * @param null $templateUri
 	 * @return bool|string
@@ -84,6 +84,27 @@ class App_GoodData
 			$start = strpos($output, 'id = \'');
 			$end = strpos($output, '\' created.');
 			return trim(substr($output, $start+6, $end-$start-6));
+		} else {
+			return FALSE;
+		}
+	}
+
+	/**
+	 * @param $idProject
+	 * @param $email
+	 * @param string $role
+	 * @param null $text
+	 * @return bool
+	 */
+	public function inviteUser($idProject, $email, $role="editor", $text=null)
+	{
+		$output = $this->_gd->call(
+			'OpenProject(id="'.$idProject.'"); ' .
+			'InviteUser(email="'.$email.'", msg="'.$text.'", role="'.$role.'");'
+		);
+
+		if(!strpos($output, 'ERROR')) {
+			return TRUE;
 		} else {
 			return FALSE;
 		}
