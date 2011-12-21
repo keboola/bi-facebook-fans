@@ -1,8 +1,8 @@
-<?
+<?php
+
 /**
- * @TODO Upravit pro konkrétní konektor, převzato z Facebooku!
- * @author
- * @date
+ *
+ * @author Miro Cillik <miro@keboola.com>
  */
 class App_Connector_GoogleAnalytics extends App_Connector
 {
@@ -14,8 +14,13 @@ class App_Connector_GoogleAnalytics extends App_Connector
 	/**
 	 * @var string
 	 */
-	private $_usersToProfilesTable;
+	private $_accountsToProfilesTable;
 
+	/**
+	 * @var string
+	 */
+	private $_accountsTable;
+	
 	/**
 	 * @var string
 	 */
@@ -28,18 +33,46 @@ class App_Connector_GoogleAnalytics extends App_Connector
 		parent::__construct('google-analytics');
 
 		$this->_profilesTable = $this->_dbPrefix.'profiles';
-		$this->_usersToProfilesTable = $this->_dbPrefix.'rUsersProfiles';
+		$this->_accountsToProfilesTable = $this->_dbPrefix.'rAccountsProfiles';
+		$this->_accountsTable = $this->_dbPrefix.'accounts';
 		$this->_usersTable = $this->_dbPrefix.'users';
 	}
 
 
 	/**
-	 * @param $idUser
+	 * @param $idUser - User id
 	 * @param $idFB
 	 * @param $accounts
 	 */
-	public function addProfilesToUser($idUser, $profiles)
+	public function addProfilesToAccount($idUser, $profiles)
 	{
+		$session = new Zend_Session_Namespace("GoogleAnalyticsForm");
+
+		//Create user
+		$userExists = $this->_db->fetchOne('SELECT COUNT(*) FROM '.$this->_usersTable.' WHERE id = ?', $idUser);
+
+		if (!$userExists) {
+			$this->_db->insert($this->_usersTable, array(
+				'id'	=> $idUser
+			));
+		}
+
+		$dbAccountId = $this->_db->fetchOne('SELECT id FROM '.$this->_accountsTable.' WHERE googleId = ?', $sesssion->googleUserId);
+		if(!$dbAccountId) {
+			$data = array(
+				'googleId'		=> $session->googleUserId,
+				'userId'		=> $idUser,
+				'gaAccessToken'	=> $session->oauthToken
+			);
+
+			//@TODO: check if user has refresh token!
+			if (isset($session->refreshToken)) {
+				$data['gaRefreshToken'] = $session->refreshToken;
+			}
+			$this->_db->insert($this->_accountsTable, $data);
+			$dbAccountId = $this->_db->lastInsertId($this->_accountsTable);
+		}
+
 		foreach($profiles as $profileId) {
 
 			$dbProfileId = $this->_db->fetchOne('SELECT id FROM '.$this->_profilesTable.' WHERE gaProfileId=?', $profileId);
@@ -54,12 +87,15 @@ class App_Connector_GoogleAnalytics extends App_Connector
 				$dbProfileId = $this->_db->lastInsertId($this->_profilesTable);
 			}
 
-			$this->_db->insert($this->_usersToProfilesTable, array(
-				'userId'	=> $idUser,
+			// @FIXME userId -> accountId - change in db too
+			$this->_db->insert($this->_accountsToProfilesTable, array(
+				'accountId'	=> $dbAccountId,
 				'profileId'	=> $dbProfileId
 			));
 
 		}
+		
+
 	}
 
 	/**
@@ -82,27 +118,28 @@ class App_Connector_GoogleAnalytics extends App_Connector
 	 * @param $idAccount
 	 * @return array
 	 */
-	public function account($idAccount)
+	public function getGoogleUser($googleId)
 	{
 		return $this->_db->fetchRow('
 			SELECT *
 			FROM '.$this->_accountsTable.'
-			WHERE id = ?',
-			array($idAccount));
+			WHERE googleId = ?',
+			array($googleId));
 	}
 
 	/**
 	 * @param $idUser
 	 * @return array
 	 */
-	public function accounts($idUser)
+	public function getProfiles($googleId)
 	{
 		return $this->_db->fetchPairs('
-			SELECT a.id, a.name
-			FROM '.$this->_accountsTable.' a
-			LEFT JOIN '.$this->_usersToAccountsTable.' ota ON (a.id = ota.idAccount)
-			WHERE ota.idUser = ?',
-			array($idUser));
+			SELECT p.gaProfileId, p.gaName
+			FROM '.$this->_profilesTable.' p
+			LEFT JOIN '.$this->_accountsToProfilesTable.' utp ON (p.id = utp.accountId)
+			LEFT JOIN '.$this->_accountsTable.' a ON (a.id = utp.accountId)
+			WHERE a.googleId = ?',
+			array($googleId));
 	}
 
 	/**

@@ -5,12 +5,12 @@
  *
  * @author Miroslav Čillík <miro@keboola.com>
  */
-class Form_GoogleAnalyticsSetup extends Zend_Form
+class Form_GoogleAnalyticsSetup extends App_Form
 {
 
 	public function setProfiles($profiles)
 	{
-		$session = new Zend_Session_Namespace();		
+		$session = new Zend_Session_Namespace("GoogleAnalyticsForm");
 
 		$options = array();
 		foreach($profiles as $acc => $wps) {
@@ -28,17 +28,6 @@ class Form_GoogleAnalyticsSetup extends Zend_Form
 			}
 		}
 		$this->getElement('profiles')->setMultiOptions($options);
-
-		$table = new Model_Profile();
-		$res = $table->getAdapter()->fetchAll(
-			'SELECT * FROM ga_profiles WHERE gaProfileId IN (' . implode(",", array_keys($options)) . ')');		
-
-		$values = array();
-		foreach($res as $row) {
-			$values[] = $row['gaProfileId'];
-		}
-		$this->getElement('profiles')->setValue($values);
-		
 	}
 
 	public function init()
@@ -47,27 +36,46 @@ class Form_GoogleAnalyticsSetup extends Zend_Form
 
 		$this->setMethod('POST');
 
-		$this->setAttrib('id', 'userForm');
-
-		$this->addElement('text', 'email', array(
-			'required'	=> true,
-			'label'		=> 'Email (For GoodData project)',
-			'validators'	=> array('NotEmpty', 'EmailAddress')
-		));
+		$this->setAttrib('class', 'googleAnalyticsForm');
+		$this->setName('googleAnalyticsForm');
 
 		$this->addElement('multiCheckbox', 'profiles', array(
 			'label'		=> 'Profiles to import',
-			'required'	=> true
+			'required'	=> true,
+			'registerInArrayValidator' => false,
+			'validators' => array('NotEmpty')
 		));
-		$this->getElement('profiles')->setRegisterInArrayValidator(false);
 
+		$this->addElement('hidden', 'job', array(
+			'value'		=> 'register'
+		));
+
+		/**
+		 * 
 		$this->addElement('submit', 'submit', array(
 			'ignore'	=> true,
 			'label'		=> 'Send'
 		));
+		 * 
+		 */
 
 		$this->addElement('hidden', 'accountTitle');
 
+		$this->addElement('image', 'submit', array(
+			'src'		=> '/img/button-save-inactive.png',
+			'ignore'	=> true,
+			'label'		=> 'form.googleAnalyticsSetup.save'
+		));		
+
+	}
+
+	public function loadDefaultDecorators()
+	{
+		parent::loadDefaultDecorators();
+
+		$this->getElement('submit')->setDecorators(array(
+			array('viewScript', array('viewScript' => 'helpers/facebookButtons.phtml'))
+		));
 	}
 }
 ?>

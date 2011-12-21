@@ -18,13 +18,16 @@ $config = Zend_Registry::get('config');
 $_c = new Model_Connectors();
 $_u = new Model_Users();
 $_g = new App_GoodData($config->gooddata->username, $config->gooddata->password);
-
+$_uc = new Model_UsersToConnectors();
 
 $_f = new App_Connector_Facebook();
-$connector = $_c->fetchRow(array('id=?' => 1));
-foreach($_u->fetchAll(array('export=1', 'idGD IS NULL')) as $user) {
+foreach($_uc->fetchAll(array('idConnector=?' => 1, 'idGD IS NULL')) as $uc) {
+
+	$user = $_u->fetchRow(array('id=?' => $uc->idUser));
+
 	echo "****************************\n***  Export: ".$user->email."\n";
 
+	$connector = $uc->findParentRow('Connectors');
 	$idGD = $_g->createProject($config->app->projectName.' - '.$user->email, $connector->templateUri);
 	if($idGD) {
 		$user->idGD = $idGD;
@@ -34,19 +37,22 @@ foreach($_u->fetchAll(array('export=1', 'idGD IS NULL')) as $user) {
 }
 
 
-
 /***********************************************************************************************************************
  * @TODO temporary creation of separate projects for other connectors
  */
-$_uc = new Model_UsersToConnectors();
 
 
 //Google Analytics
 $_c = new App_Connector_GoogleAnalytics();
+
 foreach($_uc->fetchAll(array('idConnector=?' => 2, 'idGD IS NULL')) as $uc) {
+
+	$user = $_u->fetchRow(array('id=?' => $uc->idUser));
+
 	echo "****************************\n***  Export: ".$user->email."\n";
 
-	$connector = $uc->findParentRow('Connectors');
+	$connector = $uc->findParentRow('Model_Connectors');
+
 	$idGD = $_g->createProject($connector->name.' - '.$user->email);
 	if($idGD) {
 		$uc->idGD = $idGD;
@@ -59,9 +65,13 @@ foreach($_uc->fetchAll(array('idConnector=?' => 2, 'idGD IS NULL')) as $uc) {
 //Twitter
 $_c = new App_Connector_Twitter();
 foreach($_uc->fetchAll(array('idConnector=?' => 3, 'idGD IS NULL')) as $uc) {
+	
+	$user = $_u->fetchRow(array('id=?' => $uc->idUser));
+	
 	echo "****************************\n***  Export: ".$user->email."\n";
 
-	$connector = $uc->findParentRow('Connectors');
+	$connector = $uc->findParentRow('Model_Connectors');
+
 	$idGD = $_g->createProject($connector->name.' - '.$user->email);
 	if($idGD) {
 		$uc->idGD = $idGD;

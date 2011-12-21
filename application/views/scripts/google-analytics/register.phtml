@@ -2,11 +2,22 @@
 	<div class="sidebar">
 		<div class="box lastBox">
 			<!-- Pravý sloupec -->
+
+			<a href="/google-analytics/logout">Logout from Google</a>
+
 		</div>
 	</div>
 	<div class="content">
 		<div class="firstBox">
-			[registrace]
+			<?=$this->flashMessages()?>
+
+			<h2><?=$this->translate('google.analytics.register.info')?></h2>
+
+			<?
+			if (isset($this->form)) {
+				echo $this->form;
+			}
+			?>
 		</div>
 	</div>
 </div>

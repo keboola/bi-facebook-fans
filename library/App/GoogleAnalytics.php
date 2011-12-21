@@ -1,7 +1,4 @@
 <?php
-
-require_once 'OAuth.php';
-
 /**
  * GoogleAnalytics API wrapper
  *
@@ -34,7 +31,8 @@ class App_GoogleAnalytics {
 	protected $_profiles = array();
 
 	//const http_interface = 'auto'; //'auto': autodetect, 'curl' or 'fopen'
-	const ACCOUNTS_URL = 'https://www.googleapis.com/analytics/v3/management/accounts';	
+	const ACCOUNTS_URL = 'https://www.googleapis.com/analytics/v3/management/accounts';
+	const USER_INFO_URL = 'https://www.googleapis.com/oauth2/v1/userinfo';
 	const DATA_URL = 'https://www.googleapis.com/analytics/v3/data/ga';
 	const OAUTH_URL = 'https://accounts.google.com/o/oauth2/auth';
 	const OAUTH_TOKEN_URL = 'https://accounts.google.com/o/oauth2/token';
@@ -104,15 +102,38 @@ class App_GoogleAnalytics {
 		$client->setParameterGet($get);
 		$response = $client->request();
 
-		$body = json_decode($response->getBody(), true);
+		$body = json_decode($response->getBody(), true);		
 
 		if (isset($body['error'])) {
-			throw new Exception("Error " . print_r($body), $body['code']);
+			throw new Zend_Exception("Error " . print_r($body), $body['code']);
 		}
 		if (isset($body['items'])) {
 			return $body['items'];
 		}
 		return false;
+	}
+
+	/**
+	 * Obtain basic user information
+	 */
+	public function getUserInfo()
+	{
+		$client = new Zend_Http_Client(App_GoogleAnalytics::USER_INFO_URL);
+		$client->setHeaders(array(
+			'Accept' => 'application/json',
+			'Authorization'	=> 'Bearer ' . $this->_token
+		));
+		$client->setMethod('GET');
+		$client->setParameterGet($get);
+		$response = $client->request();
+
+		$body = json_decode($response->getBody(), true);		
+
+		if (isset($body['error'])) {
+			throw new Exception("Error " . print_r($body), $body['code']);
+		}
+		
+		return $body;
 	}
 
 	public function getWebProperties($accountId, $startIndex=1, $maxResults=1000)
@@ -422,9 +443,9 @@ class App_GoogleAnalytics {
 	 * @param String $code - authorization code
 	 * @return array ['access_token', 'refresh_token']
 	 */
-	public function getAccessToken($code)
+	public function getAccessToken($code, $clientId, $clientSecret, $redirectUri)
 	{
-		$config = Zend_Registry::get('config');
+		//$config = Zend_Registry::get('config');
 		
 		$client = new Zend_Http_Client();
 		$client->setUri(App_GoogleAnalytics::OAUTH_TOKEN_URL);
@@ -434,9 +455,9 @@ class App_GoogleAnalytics {
 		));
 		$client->setParameterPost(array(
 			'code'	=> $code,
-			'client_id'	=> $config->oauth->id,
-			'client_secret'	=> $config->oauth->secret,
-			'redirect_uri'	=> 'http://' . $_SERVER['HTTP_HOST'] . '/index/oauth-login',
+			'client_id'	=> $clientId,
+			'client_secret'	=> $clientSecret,
+			'redirect_uri'	=> $redirectUri,
 			'grant_type'	=> 'authorization_code'
 		));
 		$response = $client->request();
@@ -452,6 +473,8 @@ class App_GoogleAnalytics {
 		}
 
 		$this->_token = $res['access_token'];
+
+		//var_dump($res); die;
 
 		return $res;
 	}
