@@ -31,7 +31,7 @@ class GoogleAnalyticsController extends App_Controller_Action
 	}
 
 	public function registerAction()
-	{		
+	{
 		$_uc = new Model_UsersToConnectors();
 
 		$config = Zend_Registry::get('config');
@@ -40,7 +40,7 @@ class GoogleAnalyticsController extends App_Controller_Action
 		$this->_gapi = new App_GoogleAnalytics();
 
 		$redirectUri = $this->_baseUrl.'/google-analytics/register';
-		$userToConnector = $_uc->fetchRow(array('idUser=?' => $this->_user->id, 'idConnector=?' => self::ID_CONNECTOR));
+		$userToConnector = $_uc->fetchRow(array('idUser=?' => $this->_user->id, 'idConnector=?' => self::ID_CONNECTOR));		
 
 		if (!isset($session->oauthToken)) {
 			
@@ -84,48 +84,80 @@ class GoogleAnalyticsController extends App_Controller_Action
 		}
 
 		// Access Token obtained - Show/Process registration form
-		$form = new Form_GoogleAnalyticsSetup();		
-
+		$form = new Form_GoogleAnalyticsSetup();
+		$inviteForm = new Form_Invite();
 		$request = $this->getRequest();
 
-		if ($request->isPost() && $form->isValid($request->getParams())) {
+		if ($request->isPost()) {
 
-			$this->_connector->addProfilesToAccount($this->_user->id, $request->profiles);			
+			if ($request->getParam('job') == 'register') {
+				
+				if ($form->isValid($request->getParams())) {
+					$this->_connector->addProfilesToAccount($this->_user->id, $session->googleUserId, $request->profiles);
 
-			if (!$userToConnector) {
-				$_uc->insert(array(
-					'idUser'		=> $this->_user->id,
-					'idConnector'	=> self::ID_CONNECTOR,
-				));
+					if (!$userToConnector) {
+						$_uc->insert(array(
+							'idUser'		=> $this->_user->id,
+							'idConnector'	=> self::ID_CONNECTOR,
+						));
+					}
+
+					$this->_helper->FlashMessenger->addMessage('success|google.analytics.register.success');
+				} else {
+					$this->_helper->getHelper('FlashMessenger')->addMessage('error|google.analytics.register.formInvalid');
+				}
+
+			} else if ($request->getParam('job') == 'invite') {
+
+				if ($inviteForm->isValid($request->getParams())) {
+
+					$_i = new Model_Invitations();
+					$i = $_i->fetchRow(array('idUserConnector=?' => $userToConnector->id, 'email=?' => $this->_request->email));
+					if (!$i && $this->_request->email != $this->_user->email) {
+						$_i->insert(array(
+							'idUserConnector'	=> $userToConnector->id,
+							'email'				=> $this->_request->email,
+							'role'				=> $this->_request->role,
+							'text'				=> $this->_request->text,
+							'code'				=> substr(md5(uniqid(rand(), true)), 0, 5)
+						));
+						$this->_helper->getHelper('FlashMessenger')->addMessage('success|facebook.register.invitationSent');
+					} else {
+						$this->_helper->getHelper('FlashMessenger')->addMessage('error|facebook.register.invitationExists');
+					}
+				}
 			}
-
-			$this->_helper->getHelper('FlashMessenger')->addMessage('success|google.analytics.register.success');
 			
-		} else {
-
-			try {
-				$profiles = $this->_gapi->getAllProfiles();
-			} catch (Zend_Exception $e) {
-
-				$session->__unset('oauthToken');
-				$session->__unset('refreshToken');
-				$session->__unset('googleUserId');
-
-				$this->_helper->redirector('register');
-			}
-
-			if (count($profiles) > 0) {
-				$form->setProfiles($profiles);				
-				$form->getElement('profiles')
-					->setAttrib('disable', array_keys($this->_connector->getProfiles($session->googleUserId)));
-
-			} else {
-				$this->_helper->getHelper('FlashMessenger')->addMessage('error|google.analytics.register.noAccountsFound');
-			}			
-
-			$this->view->form = $form;
 		}
 
+		$this->_gapi = new App_GoogleAnalytics($session->oauthToken);
+
+		try {
+			$profiles = $this->_gapi->getAllProfiles();
+		} catch (Zend_Exception $e) {
+
+			$session->__unset('oauthToken');
+			$session->__unset('refreshToken');
+			$session->__unset('googleUserId');
+
+			Zend_Debug::dump($e);
+
+			//$this->_helper->redirector('register');
+		}
+
+		if (count($profiles) > 0) {
+			$form->setProfiles($profiles);
+			$form->getElement('profiles')
+				->setAttrib('disable', array_keys($this->_connector->getProfiles($this->_user->id)));			
+
+		} else {
+			$this->_helper->getHelper('FlashMessenger')->addMessage('error|google.analytics.register.noAccountsFound');
+		}
+
+		$this->view->form = $form;
+		$this->view->userToConnector = $userToConnector;
+		$this->view->user = $this->_user;
+		$this->view->inviteForm = $inviteForm;
 	}
 
 	public function logoutAction()
@@ -138,7 +170,16 @@ class GoogleAnalyticsController extends App_Controller_Action
 		//$returnUrl = $this->_baseUrl . '/google-analytics/account';
 
 		//@FIXME: maybe logout via AJAX and then redirect to /google-analytics/account
-		$this->_redirect('https://www.google.com/accounts/logout');
+		/*
+		$client = new Zend_Http_Client('https://www.google.com/accounts/logout');		
+		$client->setMethod('GET');		
+		$response = $client->request();
+		 *
+		 */
+
+		
+		$this->_redirect('https://accounts.google.com/o/logout?continue=https://accounts.google.com/o/oauth2/auth?response_type%3Dcode%26scope%3Dhttps://www.googleapis.com/auth/analytics.readonly%2Bhttps://www.googleapis.com/auth/userinfo.profile%26access_type%3Doffline%26redirect_uri%3D'.$this->_baseUrl.'/google-analytics/register%26approval_prompt%3Dforce%26client_id%3D'.$config->google->oauth->id.'%26hl%3Dcs');
+		//%26from_login%26as%3D-3124dfe953c17dd7
 	}
 
 	protected function _clearSession()

@@ -93,7 +93,13 @@ facebook.register.unsubscribe;Unsubscribe
 facebook.register.usersCount;Users count
 
 
-google-analytics.register.title;Google Analytics
+google-analytics.register.title;Google Analytics connector
+google.analytics.register.info;Select profiles to analyze
+google.analytics.register.inviteInfo;Invite more users to see your dashboard
+google.analytics.register.showInvitationForm;Show invitation form
+google.analytics.register.inviteRemaining;Remaining prepaid invitations
+
+google.analytics.register.success;Profiles was successful added to your account . It will take several minutes for data to upload to GoodData dashboards. <a href="%s">Login to your GoodData account</a>.
 
 index.index.title;
 index.index.availableNow;Available NOW!

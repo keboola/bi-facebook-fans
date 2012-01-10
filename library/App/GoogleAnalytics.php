@@ -155,7 +155,7 @@ class App_GoogleAnalytics {
 		$body = json_decode($response->getBody(), true);
 
 		if (isset($body['error'])) {
-			throw new Exception("Error " . print_r($body), $body['code']);
+			throw new Zend_Exception("Error " . print_r($body), $body['code']);
 		}
 		if (isset($body['items'])) {
 			return $body['items'];
@@ -183,7 +183,7 @@ class App_GoogleAnalytics {
 		$body = json_decode($response->getBody(), true);
 
 		if (isset($body['error'])) {
-			throw new Exception("Error " . print_r($body), $body['code']);
+			throw new Zend_Exception("Error " . print_r($body), $body['code']);
 		}
 		if (isset($body['items'])) {
 			return $body['items'];

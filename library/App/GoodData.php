@@ -98,13 +98,48 @@ class App_GoodData
 	 */
 	public function inviteUser($idProject, $email, $role="editor", $text=null)
 	{
-		$output = $this->_gd->call(
+		$output = $this->call(
 			'OpenProject(id="'.$idProject.'"); ' .
 			'InviteUser(email="'.$email.'", msg="'.$text.'", role="'.$role.'");'
 		);
 
 		if(!strpos($output, 'ERROR')) {
 			return TRUE;
+		} else {
+			return FALSE;
+		}
+	}
+
+	/**
+	 * Clone project from other project
+	 * @param $idSource
+	 * @param $idTarget
+	 * @return bool
+	 */
+	public function cloneProject($idSource, $idTarget)
+	{
+		$tokenFile = ROOT_PATH.'/tmp/export-'.$idSource.'.txt';
+
+		$output = $this->call(
+			'OpenProject(id="'.$idSource.'"); ' .
+			'ExportProject(tokenFile="'.$tokenFile.'", exportUsers="false", exportData="false");'
+		);
+
+		print_r($output);
+
+		if(!strpos($output, 'ERROR') && file_exists($tokenFile)) {
+
+			$output = $this->call(
+				'OpenProject(id="'.$idTarget.'"); ' .
+				'ImportProject(tokenFile="'.$tokenFile.'");'
+			);
+			if(!strpos($output, 'ERROR')) {
+
+				system('rm '.$tokenFile);
+				return TRUE;
+
+			}
+
 		} else {
 			return FALSE;
 		}

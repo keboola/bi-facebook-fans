@@ -1,3 +1,24 @@
+<?php
+if ($this->userToConnector->idGD) {
+	$this->jQuery()->addOnLoad('
+	$("#showInviteForm").click(function(){
+		$(".inviteForm").show("slow", function(){
+			$("#hideInviteForm").show();
+			$("#showInviteForm").hide();
+		});
+		return false;
+	});
+	$("#hideInviteForm").click(function(){
+		$(".inviteForm").hide("slow", function(){
+			$("#showInviteForm").show();
+			$("#hideInviteForm").hide();
+		});
+		return false;
+	});
+	');
+}
+?>
+
 <div class="rightSidebar">
 	<div class="sidebar">
 		<div class="box lastBox">
@@ -19,5 +40,29 @@
 			}
 			?>
 		</div>
+<? if($this->userToConnector) {?>
+
+		<!--
+		<div class="box">
+			<h2><?=$this->translate('google.analytics.register.inviteInfo')?></h2>
+			<p><?=$this->translate('google.analytics.register.inviteRemaining')?>: <strong id="remainingInvitationsCount"><?=$remainingInvitationsCount?></strong></p>
+
+			<?if(!$this->userToConnector->idGD) {?>
+			<p class="warning notice"><span class="wrap"><?=$this->translate('google.analytics.register.projectNotReady')?></span></p>
+			<?}?>
+			<? if($this->userToConnector->idGD ) { ?>
+			<p>
+				<a href="#" id="showInviteForm"><?=$this->translate('google.analytics.register.showInvitationForm')?></a>
+				<a href="#" id="hideInviteForm"><?=$this->translate('google.analytics.register.hideInvitationForm')?></a>
+			</p>
+			<?}?>
+			<div class="inviteForm">
+				<?=$this->inviteForm?>
+				<div class="clear">&nbsp;</div>
+			</div>			
+
+		</div>
+		-->
+<? }?>
 	</div>
 </div>

@@ -19,6 +19,11 @@ class App_Connector_GoogleAnalytics extends App_Connector
 	/**
 	 * @var string
 	 */
+	private $_usersToAccountsTable;
+
+	/**
+	 * @var string
+	 */
 	private $_accountsTable;
 	
 	/**
@@ -27,13 +32,13 @@ class App_Connector_GoogleAnalytics extends App_Connector
 	private $_usersTable;
 
 
-
 	public function __construct()
 	{
 		parent::__construct('google-analytics');
 
 		$this->_profilesTable = $this->_dbPrefix.'profiles';
 		$this->_accountsToProfilesTable = $this->_dbPrefix.'rAccountsProfiles';
+		$this->_usersToAccountsTable = $this->_dbPrefix.'rUsersAccounts';
 		$this->_accountsTable = $this->_dbPrefix.'accounts';
 		$this->_usersTable = $this->_dbPrefix.'users';
 	}
@@ -44,9 +49,11 @@ class App_Connector_GoogleAnalytics extends App_Connector
 	 * @param $idFB
 	 * @param $accounts
 	 */
-	public function addProfilesToAccount($idUser, $profiles)
+	public function addProfilesToAccount($idUser, $googleId, $profiles)
 	{
 		$session = new Zend_Session_Namespace("GoogleAnalyticsForm");
+
+		//@TODO: M:N users - accounts
 
 		//Create user
 		$userExists = $this->_db->fetchOne('SELECT COUNT(*) FROM '.$this->_usersTable.' WHERE id = ?', $idUser);
@@ -57,20 +64,30 @@ class App_Connector_GoogleAnalytics extends App_Connector
 			));
 		}
 
-		$dbAccountId = $this->_db->fetchOne('SELECT id FROM '.$this->_accountsTable.' WHERE googleId = ?', $sesssion->googleUserId);
-		if(!$dbAccountId) {
-			$data = array(
-				'googleId'		=> $session->googleUserId,
-				'userId'		=> $idUser,
-				'gaAccessToken'	=> $session->oauthToken
-			);
+		$dbAccountId = $this->_db->fetchOne('SELECT id FROM '.$this->_accountsTable.' WHERE googleId = ?', $googleId);
 
-			//@TODO: check if user has refresh token!
-			if (isset($session->refreshToken)) {
-				$data['gaRefreshToken'] = $session->refreshToken;
-			}
+		//@FIXME: error message when user doesnt have refresh token?
+		$data['gaAccessToken'] = $session->oauthToken;
+		if (isset($session->refreshToken)) {
+			$data['gaRefreshToken'] = $session->refreshToken;
+		}
+
+		if(!$dbAccountId) {
+			$data['googleId'] = $googleId;		
 			$this->_db->insert($this->_accountsTable, $data);
 			$dbAccountId = $this->_db->lastInsertId($this->_accountsTable);
+		} else {
+			$this->_db->update($this->_accountsTable, $data, array('id = ?' => $dbAccountId));
+		}
+
+		// Relation exists?
+		$usersToAccountsId = $this->_db->fetchOne('SELECT id FROM '.$this->_usersToAccountsTable.' WHERE userId = ? AND accountId = ?', array($idUser, $dbAccountId));
+
+		if (!$usersToAccountsId) {
+			$this->_db->insert($this->_usersToAccountsTable, array(
+				'userId'	=> $idUser,
+				'accountId'	=> $dbAccountId
+			));
 		}
 
 		foreach($profiles as $profileId) {
@@ -87,11 +104,14 @@ class App_Connector_GoogleAnalytics extends App_Connector
 				$dbProfileId = $this->_db->lastInsertId($this->_profilesTable);
 			}
 
-			// @FIXME userId -> accountId - change in db too
-			$this->_db->insert($this->_accountsToProfilesTable, array(
-				'accountId'	=> $dbAccountId,
-				'profileId'	=> $dbProfileId
-			));
+			// Relation exists?
+			$accountsToProfiles = $this->_db->fetchOne('SELECT id FROM '.$this->_accountsToProfilesTable.' WHERE profileId = ? AND accountId = ?', array($dbProfileId, $dbAccountId));
+			if (!$accountsToProfiles) {				
+				$this->_db->insert($this->_accountsToProfilesTable, array(
+					'accountId'	=> $dbAccountId,
+					'profileId'	=> $dbProfileId
+				));
+			}
 
 		}
 		
@@ -131,15 +151,15 @@ class App_Connector_GoogleAnalytics extends App_Connector
 	 * @param $idUser
 	 * @return array
 	 */
-	public function getProfiles($googleId)
+	public function getProfiles($idUser)
 	{
 		return $this->_db->fetchPairs('
 			SELECT p.gaProfileId, p.gaName
 			FROM '.$this->_profilesTable.' p
-			LEFT JOIN '.$this->_accountsToProfilesTable.' utp ON (p.id = utp.accountId)
-			LEFT JOIN '.$this->_accountsTable.' a ON (a.id = utp.accountId)
-			WHERE a.googleId = ?',
-			array($googleId));
+			LEFT JOIN '.$this->_accountsToProfilesTable.' atp ON (p.id = atp.profileId)
+			LEFT JOIN '.$this->_usersToAccountsTable.' uta ON (atp.accountId = uta.accountId)				
+			WHERE uta.userId = ?',
+			array($idUser));
 	}
 
 	/**

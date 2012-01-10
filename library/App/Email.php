@@ -20,7 +20,7 @@ class App_Email
 		if(count($viewParams)) foreach($viewParams as $k => $v) {
 			$html->$k = $v;
 		}
-		$bodyHtml = $html->render($viewScript.'.phtml');
+		$bodyHtml = $html->render($viewScript.'.phtml');		
 
 		$m = new Zend_Mail();
 		$m->addTo($email);

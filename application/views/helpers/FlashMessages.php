@@ -38,6 +38,10 @@ class App_View_Helper_FlashMessages extends Zend_View_Helper_Abstract
 	{
 		$translator = Zend_Registry::get('Zend_Translate');
 		$messages = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger')->getMessages();
+		$currentMessages = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger')->getCurrentMessages();
+
+		$messages = array_merge($messages, $currentMessages);
+
 		$statMessages = array();
 		$output = '';
 

@@ -76,7 +76,7 @@ class App_Controller_Action extends Zend_Controller_Action
 
 		$this->view->pageTitle = $this->_translator->_($this->_request->getControllerName().'.'.$this->_request->getActionName().'.title');
 		$this->view->baseUrl = $this->_config->app->url;
-		$this->view->config = $this->_config;
+		$this->view->config = $this->_config;		
 
 		parent::init();
 	}
