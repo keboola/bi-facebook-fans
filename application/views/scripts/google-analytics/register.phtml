@@ -15,6 +15,20 @@ if ($this->userToConnector->idGD) {
 		});
 		return false;
 	});
+
+	$("#submit").attr("disabled", "disabled");
+
+	$("input[type=\'checkbox\']").change(function() {
+
+		var checkedCount = $("input[type=\'checkbox\']:checked").not(":disabled").length;
+
+		if (checkedCount > 0) {
+			$("#submit").removeAttr("disabled").attr("src", "/img/button-save.png");
+		} else {
+			$("#submit").attr("disabled", "disabled").attr("src", "/img/button-save-inactive.png");
+		}
+	});
+	
 	');
 }
 ?>

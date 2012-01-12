@@ -101,6 +101,9 @@ google.analytics.register.inviteRemaining;Remaining prepaid invitations
 
 google.analytics.register.success;Profiles was successful added to your account . It will take several minutes for data to upload to GoodData dashboards. <a href="%s">Login to your GoodData account</a>.
 
+google.analytics.register.formInvalid;Invalid form. Please check at least one profile.
+google.analytics.register.noProfilesFound;Thera are no Google Analytics' profiles within your Google account.
+
 index.index.title;
 index.index.availableNow;Available NOW!
 index.index.comingSoon;Coming soon!

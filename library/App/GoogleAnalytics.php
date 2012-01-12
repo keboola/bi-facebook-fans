@@ -1,4 +1,5 @@
 <?php
+
 /**
  * GoogleAnalytics API wrapper
  *
@@ -12,11 +13,11 @@
 class App_GoogleAnalytics {
 
 	// authentication variables
-	//protected $_accessToken;
-	//protected $_accessTokenSecret;
+	protected $_accessToken;
+	protected $_accessTokenSecret;
 	protected $_utility;
-	//protected $_oauthParams = array();
-	//protected $_consumerSecret;
+	protected $_oauthParams = array();
+	protected $_consumerSecret;
 	protected $_protocol = 'OAuth';
 	protected $_token;
 
@@ -29,6 +30,9 @@ class App_GoogleAnalytics {
 	protected $_accounts = array();
 	protected $_webProperties = array();
 	protected $_profiles = array();
+
+	// Last error if any
+	protected $_error = '';
 
 	//const http_interface = 'auto'; //'auto': autodetect, 'curl' or 'fopen'
 	const ACCOUNTS_URL = 'https://www.googleapis.com/analytics/v3/management/accounts';
@@ -47,8 +51,9 @@ class App_GoogleAnalytics {
 	public function __construct($token = null)
 	{
 		$this->_utility = new Zend_Oauth_Http_Utility();
+
 		$this->_token = $token;
-	}			
+	}
 
 	/**
 	 * Generate authentication header for all requests
@@ -62,7 +67,7 @@ class App_GoogleAnalytics {
 				return $this->_authSubHeader();
 				break;
 			default: // OAuth 2.0
-				return array(					
+				return array(
 					'Authorization: Bearer ' . $this->_token
 				);
 				break;
@@ -71,12 +76,36 @@ class App_GoogleAnalytics {
 
 	/**
 	 * Headers for AuthSub requests
-	 * @deprecated
 	 * @return <type>
 	 */
 	protected function _authSubHeader()
 	{
 		return array('Authorization: AuthSub token="'.$this->_token.'"');
+	}
+
+	/**
+	 * Obtain basic user information
+	 */
+	public function getUserInfo()
+	{
+		$client = new Zend_Http_Client(App_GoogleAnalytics::USER_INFO_URL);
+		$client->setHeaders(array(
+			'Accept' => 'application/json',
+			'Authorization'	=> 'Bearer ' . $this->_token
+		));
+		$client->setMethod('GET');
+		$client->setParameterGet($get);
+		$response = $client->request();
+
+		$body = json_decode($response->getBody(), true);
+
+		if (isset($body['error'])) {
+			throw new Exception("Error " . print_r($body), $body['code']);
+		}
+		if (isset($body['items'])) {
+			return $body['items'];
+		}
+		return false;
 	}
 
 	/**
@@ -102,38 +131,22 @@ class App_GoogleAnalytics {
 		$client->setParameterGet($get);
 		$response = $client->request();
 
-		$body = json_decode($response->getBody(), true);		
+		$body = json_decode($response->getBody(), true);
 
 		if (isset($body['error'])) {
-			throw new Zend_Exception("Error " . print_r($body), $body['code']);
+			// try again
+			sleep(3);
+			$response = $client->request();
+			$body = json_decode($response->getBody(), true);
+
+			if (isset($body['error'])) {
+				throw new Exception("Error " . print_r($body), $body['code']);
+			}
 		}
 		if (isset($body['items'])) {
 			return $body['items'];
 		}
 		return false;
-	}
-
-	/**
-	 * Obtain basic user information
-	 */
-	public function getUserInfo()
-	{
-		$client = new Zend_Http_Client(App_GoogleAnalytics::USER_INFO_URL);
-		$client->setHeaders(array(
-			'Accept' => 'application/json',
-			'Authorization'	=> 'Bearer ' . $this->_token
-		));
-		$client->setMethod('GET');
-		$client->setParameterGet($get);
-		$response = $client->request();
-
-		$body = json_decode($response->getBody(), true);		
-
-		if (isset($body['error'])) {
-			throw new Exception("Error " . print_r($body), $body['code']);
-		}
-		
-		return $body;
 	}
 
 	public function getWebProperties($accountId, $startIndex=1, $maxResults=1000)
@@ -143,20 +156,13 @@ class App_GoogleAnalytics {
 			'max-results'	=> $maxResults
 		);
 
-		$client = new Zend_Http_Client(App_GoogleAnalytics::ACCOUNTS_URL . '/' . $accountId . '/webproperties');
-		$client->setHeaders(array(
+		$url = App_GoogleAnalytics::ACCOUNTS_URL . '/' . $accountId . '/webproperties';
+
+		$body = $this->_request($url, array(
 			'Accept' => 'application/json',
 			'Authorization'	=> 'Bearer ' . $this->_token
-		));
-		$client->setMethod('GET');
-		$client->setParameterGet($get);
-		$response = $client->request();
+		), 'GET', $get);
 
-		$body = json_decode($response->getBody(), true);
-
-		if (isset($body['error'])) {
-			throw new Zend_Exception("Error " . print_r($body), $body['code']);
-		}
 		if (isset($body['items'])) {
 			return $body['items'];
 		}
@@ -164,27 +170,20 @@ class App_GoogleAnalytics {
 	}
 
 	public function getProfiles($accountId, $webpropertyId, $startIndex=1, $maxResults=1000)
-	{		
+	{
 		$get = array(
 			'start-index' => $startIndex,
 			'max-results'	=> $maxResults
 		);
 
-		$client = new Zend_Http_Client(App_GoogleAnalytics::ACCOUNTS_URL . '/'
-				. $accountId . '/webproperties/' . $webpropertyId . '/profiles');
-		$client->setHeaders(array(
+		$url = App_GoogleAnalytics::ACCOUNTS_URL . '/'
+				. $accountId . '/webproperties/' . $webpropertyId . '/profiles';
+
+		$body = $this->_request($url, array(
 			'Accept' => 'application/json',
 			'Authorization'	=> 'Bearer ' . $this->_token
-		));
-		$client->setMethod('GET');
-		$client->setParameterGet($get);
-		$response = $client->request();
+		), 'GET', $get);
 
-		$body = json_decode($response->getBody(), true);
-
-		if (isset($body['error'])) {
-			throw new Zend_Exception("Error " . print_r($body), $body['code']);
-		}
 		if (isset($body['items'])) {
 			return $body['items'];
 		}
@@ -198,23 +197,15 @@ class App_GoogleAnalytics {
 			'max-results'	=> $maxResults
 		);
 
-		$client = new Zend_Http_Client(App_GoogleAnalytics::ACCOUNTS_URL . '/'
-				. $accountId . '/webproperties/' . $webpropertyId . '/profiles/' . $profileId . '/goals');
-		$client->setHeaders(array(
+		$url = App_GoogleAnalytics::ACCOUNTS_URL . '/'
+				. $accountId . '/webproperties/' . $webpropertyId . '/profiles/' . $profileId . '/goals';
+
+		$body = $this->_request($url, array(
 			'Accept' => 'application/json',
 			'Authorization'	=> 'Bearer ' . $this->_token
-		));
-		$client->setMethod('GET');
-		$client->setParameterGet($get);
-		$response = $client->request();
+		), 'GET', $get);
 
-		$body = json_decode($response->getBody(), true);
-
-		if (isset($body['error'])) {
-			throw new Exception("Error " . print_r($body), $body['code']);
-		} else {
-			return $body;
-		}
+		return $body;
 	}
 
 	/**
@@ -262,9 +253,11 @@ class App_GoogleAnalytics {
 	 * @param Int $startIndex OPTIONAL: Start index of results
 	 * @param Int $maxResults OPTIONAL: Max results returned
 	 */
-	public function getData($profileId, $dimensions, $metrics, $sortMetric=null,
+	public function getData($profileId, $dimensions, $metrics, $sortMetric='ga:date',
 		  $filter=null, $startDate=null, $endDate=null, $startIndex=1, $maxResults=30)
 	{
+		echo "GAPI: requesting data ... \n";
+
 		$parameters = array('ids'=>'ga:' . $profileId);
 
 		if(is_array($dimensions)) {
@@ -345,10 +338,22 @@ class App_GoogleAnalytics {
 		//HTTP 2xx
 		if(substr($response['code'],0,1) == '2') {
 
-			return $this->_mapDataResult(json_decode($response['body'], true));
+			$result = $this->_mapDataResult(json_decode($response['body'], true));
+			if ($result != false) {
+				return $result;
+			} else {
+				return array();
+			}
 		} else {
-			throw new Exception('GAPI: Failed to request report data. Error: "' . strip_tags($response['body']) . '"');
+
+			$this->_error = json_decode($response['body'], true);
+			return false;
 		}
+	}
+
+	public function getError()
+	{
+		return $this->_error;
 	}
 
 	/**
@@ -365,8 +370,8 @@ class App_GoogleAnalytics {
 		}
 
 		if (!isset($result['columnHeaders'])) {
-			return false;
-		}		
+			return array();
+		}
 
 		$metrics = array();
 		$dimensions = array();
@@ -402,19 +407,28 @@ class App_GoogleAnalytics {
 		return $dataSet;
 	}
 
-	public function refreshToken($userId)
+	public function refreshToken($accountId)
 	{
-		$table = new Model_User();
-		$user = $table->fetchRow(array('id=?' => $userId));
+		$this->_accountId = $accountId;
+		$table = new Model_Account();
+		$account = $table->fetchRow(array('id=?' => $accountId));
 
 		$config = Zend_Registry::get('config');
-		
+
+		$clientId = $config->oauth->id;
+		$clientSecret = $config->oauth->secret;
+
+		//@TODO: temporary workaround - fix
+		if ($account->isExternal) {
+			$clientId = $account->clientId;
+			$clientSecret = $account->clientSecret;
+		}
+
 		$post = array(
-			'refresh_token'	=> $user->gaRefreshToken,
-			'client_id'		=> $config->oauth->id,
-			'client_secret' => $config->oauth->secret,
+			'refresh_token'	=> $account->gaRefreshToken,
+			'client_id'		=> $clientId,
+			'client_secret' => $clientSecret,
 			'grant_type'	=> 'refresh_token'
-				
 		);
 
 		$client = new Zend_Http_Client(App_GoogleAnalytics::OAUTH_TOKEN_URL);
@@ -428,11 +442,13 @@ class App_GoogleAnalytics {
 		if (isset($response['access_token'])) {
 			$this->_token = $response['access_token'];
 
-			$user->gaAccessToken = $response['access_token'];
-			$user->save();
+			$account->gaAccessToken = $response['access_token'];
+			$account->save();
 
 			return true;
 		}
+
+		print_r($response);
 
 		return false;
 	}
@@ -443,10 +459,10 @@ class App_GoogleAnalytics {
 	 * @param String $code - authorization code
 	 * @return array ['access_token', 'refresh_token']
 	 */
-	public function getAccessToken($code, $clientId, $clientSecret, $redirectUri)
+	public function getAccessToken($code)
 	{
-		//$config = Zend_Registry::get('config');
-		
+		$config = Zend_Registry::get('config');
+
 		$client = new Zend_Http_Client();
 		$client->setUri(App_GoogleAnalytics::OAUTH_TOKEN_URL);
 		$client->setMethod('POST');
@@ -455,9 +471,9 @@ class App_GoogleAnalytics {
 		));
 		$client->setParameterPost(array(
 			'code'	=> $code,
-			'client_id'	=> $clientId,
-			'client_secret'	=> $clientSecret,
-			'redirect_uri'	=> $redirectUri,
+			'client_id'	=> $config->oauth->id,
+			'client_secret'	=> $config->oauth->secret,
+			'redirect_uri'	=> 'http://' . $_SERVER['HTTP_HOST'] . '/index/oauth-login',
 			'grant_type'	=> 'authorization_code'
 		));
 		$response = $client->request();
@@ -471,10 +487,6 @@ class App_GoogleAnalytics {
 			$kv = explode(':', $t);
 			$res[trim($kv[0])] = trim($kv[1]);
 		}
-
-		$this->_token = $res['access_token'];
-
-		//var_dump($res); die;
 
 		return $res;
 	}
@@ -520,6 +532,40 @@ class App_GoogleAnalytics {
 			return $this->_results;
 		} else {
 			return;
+		}
+	}
+
+	/**
+	 * Zend_Http_Client request method - user this instead of httpRequest ...
+	 *
+	 * @return <array> body
+	 */
+	protected function _request($url, $headers, $method = 'GET', $params)
+	{
+		$client = new Zend_Http_Client($url);
+		$client->setHeaders($headers);
+		$client->setMethod($method);
+		$client->setParameterGet($params);
+
+		$response = $client->request();
+
+		$body = json_decode($response->getBody(), true);
+
+		if (isset($body['error'])) {
+
+			// try again
+			sleep(3);
+
+			$this->refreshToken($this->_accountId);
+
+			$response = $client->request();
+			$body = json_decode($response->getBody(), true);
+
+			if (isset($body['error'])) {
+				throw new Exception("Error " . print_r($body), $body['code']);
+			}
+		} else {
+			return $body;
 		}
 	}
 
@@ -574,7 +620,7 @@ class App_GoogleAnalytics {
 
 		curl_setopt($ch, CURLOPT_VERBOSE, true);
 		curl_setopt($ch, CURLINFO_HEADER_OUT, true);
-		
+
 		$response = curl_exec($ch);
 		$code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 

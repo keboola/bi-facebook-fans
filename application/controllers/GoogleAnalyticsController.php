@@ -102,7 +102,7 @@ class GoogleAnalyticsController extends App_Controller_Action
 						));
 					}
 
-					$this->_helper->FlashMessenger->addMessage('success|google.analytics.register.success');
+					$this->_helper->FlashMessenger->addMessage('success|google.analytics.register.success', 'https://secure.gooddata.com/#s=/gdc/projects/'.$this->_user->idGD.'|projectDashboardPage');
 				} else {
 					$this->_helper->getHelper('FlashMessenger')->addMessage('error|google.analytics.register.formInvalid');
 				}
@@ -151,7 +151,7 @@ class GoogleAnalyticsController extends App_Controller_Action
 				->setAttrib('disable', array_keys($this->_connector->getProfiles($this->_user->id)));			
 
 		} else {
-			$this->_helper->getHelper('FlashMessenger')->addMessage('error|google.analytics.register.noAccountsFound');
+			$this->_helper->getHelper('FlashMessenger')->addMessage('error|google.analytics.register.noProfilesFound');
 		}
 
 		$this->view->form = $form;
