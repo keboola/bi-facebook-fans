@@ -1,0 +1,69 @@
+<schema>
+	<name>StatusMessages</name>
+	<columns>
+		<column>
+			<name>id</name>
+			<title>ID (StatusMessages)</title>
+			<ldmType>CONNECTION_POINT</ldmType>
+			<folder>StatusMessages</folder>
+		</column>
+		<column>
+			<name>idFB</name>
+			<title>ID FB (StatusMessages)</title>
+			<ldmType>ATTRIBUTE</ldmType>
+			<folder>StatusMessages</folder>
+		</column>
+		<column>
+			<name>idUser</name>
+			<title>User ID (StatusMessages)</title>
+			<ldmType>REFERENCE</ldmType>
+			<reference>id</reference>
+			<schemaReference>Users</schemaReference>
+			<folder>StatusMessages</folder>
+		</column>
+		<column>
+			<name>story</name>
+			<title>Story (StatusMessages)</title>
+			<ldmType>ATTRIBUTE</ldmType>
+			<folder>StatusMessages</folder>
+		</column>
+		<column>
+			<name>message</name>
+			<title>Message (StatusMessages)</title>
+			<ldmType>ATTRIBUTE</ldmType>
+			<folder>StatusMessages</folder>
+		</column>
+		<column>
+			<name>type</name>
+			<title>Type (StatusMessages)</title>
+			<ldmType>ATTRIBUTE</ldmType>
+			<folder>StatusMessages</folder>
+		</column>
+		<column>
+			<name>comments</name>
+			<title>Comments (StatusMessages)</title>
+			<ldmType>FACT</ldmType>
+			<folder>StatusMessages</folder>
+		</column>
+		<column>
+			<name>action</name>
+			<title>Action (StatusMessages)</title>
+			<ldmType>ATTRIBUTE</ldmType>
+			<folder>StatusMessages</folder>
+		</column>
+		<column>
+			<name>datetime</name>
+			<title>Date (StatusMessages)</title>
+			<ldmType>DATE</ldmType>
+			<format>yyyy-MM-dd</format>
+			<schemaReference>KB_EventDate</schemaReference>
+			<folder>StatusMessages</folder>
+		</column>
+		<column>
+			<name>snapshot</name>
+			<title>Snapshot (StatusMessages)</title>
+			<ldmType>FACT</ldmType>
+			<folder>StatusMessages</folder>
+		</column>
+	</columns>
+</schema>

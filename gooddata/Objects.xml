@@ -1,0 +1,29 @@
+<schema>
+	<name>Objects</name>
+	<columns>
+		<column>
+			<name>id</name>
+			<title>ID (Objects)</title>
+			<ldmType>CONNECTION_POINT</ldmType>
+			<folder>Objects</folder>
+		</column>
+		<column>
+			<name>idFB</name>
+			<title>ID FB (Objects)</title>
+			<ldmType>ATTRIBUTE</ldmType>
+			<folder>Objects</folder>
+		</column>		
+		<column>
+			<name>name</name>
+			<title>Name (Objects)</title>
+			<ldmType>ATTRIBUTE</ldmType>
+			<folder>Objects</folder>
+		</column>
+		<column>
+			<name>type</name>
+			<title>Type (Objects)</title>
+			<ldmType>ATTRIBUTE</ldmType>
+			<folder>Objects</folder>
+		</column>
+	</columns>
+</schema>

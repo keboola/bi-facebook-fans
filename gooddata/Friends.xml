@@ -1,0 +1,31 @@
+<schema>
+	<name>Friends</name>
+	<columns>
+		<column>
+			<name>id</name>
+			<title>ID (Friends)</title>
+			<ldmType>CONNECTION_POINT</ldmType>
+			<folder>Friends</folder>
+		</column>
+		<column>
+			<name>idFB</name>
+			<title>ID FB (Friends)</title>
+			<ldmType>ATTRIBUTE</ldmType>
+			<folder>Friends</folder>
+		</column>
+		<column>
+			<name>name</name>
+			<title>Name (Friends)</title>
+			<ldmType>ATTRIBUTE</ldmType>
+			<folder>Friends</folder>
+		</column>
+		<column>
+			<name>idUser</name>
+			<title>User ID (Friends)</title>
+			<ldmType>REFERENCE</ldmType>
+			<reference>id</reference>
+			<schemaReference>Users</schemaReference>
+			<folder>Friends</folder>
+		</column>
+	</columns>
+</schema>

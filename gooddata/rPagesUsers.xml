@@ -1,0 +1,39 @@
+<schema>
+	<name>rPagesUsers</name>
+	<columns>
+		<column>
+			<name>id</name>
+			<title>ID (rPagesUsers)</title>
+			<ldmType>CONNECTION_POINT</ldmType>
+			<folder>rPagesUsers</folder>
+		</column>
+		<column>
+			<name>idPage</name>
+			<title>Page ID (rPagesUsers)</title>
+			<ldmType>REFERENCE</ldmType>
+			<reference>id</reference>
+			<schemaReference>Pages</schemaReference>
+			<folder>rPagesUsers</folder>
+		</column>
+		<column>
+			<name>idUser</name>
+			<title>User ID (rPagesUsers)</title>
+			<ldmType>REFERENCE</ldmType>
+			<reference>id</reference>
+			<schemaReference>Users</schemaReference>
+			<folder>rPagesUsers</folder>
+		</column>
+		<column>
+			<name>lifetime</name>
+			<title>Lifetime (rPagesUsers)</title>
+			<ldmType>FACT</ldmType>
+			<folder>rPagesUsers</folder>
+		</column>
+		<column>
+			<name>isLike</name>
+			<title>Is Like (rPagesUsers)</title>
+			<ldmType>ATTRIBUTE</ldmType>
+			<folder>rPagesUsers</folder>
+		</column>
+	</columns>
+</schema>

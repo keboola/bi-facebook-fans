@@ -1,0 +1,27 @@
+<schema>
+	<name>rStatusMessagesObjects</name>
+	<columns>
+		<column>
+			<name>id</name>
+			<title>ID (rStatusMessagesObjects)</title>
+			<ldmType>CONNECTION_POINT</ldmType>
+			<folder>rStatusMessagesObjects</folder>
+		</column>
+		<column>
+			<name>idStatusMessage</name>
+			<title>Status Message ID (rStatusMessagesObjects)</title>
+			<ldmType>REFERENCE</ldmType>
+			<reference>id</reference>
+			<schemaReference>StatusMessages</schemaReference>
+			<folder>rStatusMessagesObjects</folder>
+		</column>
+		<column>
+			<name>idObject</name>
+			<title>Object ID (rStatusMessagesObjects)</title>
+			<ldmType>REFERENCE</ldmType>
+			<reference>id</reference>
+			<schemaReference>Objects</schemaReference>
+			<folder>rStatusMessagesObjects</folder>
+		</column>
+	</columns>
+</schema>

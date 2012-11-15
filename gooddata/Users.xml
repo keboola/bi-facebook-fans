@@ -1,0 +1,23 @@
+<schema>
+	<name>Users</name>
+	<columns>
+		<column>
+			<name>id</name>
+			<title>ID (Users)</title>
+			<ldmType>CONNECTION_POINT</ldmType>
+			<folder>Users</folder>
+		</column>
+		<column>
+			<name>idFB</name>
+			<title>ID FB (Users)</title>
+			<ldmType>ATTRIBUTE</ldmType>
+			<folder>Users</folder>
+		</column>
+		<column>
+			<name>name</name>
+			<title>Name (Users)</title>
+			<ldmType>ATTRIBUTE</ldmType>
+			<folder>Users</folder>
+		</column>
+	</columns>
+</schema>

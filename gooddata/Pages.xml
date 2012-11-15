@@ -1,0 +1,23 @@
+<schema>
+	<name>Pages</name>
+	<columns>
+		<column>
+			<name>id</name>
+			<title>ID (Pages)</title>
+			<ldmType>CONNECTION_POINT</ldmType>
+			<folder>Pages</folder>
+		</column>
+		<column>
+			<name>idFB</name>
+			<title>ID FB (Pages)</title>
+			<ldmType>ATTRIBUTE</ldmType>
+			<folder>Pages</folder>
+		</column>
+		<column>
+			<name>name</name>
+			<title>Name (Pages)</title>
+			<ldmType>ATTRIBUTE</ldmType>
+			<folder>Pages</folder>
+		</column>
+	</columns>
+</schema>
