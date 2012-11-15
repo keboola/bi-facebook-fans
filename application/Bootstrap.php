@@ -8,15 +8,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		setlocale(LC_ALL, 'en_US.UTF8');
 		ini_set("url_rewriter.tags","");
 		Zend_Session::start();
-
-		$front = Zend_Controller_Front::getInstance();
-		//$front->setParam('noErrorHandler', true);
 	}
 
 	protected function _initAutoload()
 	{
 		$autoloader = Zend_Loader_Autoloader::getInstance();
 		$autoloader->registerNamespace('App_');
+		$autoloader->registerNamespace('Ladybug');
 
 		$resourceLoader = new Zend_Loader_Autoloader_Resource(array(
 		    'basePath'      => APPLICATION_PATH,
@@ -38,33 +36,55 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
 	protected function _initConfig()
 	{
-		$configCommon = new Zend_Config_Ini(APPLICATION_PATH . '/configs/common.ini', 'common', Array('allowModifications' => true));
-		$config = new Zend_Config_Ini(APPLICATION_PATH . '/configs/config.ini', APPLICATION_ENV, Array('allowModifications' => true));
-
-		$configMerged = $configCommon->merge($config);
-		$configMerged->setReadOnly();
-		Zend_Registry::set('config', $configMerged);
+		$config = new Zend_Config_Ini(APPLICATION_PATH . '/configs/config.ini', APPLICATION_ENV, Array('allowModifications' => true));		
+		Zend_Registry::set('config', $config);
+		return $config;
 	}
 
 	protected function _initNDebug()
 	{
-		// Setup of Nette Debug
-		require_once "Nette/Utils/exceptions.php";
-		require_once "Nette/Utils/shortcuts.php";
-		require_once "Nette/Debug/Debug.php";
+		$config = $this->bootstrap('config')->getResource('config');		
 
-		$config = Zend_Registry::get('config');
-
-		define('NETTE', TRUE);
-		define('NETTE_DIR', APPLICATION_PATH.'/../library/Nette');
-		define('NETTE_VERSION_ID', 907); // v0.9.7
-		define('NETTE_PACKAGE', 'PHP 5.2 prefixed');
+		if (!defined('APPLICATION_ENV')) {
+			define('APPLICATION_ENV', $config->app->env);
+		}		
 
 		if (APPLICATION_ENV == 'development') {
-			NDebug::enable();
-		} else {
-			NDebug::enable('production', ROOT_PATH.'/logs/php-error.log', $config->app->admin);
+			ini_set('display_startup_errors', 1);
+			ini_set('display_errors', 1);
+			
+			Ladybug\Loader::loadHelpers();
 		}
+
+		if (isset($_SERVER['HOSTNAME']))
+			$_SERVER['SERVER_NAME'] = $_SERVER['HOSTNAME'];		
+
+		require_once 'Nette/NDebugger.php';
+		NDebugger::enable();
+		NDebugger::$logDirectory = ROOT_PATH.'/logs';
+		NDebugger::$email = $config->app->admin;
+		NDebugger::$productionMode = (APPLICATION_ENV == 'production');
+		NLogger::$emailSnooze = 3600;		
+	}
+
+	protected function _initDb()
+	{
+		$config = $this->bootstrap('config')->getResource('config');
+
+		// connect do db
+		$db = Zend_Db::factory('pdo_mysql', array(
+			'host'		=> $config->db->host,
+			'username'	=> $config->db->login,
+			'password'	=> $config->db->password,
+			'dbname'	=> $config->db->db
+		));
+
+		$db->getConnection();
+		$db->query('SET NAMES utf8');
+
+		Zend_Db_Table::setDefaultAdapter($db);
+		Zend_Registry::set('db', $db);
+		return $db;
 	}
 
 	protected function _initCache()
@@ -83,24 +103,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		$manager->setCache('permanent', $permanentCache);
 
 		Zend_Registry::set('cache', $manager);
-	}
-
-	protected function _initDb()
-	{
-		$registry = Zend_Registry::getInstance();
-
-		// connect do db
-		$db = Zend_Db::factory('pdo_mysql', array(
-			'host'		=> $registry->config->db->host,
-			'username'	=> $registry->config->db->login,
-			'password'	=> $registry->config->db->password,
-			'dbname'	=> $registry->config->db->db
-		));
-
-		$db->getConnection();
-		$db->query('SET NAMES utf8');
-
-		Zend_Db_Table::setDefaultAdapter($db);
 	}
 
 	protected function _initLocale()
@@ -130,6 +132,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 			Zend_Locale::setCache($cache->getCache('permanent'));
 	}
 
+	/**
 	public function _initTranslatorSettings()
 	{
 		$registry = Zend_Registry::getInstance();
@@ -150,6 +153,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		$registry->Zend_Translate = $translate;
 		return $registry->Zend_Translate;
 	}
+	 * 
+	 */
 
 	protected function _initViewSettings()
 	{

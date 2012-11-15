@@ -29,7 +29,7 @@ class App_Facebook
 		$this->_token = $token;
 	}
 
-		/**
+	/**
 	 * Make a call to Graph API
 	 * @param string $request url path without boundary slashes
 	 * @param int $tries nu,ber of tries when API call fails
@@ -53,6 +53,10 @@ class App_Facebook
 			$result = Zend_Json::decode($resultCurl);
 			if(isset($result['error'])) {
 				if (isset($result['error']['type']) && $result['error']['type']=='OAuthException' && $this->_account) {
+
+					// First try exchangig access token
+					$this->exchangeToken();
+
 					sleep(10);
 					return $this->request($request, $tries-1);
 				} else {
@@ -91,21 +95,53 @@ class App_Facebook
 	{
 		$c = Zend_Registry::get('config');
 		return "http://www.facebook.com/dialog/oauth?client_id=" . $c->facebook->appId
-			. "&scope=offline_access,read_insights,email,manage_pages&redirect_uri=" . $callBack
+			. "&scope=offline_access,email,user_status&redirect_uri=" . $callBack
 			. "&state=" . $csrf;
+	}
+
+	/**
+	 * Exchanges expired token for new one
+	 * @return string New Access Token
+	 */
+	public function exchangeToken($tries = 3)
+	{
+		$c = Zend_Registry::get('config');
+		$url = "https://graph.facebook.com/oauth/access_token?client_id=" . $c->facebook->appId
+			. "&client_secret=" . $c->facebook->appSecret
+			. "&grant_type=fb_exchange_token"
+			. "&fb_exchange_token=" . $this->_token;
+
+		$client = new Zend_Http_Client($url);		
+		$client->setMethod('GET');
+		$response = $client->request();
+
+		if (substr($response->getBody(), 0, 13) == 'access_token=') {
+			$bodyArr = explode('&', $response->getBody());
+			$this->_token = substr($bodyArr[0], 13);
+			return $this->_token;
+		} else {
+			if ($tries > 0) {
+				App_Debug::log(array('Facebook error', $url, $response));
+				sleep(5);
+				return $this->exchangeToken($tries-1);
+			} else {
+				App_Debug::send(array('Facebook error', $url, $response));
+				throw new App_FacebookException('There was an API error while calling '.$url.': '.$response);
+			}
+		}
 	}
 
 	/**
 	 * @static
 	 * @param $callBack
-	 * @param $csrf
+	 * @param $code
 	 */
-	public static function accessToken($callBack, $csrf, $tries=3)
+	public static function accessToken($callBack, $code, $tries=3)
 	{
 		$c = Zend_Registry::get('config');
 		$url = "https://graph.facebook.com/oauth/access_token?client_id=" . $c->facebook->appId
 			. "&redirect_uri=" . $callBack . "&client_secret=" . $c->facebook->appSecret
-			. "&code=" . $csrf;
+			. "&code=" . $code;
 
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
@@ -117,12 +153,16 @@ class App_Facebook
 
 		if ($resultCurl) {
 			if(substr($resultCurl, 0, 13) == 'access_token=') {
+				if (strstr($resultCurl, '&')) {
+					$tmpArr = explode('&', $resultCurl);
+					$resultCurl = $tmpArr[0];
+				}
 				return substr($resultCurl, 13);
 			} else {
 				if ($tries > 0) {
 					App_Debug::log(array('Facebook error', $url, $resultCurl));
 					sleep(5);
-					return self::accessToken($callBack, $csrf, $tries-1);
+					return self::accessToken($callBack, $code, $tries-1);
 				} else {
 					App_Debug::send(array('Facebook error', $url, $resultCurl));
 					throw new App_FacebookException('There was an API error while calling '.$url.': '.$resultCurl);
@@ -132,7 +172,7 @@ class App_Facebook
 			if ($tries > 0) {
 				App_Debug::log(array('cUrl error', $url, $curlError));
 				sleep(5);
-				return self::accessToken($callBack, $csrf, $tries-1);
+				return self::accessToken($callBack, $code, $tries-1);
 			} else {
 				App_Debug::send(array('cUrl error', $url, $curlError));
 				throw new App_FacebookException('There was an error while calling '.$url.': '.$curlError);
@@ -140,6 +180,29 @@ class App_Facebook
 		}
 
 
+	}
+
+	public static function base64UrlDecode($input) {
+		return base64_decode(strtr($input, '-_', '+/'));
+	}
+
+	/**
+	 * Decodes signed request obtained when user authenticate and authorize FB app
+	 *
+	 * @param <type> $signedRequest - encoded JSON object
+	 * @return <type>
+	 */
+	public static function loadSignedRequest($signedRequest) {
+		$c = Zend_Registry::get('config');
+
+		list($signature, $payload) = explode('.', $signedRequest, 2);
+		$data = json_decode(self::base64UrlDecode($payload), true);
+
+		if (isset($data['issued_at']) && $data['issued_at'] > time() - 86400 &&
+			self::base64UrlDecode($signature) == hash_hmac('sha256', $payload, $c->facebook->appSecret, $raw=true)) {
+
+				return $data;
+		}
 	}
 	
 }

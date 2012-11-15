@@ -1,64 +1,48 @@
 <?php
-
+/**
+ * ErrorController
+ */
 class ErrorController extends Zend_Controller_Action
 {
+	/**
+	 * errorAction() is the action that will be called by the "ErrorHandler"
+	 * plugin.  When an error/exception has been encountered
+	 * in a ZF MVC application (assuming the ErrorHandler has not been disabled
+	 * in your bootstrap) - the Errorhandler will set the next dispatchable
+	 * action to come here.  This is the "default" module, "error" controller,
+	 * specifically, the "error" action.  These options are configurable.
+	 *
+	 * @see http://framework.zend.com/manual/en/zend.controller.plugins.html
+	 *
+	 * @return void
+	 */
+	public function errorAction()
+	{
+		// Grab the error object from the request
+		$errors = $this->_getParam('error_handler');
 
-    public function errorAction()
-    {
-        $errors = $this->_getParam('error_handler');
-     
-        switch ($errors->type) {
-            case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ROUTE:
-            case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER:
-            case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION:
-        
-                // 404 error -- controller or action not found
-                $this->getResponse()->setHttpResponseCode(404);
-                $this->view->message = 'Page not found';
-                break;
-            default:
-                // application error
-                $this->getResponse()->setHttpResponseCode(500);
-                $this->view->message = 'Application error';
-				$this->view->info = $errors->exception->getMessage();
-				
-				App_Debug::log(array(
-					'message' => $errors->exception->getMessage(),
-					'trace' => $errors->exception->getTraceAsString(),
-					'request' => array_diff_key($this->_request->getParams(), array('error_handler'=>''))
-				), 'php-error.log');
-				
-                break;
-        }
-        
-        // conditionally display exceptions
-        if ($this->getInvokeArg('displayExceptions') == true) {
-            $this->view->exception = $errors->exception;
-        }
-        
-        $this->view->request   = $errors->request;
+		switch ($errors->type) {
+			case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ROUTE:
+			case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER:
+			case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION:
 
-		echo '<p>'.$this->view->message.'</p>';
-		echo '<p>'.$this->view->info.'</p>';
-		echo '<pre>'.$errors->exception->getTraceAsString().'</pre>';
-		/*echo Zend_Json::encode(array(
-				'message' => $this->view->message,
-				'info' => $this->view->info,
-				'trace' => $errors->exception->getTraceAsString()
-			));*/
-		die();
-    }
+				// 404 error -- controller or action not found
+				$this->getResponse()->setHttpResponseCode(404);
+				$this->view->message = 'Page not found';
+				break;
+			default:
+				// application internal error
+				$this->getResponse()->setHttpResponseCode(500);
+				$this->view->message = 'Application error';
+				break;
+		}		
 
-    public function getLog()
-    {
-        $bootstrap = $this->getInvokeArg('bootstrap');
-        if (!$bootstrap->hasPluginResource('Log')) {
-            return false;
-        }
-        $log = $bootstrap->getResource('Log');
-        return $log;
-    }
+		if ($this->getInvokeArg('displayExceptions')) {
+			// pass the actual exception object to the view
+			$this->view->exception = $errors->exception;
+		}
 
-
+		$this->view->request = $errors->request;
+	}
+	
 }
-

@@ -10,18 +10,10 @@ $this->jQuery()
 	->addJavascriptFile('/js/modernizr-1.7.min.js')
 	->addJavascriptFile('/js/jquery.corner.js')
 	->enable();
-$this->headTitle($this->pageTitle)
-	->setSeparator(' | ')
-	->headTitle($this->translate('app.name'));
-$this->jQuery()->addOnLoad('
-	$(".pageSubHeader .navigation, .notice").corner("5px");
-	$(".pageSubHeader .navigation .first").corner("5px left");
-	$(".pageSubHeader .navigation .last").corner("5px right");
-');
 ?>
 
 <!DOCTYPE HTML>
-<html>
+<html xmlns:fb="http://www.facebook.com/2008/fbml">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -30,49 +22,33 @@ $this->jQuery()->addOnLoad('
 	<?=$this->headLink();?>
 	<?=$this->jQuery();?>
 </head>
+<?php
+	$config = Zend_Registry::get('config');
+?>
+<body>	
 
-<body>
-	<div class="pageHeaderWrapper"><div class="pageHeader pageSection">
-		<div class="loginBox"><?=$this->loggedInAs();?></div>
-		<div class="siteName"><a href="/account"><img src="/img/logo.png" alt="" /></a></div>
-	</div></div>
-	<?if($this->user){?>
-	<div class="pageSubHeaderWrapper"><div class="pageSubHeader pageSection">
-		<?=$this->navigation()->menu()->render();?>
-	</div></div>
-	<?}?>
+	<div class="pageHeaderWrapper">
+		<div class="pageHeader pageSection">
+			<div class="loginBox">
+				<a target="_blank" href="http://www.facebook.com/dialog/pagetab?app_id=<?=$config->facebook->appId;?>&next=<?=$config->app->url;?>" class="right">Přidat aplikaci na stránku</a><br />
+			</div>
+			<div class="siteName"><a href="/account"><img src="/img/logo.png" alt=""></a></div>			
+		</div>
+	</div>
+
 	<div class="pageTitleWrapper"><div class="pageTitle pageSection">
-		<h1><?=$this->pageTitle?></h1>
+		<h1>Keboola Fans Checker</h1>
 	</div></div>
+
 	<div class="pageContentWrapper"><div class="pageContent pageSection">
 		<?=$this->layout()->content;?>
 	</div></div>
+
 	<div class="pageFooterWrapper"><div class="pageFooter pageSection">
-		<p>&copy; <a href="http://keboola.com">Keboola</a> | <a href="<?=$this->config->app->support->url?>">
-			<?=$this->translate('layout.support')?></a></p>
+		<p>© <a href="http://keboola.com">Keboola</a> | <a href="http://keboola.zendesk.com">
+			Support</a></p>
 	</div></div>
-	<script type="text/javascript">
-		var GoSquared={};
-		GoSquared.acct = "GSN-148523-Z";
-		(function(w){
-			function gs(){
-				w._gstc_lt=+(new Date); var d=document;
-				var g = d.createElement("script"); g.type = "text/javascript"; g.async = true; g.src = "//d1l6p2sc9645hc.cloudfront.net/tracker.js";
-				var s = d.getElementsByTagName("script")[0]; s.parentNode.insertBefore(g, s);
-			}
-			w.addEventListener?w.addEventListener("load",gs,false):w.attachEvent("onload",gs);
-		})(window);
-	</script>
-	<script type="text/javascript">
-		var _gaq = _gaq || [];
-		_gaq.push(['_setAccount', 'UA-27344639-1']);
-		_gaq.push(['_trackPageview']);
-		(function() {
-			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-		})();
-	</script>
+		
 </body>
 </html>
 

@@ -383,7 +383,7 @@ class Zend_Application
 
         switch (strtolower($suffix)) {
             case 'ini':
-                $config = new Zend_Config_Ini($file, $environment);
+                $config = new Zend_Config_Ini($file, $environment);				
                 break;
 
             case 'xml':

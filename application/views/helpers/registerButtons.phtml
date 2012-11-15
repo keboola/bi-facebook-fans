@@ -1,8 +1,0 @@
-<div class="buttonsRow">
-	<a href="/"><img src="/img/button-cancel.png" alt="Cancel" /></a>
-	<?=$this->{$this->element->helper} (
-	$this->element->getName(),
-	$this->element->getLabel(),
-	array_merge($this->element->getAttribs(), Array('escape' => false, 'content' => '<span>' . $this->element->getLabel() . '</span>'))
-	) ?>
-</div>

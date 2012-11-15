@@ -2,14 +2,14 @@
 /**
  * GoodData API class
  * @author Jakub Matejka <jakub@keboola.com>
- * @date 2011-06-29
+ * @date 29.6.11, 13:51
  * 
  */
  
 class App_GoodData
 {
 	/**
-	 *
+	 * Path to GD CLI
 	 */
 	const CLI_PATH = '/opt/ebs-disk/GD/cli/bin/gdi.sh';
 
@@ -25,142 +25,168 @@ class App_GoodData
 	private $_password;
 
 	/**
+	 * @var id of GD project
+	 */
+	private $_idProject;
+
+	
+	/**
 	 * @param $username
 	 * @param $password
-	 * @internal param $idProject
+	 * @param $idProject
 	 */
-	public function __construct($username, $password)
+	public function __construct($username, $password, $idProject)
 	{
 		$this->_username = $username;
 		$this->_password = $password;
+		$this->_idProject = $idProject;
 	}
 
 	/**
 	 * Common wrapper for GD CLI commands
 	 * @param array $args
-	 * @param bool $return
 	 * @param bool $reportErrors
-	 * @return void|string
+	 * @return void
 	 */
-	public function call($args, $return=TRUE, $reportErrors=TRUE)
+	public function call($args, $reportErrors=true)
 	{
-		$command = self::CLI_PATH.' -u '.$this->_username.' -p '.$this->_password.' -e \''.$args;
+		$command = self::CLI_PATH.' -u '.$this->_username.' -p '.$this->_password.' -e \'OpenProject(id="'.$this->_idProject.'");';
+		$command .= $args;
+
 		$output = shell_exec($command.'\'');
 
-		if (strpos($output, '503 Service Unavailable') || strpos($output, 'Error invoking GoodData WebDav API')) {
+		if (strpos($output, '503 Service Unavailable')
+			|| strpos($output, 'Error invoking GoodData WebDav API')
+			|| strpos($output, '404 Not Found')
+			|| strpos($output, '500 Internal Server Error')) {
+
+			$log = Zend_Registry::get('log');
+			$log->log('GoodData Service Unavailable', Zend_Log::NOTICE, array(
+				'pid' => $this->_idProject
+			));
 			sleep(60);
 			$this->call($args, $reportErrors);
-			App_Debug::log('GD Service Unavailable');
 		} else {
 			if ($reportErrors && strpos($output, 'ERROR')) {
-				App_Debug::send($output, null, 'debug.log');
+				$debugFile = ROOT_PATH . '/tmp/debug-' . date('Ymd-His').'.log';
+				system('mv debug.log ' . $debugFile);
+				$log = Zend_Registry::get('log');
+				$log->log('GoodData export error', Zend_Log::ERR, array(
+					'pid'		=> $this->_idProject,
+					'error'		=> $output,
+					'debugFile' => $debugFile
+				));
 			}
 
-			if($return) {
-				return $output;
-			} else {
-				echo $output;
-			}
+			echo $output;
 			system('rm ./*.log*');
 		}
 	}
 
-
 	/**
-	 * Clone project from template or create empty
+	 * Set of commands which create a date
 	 * @param $name
-	 * @param null $templateUri
-	 * @return bool|string
+	 * @param $includeTime
+	 * @return void
 	 */
-	public function createProject($name, $templateUri=NULL)
+	public function createDate($name, $includeTime=FALSE)
 	{
-		$template = NULL;
-		if($templateUri) {
-			$template = 'templateUri="'.$templateUri.'"';
-		}
-		$output = $this->call('CreateProject(name="'.$name.'"'.$template.');');
+		echo "\n".'*** Create date: '.$name."\n";
+		$maqlFile = ROOT_PATH.'/tmp/temp.maql';
 
-		if(!strpos($output, 'ERROR')) {
-			$start = strpos($output, 'id = \'');
-			$end = strpos($output, '\' created.');
-			return trim(substr($output, $start+6, $end-$start-6));
-		} else {
-			return FALSE;
-		}
+		$command = 'UseDateDimension(name="'.$name.'", includeTime="'.($includeTime ? 'true' : 'false').'");';
+		$command .= 'GenerateMaql(maqlFile="'.$maqlFile.'");';
+		$command .= 'ExecuteMaql(maqlFile="'.$maqlFile.'");';
+		$command .= 'TransferData();';
+
+		$this->call($command);
+		system('rm -rf '.$maqlFile);
 	}
 
 	/**
-	 * @param $idProject
-	 * @param $email
-	 * @param string $role
-	 * @param null $text
-	 * @return bool
+	 * Update reports command
 	 */
-	public function inviteUser($idProject, $email, $role="editor", $text=null)
+	public function updateReports()
 	{
-		$output = $this->call(
-			'OpenProject(id="'.$idProject.'"); ' .
-			'InviteUser(email="'.$email.'", msg="'.$text.'", role="'.$role.'");'
-		);
+		echo "\n".'*** Updating Reports'."\n";
+		$maqlFile = ROOT_PATH.'/tmp/temp.maql';
 
-		if(!strpos($output, 'ERROR')) {
-			return TRUE;
-		} else {
-			return FALSE;
-		}
+		$command = 'GetReports(fileName="'.$maqlFile.'");';
+		$command .= 'ExecuteReports(fileName="'.$maqlFile.'");';
+
+		$this->call($command, false);
+		system('rm -rf '.$maqlFile);
 	}
 
 	/**
-	 * Clone project from other project
-	 * @param $idSource
-	 * @param $idTarget
-	 * @return bool
+	 * Set of commands which create a dataset
+	 * @param $xml
+	 * @param $csv
+	 * @return void
 	 */
-	public function cloneProject($idSource, $idTarget)
+	public function createDataset($xml, $csv)
 	{
-		$tokenFile = ROOT_PATH.'/tmp/export-'.$idSource.'.txt';
+		echo "\n".'*** Create dataset: '.basename($xml)."\n";
+		$maqlFile = ROOT_PATH.'/tmp/temp.maql';
 
-		$output = $this->call(
-			'OpenProject(id="'.$idSource.'"); ' .
-			'ExportProject(tokenFile="'.$tokenFile.'", exportUsers="false", exportData="false");'
-		);
+		$command = 'UseCsv(csvDataFile="' . $csv . '", hasHeader="true", configFile="' . $xml . '");';
+		$command .= 'GenerateMaql(maqlFile="'.$maqlFile.'");';
+		$command .= 'ExecuteMaql(maqlFile="'.$maqlFile.'");';
 
-		print_r($output);
-
-		if(!strpos($output, 'ERROR') && file_exists($tokenFile)) {
-
-			$output = $this->call(
-				'OpenProject(id="'.$idTarget.'"); ' .
-				'ImportProject(tokenFile="'.$tokenFile.'");'
-			);
-			if(!strpos($output, 'ERROR')) {
-
-				system('rm '.$tokenFile);
-				return TRUE;
-
-			}
-
-		} else {
-			return FALSE;
-		}
+		$this->call($command);
+		system('rm -rf '.$maqlFile);
 	}
 
+	/**
+	 * Set of commands which create a dataset
+	 * @param $xml
+	 * @param $csv
+	 * @param $idUser
+	 */
+	public function updateDataset($xml, $csv, $idUser)
+	{
+		echo "\n".'*** Update dataset: '.basename($xml)."\n";
+		$maqlFile = ROOT_PATH.'/tmp/update-'.$idUser.'-'.basename($xml).'-'.date('Ymd-His').'.maql';
+
+		$command = 'UseCsv(csvDataFile="' . $csv . '", hasHeader="true", configFile="' . $xml . '");';
+		$command .= 'GenerateUpdateMaql(maqlFile="'.$maqlFile.'");';
+		$command .= 'ExecuteMaql(maqlFile="'.$maqlFile.'");';
+
+		$this->call($command);
+	}
 
 	/**
-	 * Double all double quotes because of GoodData escaping
+	 * Set of commands which loads data to data set
+	 * @param $xml
+	 * @param $csv
+	 * @param bool $incremental
+	 * @return void
+	 */
+	public function loadData($xml, $csv, $incremental=false)
+	{
+		echo "\n".'*** Load data: '.basename($csv)."\n";
+		$command = 'UseCsv(csvDataFile="' . $csv . '", hasHeader="true", configFile="' . $xml . '");';
+		$command .= 'TransferData(incremental="'.($incremental ? 'true' : 'false').'", waitForFinish="true");';
+
+		$this->call($command);
+	}
+
+	/**
 	 * @static
 	 * @param $string
 	 * @param bool $stripQuotes
-	 * @return string
+	 * @param bool $shorten
+	 * @return mixed|string
 	 */
-	public static function escapeString($string, $stripQuotes=FALSE)
+	public static function escapeString($string, $stripQuotes=FALSE, $shorten=TRUE)
 	{
 		if($stripQuotes) {
 			$result = str_replace('"', '', $string);
 		} else {
 			$result = str_replace('"', '""', (string)$string);
 		}
-		$result = substr(trim($result), 0, 255);
+		if ($shorten)
+			$result = substr(trim($result), 0, 255);
 
 		// remove trailing quotation mark if there is only one in the end of string
 		if(substr($result, strlen($result)-1) == '"' && substr($result, strlen($result)-2) != '""') {

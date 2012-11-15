@@ -143,6 +143,7 @@ class Zend_Config_Ini extends Zend_Config
             $dataArray = array();
             foreach ($section as $sectionName) {
                 if (!isset($iniArray[$sectionName])) {
+					var_dump($sectionName); die;
                     /**
                      * @see Zend_Config_Exception
                      */
